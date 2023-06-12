@@ -230,8 +230,8 @@ CREATE TABLE `user` (
   `adresse_user` varchar(255) NOT NULL,
   `photo_user` varchar(255) NOT NULL,
   `etat_user` enum('0','1','2') NOT NULL DEFAULT '1',
-  `date-created_user` timestamp NOT NULL DEFAULT current_timestamp(),
-  `date-updated_user` timestamp NOT NULL DEFAULT current_timestamp()
+  `date_created_user` timestamp NOT NULL DEFAULT current_timestamp(),
+  `date_updated_user` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

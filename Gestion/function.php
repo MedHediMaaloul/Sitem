@@ -20,6 +20,7 @@ function Login(){
     	$row= mysqli_fetch_array($selectEmail);
     	$status= $row['etat_user'];
     	if ($num_row > 0) {	
+			$_SESSION['id_user']=$row['id_user'];
 			$_SESSION['nom_user']=$row['nom_user'];
     		$_SESSION['Role']=$row['id_role'];
 			$_SESSION['Specialite']=$row['id_specialite'];
@@ -45,63 +46,64 @@ function viewUser(){
     <table class="table table-striped align-middle">
         <thead>
             <tr>
-                <th class="border-top-0"><i class="fa fa-user"></i> Nom </th>
-                <th class="border-top-0"><i class="fa fa-user"></i> Prénom </th>
-                <th class="border-top-0"><i class="fa fa-pen"></i> Cin </th>
-                <th class="border-top-0"><i class="fa fa-phone"></i> Téléphone</th>
-                <th class="border-top-0" class="hidden-phone"><i class="fa fa-envelope"></i> Email</th>
-                <th class="border-top-0"><i class="fa fa-user"></i> Date de Naissance </th>
-                <th class="border-top-0"><i class=" fa fas fa-map-marker-alt"></i> Adresse</th>
-				<th class="border-top-0"><i class="fas fa-graduation-cap"></i> Specialité</th>
-                <th class="border-top-0"><i class="fa fa-image"></i> Photo</th>
-				<th class="border-top-0">Actions</th>
+                <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Nom </th>
+                <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Prénom </th>
+                <th style="text-align: center;" class="border-top-0"><i class="fa fa-pen"></i> Cin </th>
+                <th style="text-align: center;" class="border-top-0"><i class="fa fa-phone"></i> Téléphone</th>
+                <th style="text-align: center;" class="border-top-0" class="hidden-phone"><i class="fa fa-envelope"></i> Email</th>
+                <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Date de Naissance </th>
+                <th style="text-align: center;" class="border-top-0"><i class=" fa fas fa-map-marker-alt"></i> Adresse</th>
+                <th style="text-align: center;" class="border-top-0"><i class="fas fa-graduation-cap"></i> Specialité</th>
+                <th style="text-align: center;" class="border-top-0"><i class="fa fa-image"></i> Photo</th>
+                <th style="text-align: center;" class="border-top-0">Actions</th>
             </tr>            
         </thead>';
 
-	$query = "SELECT * FROM user WHERE etat_user != '0' ORDER BY etat_user ASC";
+    $query = "SELECT * FROM user WHERE etat_user != '0' ORDER BY etat_user ASC";
     $result = mysqli_query($conn, $query);
     while ($row = mysqli_fetch_assoc($result)) {
-		$query_sepcialite = "SELECT * FROM specialite";
-		$result_sepcialite = mysqli_query($conn, $query_sepcialite);
-		$table_specialite =explode(",",$row['id_specialite']);
-		$user_data="";
-		while ($row_specialite = mysqli_fetch_assoc($result_sepcialite)) {
-			if (in_array( $row_specialite['id_specialite'],  $table_specialite )){
-				$user_data=$user_data.' '.$row_specialite['nom_specialite'].' /';
-			}
-		}	
-		if( substr($user_data, -1)=="/"){
-			$user_data =substr($user_data, 0, -1);   
-		}
+        $query_sepcialite = "SELECT * FROM specialite";
+        $result_sepcialite = mysqli_query($conn, $query_sepcialite);
+        $table_specialite =explode(",",$row['id_specialite']);
+        $user_data="";
+        while ($row_specialite = mysqli_fetch_assoc($result_sepcialite)) {
+            if (in_array( $row_specialite['id_specialite'],  $table_specialite )){
+                $user_data=$user_data.' '.$row_specialite['nom_specialite'].' /';
+            }
+        }   
+        if( substr($user_data, -1)=="/"){
+            $user_data =substr($user_data, 0, -1);   
+        }
 
-    	$value .= '<tbody>
-    		<tr>
-    		    <td>' . $row['nom_user'] . '</td>
-    		    <td>' . $row['prenom_user'] . '</td>
-    		    <td>' . $row['cin_user'] . '</td>
-    		    <td>' . $row['numTel_user'] . '</td>
-    		    <td>' . $row['email_user'] . '</td>
-    		    <td>' . $row['date_naissance_user'] . '</td>
-    		    <td>' . $row['adresse_user'] . '</td>
-				<td>' . $user_data. '</td>
-    			<td><a '.(($row["photo_user"]!="")?"href='uploads/{$row["photo_user"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
-				<td>
-				<div class="btn-group">';
-				    if($row['etat_user'] == '1'){
-				    	$value .= '<button type="button" style="margin-right: 3px;" class="btn btn-primary" id="btn_desactiver_user" data-id2=' . $row['id_user'] . '><i class="fas fa-check"></i></button>'; 
-				    }
-					if($row['etat_user'] == '2'){
-						$value .= '<button type="button" style="margin-right: 3px;" class="btn btn-outline-primary" id="btn_activer_user" data-id3=' . $row['id_user'] . '><i class="fas fa-check"></i></button>'; 
-					}
-					$value .= '<button type="button" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifier_user" data-id=' . $row['id_user'] . '><i class="fa fa-pen fa-1x"></i></button> 
-					<button type="button" class="btn btn-danger" id="btn_supprimer_user" data-id1=' . $row['id_user'] . '><i class="fa fa-trash fa-1x"></i></button> 
-				</div>
-				</td>
-    		</tr>';
-    	}
+        $value .= '<tbody>
+            <tr>
+                <td style="text-align: center;">' . $row['nom_user'] . '</td>
+                <td style="text-align: center;">' . $row['prenom_user'] . '</td>
+                <td style="text-align: center;">' . $row['cin_user'] . '</td>
+                <td style="text-align: center;">' . $row['numTel_user'] . '</td>
+                <td style="text-align: center;">' . $row['email_user'] . '</td>
+                <td style="text-align: center;">' . $row['date_naissance_user'] . '</td>
+                <td style="text-align: center;">' . $row['adresse_user'] . '</td>
+                <td style="text-align: center;">' . $user_data. '</td>
+                <td style="text-align: center;"><a '.(($row["photo_user"]!="")?"href='uploads/{$row["photo_user"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
+                <td style="text-align: center;">
+                    <div class="btn-group">';
+                        if($row['etat_user'] == '1'){
+                            $value .= '<button type="button" style="margin-right: 3px;" class="btn btn-success" id="btn_desactiver_user" data-id2=' . $row['id_user'] . '><i class="fas fa-check"></i></button>'; 
+                        }
+                        if($row['etat_user'] == '2'){
+                            $value .= '<button type="button" style="margin-right: 3px;" class="btn btn-outline-success" id="btn_activer_user" data-id3=' . $row['id_user'] . '><i class="fas fa-check"></i></button>'; 
+                        }
+                        $value .= '<button type="button" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifier_user" data-id=' . $row['id_user'] . '><i class="fa fa-pen fa-1x"></i></button> 
+                        <button type="button" class="btn btn-danger" id="btn_supprimer_user" data-id1=' . $row['id_user'] . '><i class="fa fa-trash fa-1x"></i></button> 
+                    </div>
+                </td>
+            </tr>';
+        }
     $value .= '</tbody></table>';
     echo json_encode(['status' => 'success', 'html' => $value]);
 }
+
     	
 function addUser(){
 	global $conn ;
@@ -132,9 +134,9 @@ function addUser(){
 
 	if(mysqli_num_rows($selectEmail)) {
 		if ($status!="0"){
-			echo "<div class='text-echec'>L\'email est déjà utilisée</div> ";
+			echo "<div class='text-echec'>L'email est déjà utilisée</div> ";
 		}else{
-			echo "<div class='text-echec'>L\'email est supprimé, contactez votre administrateur.</div> ";
+			echo "<div class='text-echec'>L'email est supprimé, contactez votre administrateur.</div> ";
 		}
 	}else if(mysqli_num_rows($selectCIN)) {
 		echo "<div class='text-echec'>Ce numéro de CIN est déjà utilisé</div> ";
@@ -143,7 +145,7 @@ function addUser(){
 		values('$nom','$prenom','$numCIN','$numTel','$email','$password','$dateNaissance','$role','$specialite','$address','$photoProfile_filname','1')";
 		$result=mysqli_query($conn,$query);
 		if ($result) {
-			echo "<div class='text-success'>L\'utilisateur est ajouté avec succès</div>";
+			echo "<div class='text-success'>L'utilisateur est ajouté avec succès</div>";
 		} else {
 			echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
 		}
@@ -155,13 +157,11 @@ function addUser(){
       
     	global $conn;
     	$id_user = $_POST['user_ID'];
-    
-    	$query = "UPDATE user SET etat_user='2' WHERE id_user='$id_user'";
-    
+		$date = date('Y-m-d H:i:s');
+        $query = "UPDATE user SET etat_user='2',date_updated_user='$date' WHERE id_user='$id_user'";    
     	$result=mysqli_query($conn,$query);
-    
     	if ($result) {
-    		echo "<div class='text-success'>le compte est désactivé avec succès</div>";
+    		echo "<div class='text-success'>Le compte est désactivé avec succès</div>";
     	} else {
     		echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
     	}
@@ -171,13 +171,11 @@ function addUser(){
       
     	global $conn;
     	$id_user = $_POST['user_ID'];
-    
-    	$query = "UPDATE user SET etat_user='1' WHERE id_user='$id_user'";
-    
+		$date = date('Y-m-d H:i:s');
+        $query = "UPDATE user SET etat_user='1',date_updated_user='$date' WHERE id_user='$id_user'";
     	$result=mysqli_query($conn,$query);
-    
     	if ($result) {
-    		echo "<div class='text-success'>le compte est activé avec succès</div>";
+    		echo "<div class='text-success'>Le compte est activé avec succès</div>";
     	} else {
     		echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
     	}
@@ -187,13 +185,11 @@ function addUser(){
   
 		global $conn;
 		$id_user = $_POST['DeleteID'];
-	
-		$query = "UPDATE user SET etat_user='0' WHERE id_user='$id_user'";
-	
+		$date = date('Y-m-d H:i:s');
+		$query = "UPDATE user SET etat_user='0', date_updated_user='$date' WHERE id_user='$id_user'";
 		$result=mysqli_query($conn,$query);
-	
 		if ($result) {
-			echo "<div class='text-success'>Supprimé avec succès</div>";
+			echo "<div class='text-success'>L'utilisateur est supprimé avec succès</div>";
 		} else {
 			echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
 		}
@@ -230,6 +226,7 @@ function addUser(){
 	
 	function updateUser(){
 		global $conn ;
+		$date = date('Y-m-d H:i:s');
 		$idUser= $_POST['idUser'];
 		$role=$_POST['role'];
 		$specialite=$_POST['specialite'];
@@ -276,15 +273,15 @@ function addUser(){
 
 		if(mysqli_num_rows($selectEmail)) {
 			if ($status!="0"){
-				echo "<div class='text-echec'>L\'email est déjà utilisée</div> ";
+				echo "<div class='text-echec'>L'email est déjà utilisée</div> ";
 			}else{
-				echo "<div class='text-echec'>L\'email est supprimé, contactez votre administrateur.</div> ";
+				echo "<div class='text-echec'>L'email est supprimé, contactez votre administrateur.</div> ";
 			}
 		}else if(mysqli_num_rows($selectCIN)) {
 			echo "<div class='text-echec'>Ce numéro de CIN est déjà utilisé</div> ";
 		}else {
 	    	
-			$query = "UPDATE user SET nom_user='$nom',prenom_user='$prenom',cin_user='$numCIN',numTel_user='$numTel',email_user='$email',password_user='$password',date_naissance_user='$dateNaissance',id_role='$role',id_specialite='$specialite',adresse_user='$address',photo_user='$photoProfile_filname' WHERE id_user='$idUser'";
+			$query = "UPDATE user SET nom_user='$nom',prenom_user='$prenom',cin_user='$numCIN',numTel_user='$numTel',email_user='$email',password_user='$password',date_naissance_user='$dateNaissance',id_role='$role',id_specialite='$specialite',adresse_user='$address',photo_user='$photoProfile_filname', date_updated_user='$date' WHERE id_user='$idUser'";
 
 			$result=mysqli_query($conn,$query);
 	
@@ -298,7 +295,7 @@ function addUser(){
 
 	}
 
-	function getClientRecord(){
+	function getProfilRecord(){
 		global $conn ;
 		$iduser= $_SESSION['id_user'];
         $query = "SELECT * FROM user     
@@ -392,7 +389,7 @@ function addUser(){
         `id_specialite`='$selectedspecialite',
         `adresse_user`=' $up_profilAdresse',
         `photo_user`= '$up_profilPhoto',
-        `date-updated_user`='$date'
+        `date_updated_user`='$date'
         WHERE id_user='$up_idprofil'";
         $result_update_profil = mysqli_query($conn, $query_update_profil);
         if (!$result_update_profil) {

@@ -45,6 +45,9 @@ include 'Gestion/connect_db.php';
         grid-template-columns: repeat(2, auto);
         gap: 25px;
     }
+    #btn dropdown-toggle btn-light data-id{
+        border:1px solid black
+    }
     </style>
     <div class="page-content">
         <div class="row">
@@ -215,7 +218,6 @@ include 'Gestion/connect_db.php';
                         </div>
                         <div class="modal-body">
                             <form id="up-profilForm" autocomplete="off" class="form-horizontal form-material">
-                                <input type="hidden" id="up_idclient">
                                 <div id="fiche_1row">
                                     <div hidden>
                                         <input type="text" id="up_idProfil" class="form-control">
@@ -279,19 +281,19 @@ include 'Gestion/connect_db.php';
                                         <label class="col-md-12 p-0">Spécialité<span
                                                 class="text-danger">*</span></label>
                                         <?php
-                                        $query = "SELECT * FROM specialite ORDER BY id_specialite ASC";
-                                        $result = mysqli_query($conn, $query);
+                                    $query = "SELECT * FROM specialite ORDER BY id_specialite ASC";
+                                    $result = mysqli_query($conn, $query);
                                         ?>
                                         <div class="col-md-12 p-0">
-                                        <select type="text" style="width:200px; text-align: center;" name="type"  id="role" id="up_profilspecialite" name="role" class="form-control" required>
-                                <option value="Choisissez" selected disabled>Choisissez Spécialité</option>
-                                                <?php
-                                            if ($result->num_rows > 0) {
-                                                while ($row = $result->fetch_assoc()) {
-                                                    echo '<option value="' . $row['id_specialite'] . '">' . $row['nom_specialite'] .  ' </option>';
-                                                }
+                                        <select class="selectpicker form-control" id="up_profilspecialite" name="up_specialitename" style="margin-bottom:8px" multiple aria-label="select">
+                                <option value="" disabled>Selectionner votre spécialité</option>
+                                 <?php
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                            echo '<option value="' . $row['id_specialite'] . '">' . $row['nom_specialite'] . ' </option>';
                                             }
-                                            ?>
+                                        }
+                                 ?>
                                             </select>
                                         </div>
                                     </div>
@@ -349,48 +351,49 @@ include 'Gestion/connect_db.php';
             </div>
             <!-- end Model modification profil -->
 
-            <!-- Model alert modification profil succès -->
-            <div class="modal fade" id="SuccessUpProfil" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
+                <!-- Model alert update profil succès -->
+                <div class="modal fade" id="SuccessUpProfil" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modifier Profil</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        </div>
-                        <div class="modal-echec-succes">
-                            <div class="circlechecked">
-                                <i class="bx bx-check"></i>
-                            </div>
-                            <div style="font-size:20px; margin-top:109px;">
-                                <center id="upprtofil_success"></center>
-                            </div>
-                        </div>
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Modifier Utilisateur</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>                    </div>
+                    <div class="modal-echec-succes">
+                      <div class="circlechecked">
+                      <i class="fas fa-check"></i>
+                      </div>
+                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                        <center id="upprtofil_success"></center>
+                      </div>
                     </div>
+                  </div>
                 </div>
-            </div>
-            <!-- end Model alert modification profil succès -->
-            <!-- Model alert modification profil echec -->
-            <div class="modal fade" id="EchecUpProfil" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
+              </div>
+              <!-- end Model alert update profil succès -->
+
+                <!-- Model alert update profil echec -->
+                <div class="modal fade" id="EchecUpProfil" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modifier Profil</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        </div>
-                        <div class="modal-echec-succes">
-                            <div class="circleerror">
-                                <i class="bx bx-x"></i>
-                            </div>
-                            <div style="font-size:20px; margin-top:109px;">
-                                <center id="upprofil_echec"></center>
-                            </div>
-                        </div>
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Modifier Utilisateur</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>                    </div>
+                    <div class="modal-echec-succes">
+                      <div class="circleerror">
+                      <i class="fas fa-check"></i>
+                      </div>
+                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                        <center id="upprofil_echec"></center>
+                      </div>
                     </div>
+                  </div>
                 </div>
-            </div>
-            <!-- end Model alert modification profil echec -->
+              </div>
+              <!-- end Model alert update profil echec -->
 
         </div>
     </div>

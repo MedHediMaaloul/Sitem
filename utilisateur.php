@@ -171,7 +171,9 @@ include 'Gestion/header.php'
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLabel">Ajout Utilisateur</h5>
-                      <button class="button-close" id="btn-close-x"></button>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circlechecked">
@@ -192,7 +194,9 @@ include 'Gestion/header.php'
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLabel">Ajout Utilisateur</h5>
-                      <button class="button-close" id="btn-close-x"></button>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circleerror">
@@ -207,8 +211,8 @@ include 'Gestion/header.php'
               </div>
               <!-- end Model alert add user echec --> 
 
-              <!-- delete User model -->
-              <div class="modal fade" id="delete_user" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <!-- Model alert delete user succès -->
+              <div class="modal fade" id="SuccessDeleteUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -216,28 +220,6 @@ include 'Gestion/header.php'
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
                         <span aria-hidden="true">&times;</span>
                       </button>
-                    </div>
-                    <div class="modal-body">
-                    <p>Voulez-vous supprimer l'utilisateur ?</p>
-                      <div class="modal-body">
-                        <div style="float: right;">
-                          <button class="btn btn-success" id="supprimer_user">Supprimer</button>
-                          <button type="button" class="btn btn-danger" data-dismiss="modal" id="btn-close">Fermer</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- end delet modal -->
-
-              <!-- Model alert delete user succès -->
-              <div class="modal fade" id="SuccessDeleteUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Supprimer Utilisateur</h5>
-                      <button class="button-close" id="btn-close-UpdateUser"></button>
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circlechecked">
@@ -258,7 +240,9 @@ include 'Gestion/header.php'
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLabel">Supprimer Utilisateur</h5>
-                      <button class="button-close" id="btn-close-UpdateUser"></button>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circleerror">
@@ -327,7 +311,9 @@ include 'Gestion/header.php'
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLabel">Désactiver Utilisateur</h5>
-                      <button class="button-close" id="btn-close-x"></button>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circlechecked">
@@ -348,7 +334,9 @@ include 'Gestion/header.php'
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLabel">Désactiver Utilisateur</h5>
-                      <button class="button-close" id="btn-close-x"></button>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circleerror">
@@ -394,7 +382,9 @@ include 'Gestion/header.php'
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLabel">Activer Utilisateur</h5>
-                      <button class="button-close" id="btn-close-x"></button>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circlechecked">
@@ -415,7 +405,9 @@ include 'Gestion/header.php'
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLabel">Activer Utilisateur</h5>
-                      <button class="button-close" id="btn-close-x"></button>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circleerror">
@@ -470,8 +462,8 @@ include 'Gestion/header.php'
                           <div class="form-group" id="sh2" style="display:none;">
                             <label class="col-md-12 p-0">Spécialité<span class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
-                              <select multiple type="text" name="type" id="up_specialite" name="up_specialite" style="margin-bottom:8px" class=" form-control" aria-label="select">
-                                <option value="" disabled >Selectionner votre spécialité</option>
+                            <select class="selectpicker form-control" id="up_specialite" name="up_specialite" style="margin-bottom:8px" multiple aria-label="select">
+                                <option value="" disabled>Selectionner votre spécialité</option>
                                 <?php
                                   global $conn;
                                   $resultat = mysqli_query($conn,"SELECT * FROM specialite");  
@@ -595,7 +587,9 @@ include 'Gestion/header.php'
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLabel">Modifier Utilisateur</h5>
-                      <button class="button-close" id="btn-close-UpdateUser"></button>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circlechecked">
@@ -616,7 +610,9 @@ include 'Gestion/header.php'
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLabel">Modifier Utilisateur</h5>
-                      <button class="button-close" id="btn-close-UpdateUser"></button>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circleerror">

@@ -36,7 +36,6 @@ WHERE id_user= '$iduser'";
     top: -8px !important;
 }
 </style>
-
 <body>
     <div class="wrapper">
         <div class="sidebar-wrapper" data-simplebar="true">
@@ -104,7 +103,7 @@ WHERE id_user= '$iduser'";
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="profil.php">
+                    <a class="hex-content" href="../profil.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-tasks" aria-hidden="true"></i>
@@ -130,7 +129,7 @@ WHERE id_user= '$iduser'";
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="profil.php">
+                    <a class="hex-content" href="../profil.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -156,7 +155,7 @@ WHERE id_user= '$iduser'";
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="profil.php">
+                    <a class="hex-content" href="../profil.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-laptop" aria-hidden="true"></i>
@@ -182,7 +181,7 @@ WHERE id_user= '$iduser'";
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="profil.php">
+                    <a class="hex-content" href="../profil.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-database" aria-hidden="true"></i>
@@ -208,7 +207,7 @@ WHERE id_user= '$iduser'";
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="profil.php">
+                    <a class="hex-content" href="../profil.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-envelope-open" aria-hidden="true"></i>

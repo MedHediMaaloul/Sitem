@@ -14,7 +14,6 @@ $(document).ready(function () {
 //close modal
 $(document).on("click", "#btn-close", function () {
   location.reload(true);
-
 });
 
 //validate phone
@@ -160,6 +159,7 @@ function view_user() {
 
 function add_user() {
   $(document).on("click", "#btn_openModel", function () {
+    document.getElementById('sh1').style.display = 'none';
     $("#insert-user_form").trigger("reset");
     var paragraphs = $("#insert-user_form").find("p");
     paragraphs.each(function () {
@@ -167,6 +167,9 @@ function add_user() {
     });
     $("#modal_add").modal("show");
     $(document).on("click", "#btn_ajout_user", function () {
+      paragraphs.each(function () {
+        $(this).html('');
+      });
       var role = $("#role").val();
       var nom = $("#nom").val();
       var prenom = $("#prenom").val();
@@ -252,7 +255,6 @@ function add_user() {
           contentType: false,
           data: form_data,
           success: function (data) {
-            view_user();
             if (data.includes('text-echec')) {
               $("#modal_add").modal("hide");
               $("#adduser_echec").removeClass("text-checked").addClass("text-echec").html(data);
@@ -270,6 +272,7 @@ function add_user() {
               setTimeout(function () {
                 if ($("#SuccessAddUser").length > 0) {
                   $("#SuccessAddUser").modal("hide");
+                  view_user();
                 }
               }, 2000);
             }
@@ -293,7 +296,6 @@ function disable_account() {
           user_ID: user_ID
         },
         success: function (data) {
-          view_user();
           if (data.includes('text-echec')) {
             $("#disable_user").modal("hide");
             $("#disableUser_echec").removeClass("text-checked").addClass("text-echec").html(data);
@@ -311,6 +313,7 @@ function disable_account() {
             setTimeout(function () {
               if ($("#SuccessDisableUser").length > 0) {
                 $("#SuccessDisableUser").modal("hide");
+                view_user();
               }
             }, 2000);
           }
@@ -333,7 +336,6 @@ function activate_account() {
           user_ID: user_ID
         },
         success: function (data) {
-          view_user();
           if (data.includes('text-echec')) {
             $("#activate_user").modal("hide");
             $("#activateUser_echec").removeClass("text-checked").addClass("text-echec").html(data);
@@ -351,6 +353,7 @@ function activate_account() {
             setTimeout(function () {
               if ($("#SuccessActivateUser").length > 0) {
                 $("#SuccessActivateUser").modal("hide");
+                view_user();
               }
             }, 2000);
           }
@@ -372,7 +375,6 @@ function delete_user() {
           DeleteID: Delete_ID
         },
         success: function (data) {
-          view_user();
           if (data.includes('text-echec')) {
             $("#delete_user").modal("hide");
             $("#deleteUser_echec").removeClass("text-checked").addClass("text-echec").html(data);
@@ -390,6 +392,7 @@ function delete_user() {
             setTimeout(function () {
               if ($("#SuccessDeleteUser").length > 0) {
                 $("#SuccessDeleteUser").modal("hide");
+                view_user();
               }
             }, 2000);
           }
@@ -402,9 +405,9 @@ function delete_user() {
   });
 }
 
-
 function get_data_user() {
   $(document).on("click", "#btn_modifier_user", function () {
+    document.getElementById('sh2').style.display = 'none';
     $("#passwordupdate").prop("checked", false);
     $("#passwordchange_form ").css("display", "none");
     $("#update-user_form").trigger("reset");
@@ -424,6 +427,8 @@ function get_data_user() {
         $("#idUser").val(data[0]);
         $("#up_role").val(data[1]);
         var specialite = data[2].split(",");
+        $('select[name=up_specialite]').val(specialite);
+        $('#up_specialite').selectpicker('refresh')
         $("#up_specialite").val(specialite);
         $("#up_nom").val(data[3]);
         $("#up_prenom").val(data[4]);
@@ -434,11 +439,9 @@ function get_data_user() {
         $("#up_dateNaissance").val(data[9]);
 
         $("#update_user_modal").modal("show");
-        view_user();
         if ($("#up_role").val() == "1") {
           document.getElementById('sh2').style.display = 'block';
         }
-
         const id_up_role = document.getElementById("up_role");
         id_up_role.addEventListener("change", handleSelectChange);
         function handleSelectChange(event) {
@@ -446,6 +449,8 @@ function get_data_user() {
           document.getElementById('sh2').style.display = 'none';
           if (id_role == "1") {
             document.getElementById('sh2').style.display = 'block';
+          }else{
+            $("#up_specialite").val("");
           }
         }
 
@@ -458,6 +463,10 @@ function get_data_user() {
 
 function update_user() {
   $(document).on("click", "#btn_update_user", function () {
+    var paragraphs = $("#update-user_form").find("p");
+    paragraphs.each(function () {
+      $(this).html('');
+    });
     $("#update_user_modal").scrollTop(0);
     var idUser = $("#idUser").val();
     var role = $("#up_role").val();
@@ -476,18 +485,6 @@ function update_user() {
         return $(this).val();
       })
       .get();
-
-    $("#up_role_error").html("");
-    $("#up_specialite_error").html("");
-    $("#up_nom_error").html("");
-    $("#up_prenom_error").html("");
-    $("#up_address_error").html("");
-    $("#up_numCIN_error").html("");
-    $("#up_email_error").html("");
-    $("#up_numTel_error").html("");
-    $("#up_dateNaissance_error").html("");
-    $("#up_password_error").html("");
-
     if (doc_photoProfile == undefined) {
       doc_photoProfile = "";
     }
@@ -561,7 +558,6 @@ function update_user() {
         contentType: false,
         data: form_data,
         success: function (data) {
-          view_user();
           if (data.includes('text-echec')) {
             $("#update_user_modal").modal("hide");
             $("#UpdateUser_echec").removeClass("text-checked").addClass("text-echec").html(data);
@@ -579,6 +575,7 @@ function update_user() {
             setTimeout(function () {
               if ($("#SuccessUpdateUser").length > 0) {
                 $("#SuccessUpdateUser").modal("hide");
+                view_user();
               }
             }, 2000);
           }
@@ -589,9 +586,11 @@ function update_user() {
   });
 }
 
+   /* profil*/
+
 function get_profil_record() {
   $.ajax({
-    url: "get_client_record.php",
+    url: "get_profil_record.php",
     method: "post",
     dataType: "JSON",
     success: function (data) {
@@ -615,13 +614,12 @@ function get_profil_record() {
   $(document).on("click", "#up_profil_btn", function () {
     $("#passwordupdate").prop("checked", false);
     $("#passwordchange_form ").css("display", "none");
-
     var paragraphs = $("#up-profilForm").find("p");
     paragraphs.each(function() {
     $(this).html('');
     });
     $.ajax({
-      url: "get_client_record.php",
+      url: "get_profil_record.php",
       method: "post",
       dataType: "JSON",
       success: function (data) {
@@ -634,7 +632,8 @@ function get_profil_record() {
         $("#up_profilPhone").val(data[4]);
         $("#up_profilAdresse").val(data[10]);
         var specialites = data[9].split(",");
-        $("#up_profilspecialite").val(specialites);
+        $('select[name=up_specialitename]').val(specialites);
+        $('#up_profilspecialite').selectpicker('refresh')
         $("#up_profil_modal").modal("show");
       },
     });
@@ -642,8 +641,12 @@ function get_profil_record() {
 }
 function update_profil_record() {
   $(document).on("click", "#btn_update_profil_user", function () {
+    var paragraphs = $("#up-profilForm").find("p");
+    paragraphs.each(function() {
+    $(this).html('');
+    });
     $("#up_profil_modal").scrollTop(0);
-        var up_idprofil = $("#up_idProfil").val();
+    var up_idprofil = $("#up_idProfil").val();
     var up_profilNom = $("#up_profilNom").val();
     var up_profilPrenom = $("#up_profilPrenom").val();
     var up_profilDateNaissance = $("#up_profilDateNaissance").val();
@@ -735,9 +738,9 @@ function update_profil_record() {
                 .addClass("text-checked")
                 .html(data);
               $("#SuccessUpProfil").modal("show");
-
               setTimeout(function () {
                 $("#SuccessUpProfil").modal("hide");
+                get_profil_record();
               }, 3000);
             }
           },

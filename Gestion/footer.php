@@ -17,7 +17,6 @@
 <script>
 $(document).ready(function() {
     $('.hex-content').click(function(e) {
-        e.preventDefault(); 
         $('.hex-item').children().css('background','transparent');
         $('.hex-item:first-child').css('transform', 'scale(1)');
         $('.hex-content svg').css({'transform':'scale(0.87)','transition':'0.3s'});
