@@ -125,8 +125,9 @@ function addUser(){
 	    
     $selectEmail = mysqli_query($conn, "SELECT * FROM user WHERE email_user = '".$_POST['email']."' ");
 	$row= mysqli_fetch_array($selectEmail);
-	$status= $row['etat_user'];
-
+	while ($row = mysqli_fetch_assoc($selectEmail)) {
+		$status= $row['etat_user'];
+		}
 	$selectCIN = mysqli_query($conn, "SELECT * FROM user WHERE cin_user!='0' and cin_user = '".$_POST['numCIN']."'");
 
 	if(mysqli_num_rows($selectEmail)) {
