@@ -130,3 +130,39 @@ body {
   position: relative;
   z-index: 2;
   color: #555; }
+
+  
+.inbox-body .modal .modal-body input,.inbox-body .modal .modal-body textarea {
+  border:1px solid #e6e6e6;
+  box-shadow:none;
+}
+.btn-send,.btn-send:hover {
+  background:#00A8B3;
+  color:#fff;
+}
+.btn-send:hover {
+  background:#009da7;
+}
+.modal-header h4.modal-title {
+  font-weight:300;
+  font-family:'Open Sans',sans-serif;
+}
+.modal-body label {
+  font-weight:400;
+  font-family: 'Open Sans',sans-serif;
+}
+
+.compose-mail {
+  width: 100%;
+  display: inline-block;
+  position: relative;
+  margin-top: 20px;
+}
+
+.modal-header {
+	background: #05DD9A;
+}
+
+.modal-title {
+	color: white;
+}

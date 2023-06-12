@@ -1,5 +1,4 @@
 <?php
-session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,29 +6,26 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <title>CodePen - menu with awesome hover </title>
-    <link rel='stylesheet' href='assets/css/bootstrap.min.css'>
-    <link href="assets/font/bambino/Bambino Black.ttf" rel="stylesheet">
+
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css'>
+    <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.cdnfonts.com/css/bambino-2" rel="stylesheet">
-                    <link rel="stylesheet" href="assets/css/accueil.css">
+    <link rel="stylesheet" href="assets/css/accueil.css">
 
 </head>
 
 <body>
     <!-- partial:index.partial.html -->
-    <main class="site-wrapper">
+    <main>
         <div class="pt-table desktop-768">
 
-            <div class="pt-tablecell page-home relative" style="background-image: url(assets/images/background_accueil.jpg);
-    background-position: center;
-    background-size: cover;">
-                <div class="overlay"></div>
-
+            <div class="pt-tablecell page-home ">
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-6 col-md-offset-1 col-md-10 col-lg-offset-2 col-lg-8">
                             <div class="page-title  home text-center">
-                                <span class="heading-page"> SITEM
-                                </span>
+                                <img src="assets/images/logo_sitem.png" width="300px" alt="">
                             </div>
 
                             <div class="hexagon-menu clear">
@@ -70,7 +66,7 @@ session_start();
                                         <div></div>
                                         <div></div>
                                     </div>
-                                    <a class="hex-content">
+                                    <a class="hex-content" href="utilisateur.php">
                                         <span class="hex-content-inner">
                                             <span class="icon">
                                                 <i class="fa fa-users" aria-hidden="true"></i>
