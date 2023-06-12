@@ -9,7 +9,6 @@ body {
   font-weight: 400;
   font-size: 16px;
   line-height: 30px;
-  /* background-color: #e9ecef; */
   color: #ababab;
 }
 
@@ -100,8 +99,6 @@ body {
   background-clip: border-box;
   border-bottom: 1px solid rgb(255 255 255 / 15%);
 }
-
-
 
 .hexagon-item {
   cursor: pointer;
@@ -348,9 +345,14 @@ body {
   top: 2px !important;
 }
 
+.svgicon {
+  height: 160px !important;
+  width: 174px !important;
+  top: -8px !important;
+}
+
 .circleiconss {
   position: relative;
-
   border-radius: 50%;
   box-sizing: content-box;
 }
@@ -380,7 +382,6 @@ body {
 .circleiconsslink:hover::before {
   transform: scale(1.2);
   border: 2px solid #05dd9a;
-
 }
 
 
@@ -463,4 +464,9 @@ input[type=checkbox] {
 	text-align: center;
 	border-radius: 50px;
 	line-height: 55px;
+}
+
+.msgError {
+  color: #D8000C;
+  text-align: center;
 }

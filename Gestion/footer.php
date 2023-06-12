@@ -14,5 +14,25 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js" integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<script>
+$(document).ready(function() {
+    $('.hex-content').click(function(e) {
+        e.preventDefault(); 
+        $('.hex-item').children().css('background','transparent');
+        $('.hex-item:first-child').css('transform', 'scale(1)');
+        $('.hex-content svg').css({'transform':'scale(0.87)','transition':'0.3s'});
+        $('.hex-content .icon i').css({'color':'#fff','transition':'0.6s'});
+        var hexChildren = $(this).closest('.hexagon-item').children('.hex-item');
+        var hexItem = $(this).closest('.hexagon-item').find('.hex-item:first-child');
+        var hexcontent = $(this).closest('.hexagon-item').find('.hex-content svg');
+        var hexicone = $(this).closest('.hexagon-item').find('.hex-content .icon i');
+        hexicone.css({'color':'#05dd9a','transition':'0.6s'});
+        hexcontent.css({'transform':'scale(0.97)','transition':'0.3s'});
+        hexItem.css('transform', 'scale(1.2)');
+        hexChildren.children().css('background','#05dd9a');
+    });
+});
+</script>
 </body>
+
 </html>

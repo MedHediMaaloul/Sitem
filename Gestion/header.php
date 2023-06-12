@@ -1,8 +1,13 @@
 <?php
-	session_start();
-  include('Gestion/connect_db.php');
-
+session_start();
+include 'Gestion/connect_db.php';
+$iduser=$_SESSION['id_user'];
+$query = "SELECT * FROM user     
+WHERE id_user= '$iduser'";
+ $result = mysqli_query($conn, $query);
+ $row = mysqli_fetch_assoc($result);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,9 +31,9 @@
 </head>
 <style>
 .svgicon {
-    height: 158px !important;
-    width: 175px !important;
-    top: -7px !important;
+    height: 160px !important;
+    width: 174px !important;
+    top: -8px !important;
 }
 </style>
 
@@ -47,7 +52,7 @@
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="../profil.php">
+                    <a class="hex-content" href="profil.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-user" aria-hidden="true"></i>
@@ -99,7 +104,7 @@
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="../profil.php">
+                    <a class="hex-content" href="profil.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-tasks" aria-hidden="true"></i>
@@ -125,7 +130,7 @@
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="../profil.php">
+                    <a class="hex-content" href="profil.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -151,7 +156,7 @@
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="../profil.php">
+                    <a class="hex-content" href="profil.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-laptop" aria-hidden="true"></i>
@@ -177,7 +182,7 @@
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="../profil.php">
+                    <a class="hex-content" href="profil.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-database" aria-hidden="true"></i>
@@ -203,7 +208,7 @@
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="../profil.php">
+                    <a class="hex-content" href="profil.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-envelope-open" aria-hidden="true"></i>
@@ -223,7 +228,7 @@
         <header>
             <div class="topbar d-flex align-items-center">
                 <nav class="navbar navbar-expand">
-                    <a href="" class="circleiconsslink"> <img src="assets/images/profil.png"
+                    <a href="" class="circleiconsslink"> <img src="uploads/<?php  (empty($row['photo_user']))? print 'avatar.png':print $row['photo_user']?>"
                             class="rounded-circle shadow-4 circleiconss" style="width: 55px; height:55px;"
                             alt="Avatar" />
                     </a>
