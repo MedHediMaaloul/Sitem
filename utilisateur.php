@@ -5,14 +5,14 @@ include 'Gestion/header.php'
 <div class="page-wrapper">
   <div class="page-content">
     <div class="row">                
-      <h3 class="mb-4" style="color:#05DD9A;"><i class="fa fa-angle-right"></i> Utilisateur</h3>
+      <h3 class="mb-4 fnt" style="color:#05DD9A;"><i class="fa fa-angle-right"></i> Utilisateur</h3>
       <div class="row mt">
         <div class="col-md-12">
           <div class="content-panel">                  
-            <button type="button" class="btn btn-success btn-xs" id="btn_openModel" ><i class="fa fa-plus-circle"></i></button> 
+            <button type="button" title="Ajouter Utilisateur"class="btn btn-success btn-xs" id="btn_openModelAddUser" ><i class="fa fa-plus-circle"></i></button> 
               
             <!-- Add user Modal -->
-              <div class="modal fade bd-example-modal-lg" id="modal_add"  tabindex="-1" role="dialog"
+              <div class="modal fade bd-example-modal-lg" id="modal_addUser"  tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                   <div class="modal-content">
@@ -200,7 +200,7 @@ include 'Gestion/header.php'
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circleerror">
-                        <i class="fas fa-check"></i>
+                        <i class="fa fa-times"></i>
                       </div>
                       <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="adduser_echec"></center>
@@ -216,7 +216,7 @@ include 'Gestion/header.php'
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Supprimer Utilisateur</h5>
+                      <h5 class="modal-title" id="exampleModalLabel">Suppression Utilisateur</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -239,14 +239,14 @@ include 'Gestion/header.php'
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Supprimer Utilisateur</h5>
+                      <h5 class="modal-title" id="exampleModalLabel">Suppression Utilisateur</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circleerror">
-                        <i class="fas fa-check"></i>
+                        <i class="fa fa-times"></i>
                       </div>
                       <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="deleteUser_echec"></center>
@@ -340,7 +340,7 @@ include 'Gestion/header.php'
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circleerror">
-                        <i class="fas fa-check"></i>
+                        <i class="fa fa-times"></i>
                       </div>
                       <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="disableUser_echec"></center>
@@ -411,7 +411,7 @@ include 'Gestion/header.php'
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circleerror">
-                        <i class="fas fa-check"></i>
+                        <i class="fa fa-times"></i>
                       </div>
                       <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="activateUser_echec"></center>
@@ -463,7 +463,7 @@ include 'Gestion/header.php'
                             <label class="col-md-12 p-0">Spécialité<span class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
                             <select class="selectpicker form-control" id="up_specialite" name="up_specialite" style="margin-bottom:8px" multiple aria-label="select">
-                                <option value="" disabled>Selectionner votre spécialité</option>
+                                <option value="" disabled selected>Selectionner votre spécialité</option>
                                 <?php
                                   global $conn;
                                   $resultat = mysqli_query($conn,"SELECT * FROM specialite");  
@@ -616,7 +616,7 @@ include 'Gestion/header.php'
                     </div>
                     <div class="modal-echec-succes">
                       <div class="circleerror">
-                      <i class="fas fa-check"></i>
+                      <i class="fa fa-times"></i>
                       </div>
                       <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="UpdateUser_echec"></center>

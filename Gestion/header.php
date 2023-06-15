@@ -103,7 +103,7 @@ WHERE id_user= '$iduser'";
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="../profil.php">
+                    <a class="hex-content" href="projet.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-tasks" aria-hidden="true"></i>
@@ -227,7 +227,7 @@ WHERE id_user= '$iduser'";
         <header>
             <div class="topbar d-flex align-items-center">
                 <nav class="navbar navbar-expand">
-                    <a href="" class="circleiconsslink"> <img src="uploads/<?php  (empty($row['photo_user']))? print 'avatar.png':print $row['photo_user']?>"
+                    <a href="" class="circleiconsslink"> <img src="uploads/user/<?php  (empty($row['photo_user']))? print 'avatar.png':print $row['photo_user']?>"
                             class="rounded-circle shadow-4 circleiconss" style="width: 55px; height:55px;"
                             alt="Avatar" />
                     </a>

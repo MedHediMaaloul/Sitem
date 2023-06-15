@@ -9,6 +9,21 @@ $(document).ready(function () {
   activate_account();
   get_profil_record();
   update_profil_record();
+  view_project();
+  add_project();
+  delete_project();
+  get_data_etat();
+  update_etat_project();
+  get_data_project();
+  update_project();
+  view_tache();
+  add_tache();
+  delete_tache();
+  get_data_etatTache();
+  update_etat_tache();
+  get_data_tache();
+  update_tache();
+
 });
 
 //close modal
@@ -158,16 +173,16 @@ function view_user() {
 
 
 function add_user() {
-  $(document).on("click", "#btn_openModel", function () {
+  $(document).on("click", "#btn_openModelAddUser", function () {
     document.getElementById('sh1').style.display = 'none';
     $("#insert-user_form").trigger("reset");
-    var paragraphs = $("#insert-user_form").find("p");
-    paragraphs.each(function () {
+    var msgErrorLabel = $("#insert-user_form").find("p");
+    msgErrorLabel.each(function () {
       $(this).html('');
     });
-    $("#modal_add").modal("show");
+    $("#modal_addUser").modal("show");
     $(document).on("click", "#btn_ajout_user", function () {
-      paragraphs.each(function () {
+      msgErrorLabel.each(function () {
         $(this).html('');
       });
       var role = $("#role").val();
@@ -256,7 +271,7 @@ function add_user() {
           data: form_data,
           success: function (data) {
             if (data.includes('text-echec')) {
-              $("#modal_add").modal("hide");
+              $("#modal_addUser").modal("hide");
               $("#adduser_echec").removeClass("text-checked").addClass("text-echec").html(data);
               $("#EchecAddUser").modal("show");
               setTimeout(function () {
@@ -265,7 +280,7 @@ function add_user() {
                 }
               }, 2000);
             } else {
-              $("#modal_add").modal("hide");
+              $("#modal_addUser").modal("hide");
               $("#adduser_success").addClass("text-checked").html(data);
               $("#SuccessAddUser").modal("show");
               $("#adduser_success").removeClass("text-echec").addClass("text-checked");
@@ -411,8 +426,8 @@ function get_data_user() {
     $("#passwordupdate").prop("checked", false);
     $("#passwordchange_form ").css("display", "none");
     $("#update-user_form").trigger("reset");
-    var paragraphs = $("#update-user_form").find("p");
-    paragraphs.each(function () {
+    var msgErrorLabel = $("#update-user_form").find("p");
+    msgErrorLabel.each(function () {
       $(this).html('');
     });
     var updateID = $(this).attr("data-id");
@@ -449,7 +464,7 @@ function get_data_user() {
           document.getElementById('sh2').style.display = 'none';
           if (id_role == "1") {
             document.getElementById('sh2').style.display = 'block';
-          }else{
+          } else {
             $("#up_specialite").val("");
           }
         }
@@ -463,8 +478,8 @@ function get_data_user() {
 
 function update_user() {
   $(document).on("click", "#btn_update_user", function () {
-    var paragraphs = $("#update-user_form").find("p");
-    paragraphs.each(function () {
+    var msgErrorLabel = $("#update-user_form").find("p");
+    msgErrorLabel.each(function () {
       $(this).html('');
     });
     $("#update_user_modal").scrollTop(0);
@@ -586,7 +601,7 @@ function update_user() {
   });
 }
 
-   /* profil*/
+/* profil*/
 
 function get_profil_record() {
   $.ajax({
@@ -607,16 +622,16 @@ function get_profil_record() {
       $("#userpaasword").val(data[6]);
       $("#userspecialité").html(data[12]);
       if (data[11] != "") {
-        $("#profilphoto").attr("src", "uploads/" + data[11]);
+        $("#profilphoto").attr("src", "uploads/user/" + data[11]);
       }
     },
   });
   $(document).on("click", "#up_profil_btn", function () {
     $("#passwordupdate").prop("checked", false);
     $("#passwordchange_form ").css("display", "none");
-    var paragraphs = $("#up-profilForm").find("p");
-    paragraphs.each(function() {
-    $(this).html('');
+    var msgErrorLabel = $("#up-profilForm").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
     });
     $.ajax({
       url: "get_profil_record.php",
@@ -641,9 +656,9 @@ function get_profil_record() {
 }
 function update_profil_record() {
   $(document).on("click", "#btn_update_profil_user", function () {
-    var paragraphs = $("#up-profilForm").find("p");
-    paragraphs.each(function() {
-    $(this).html('');
+    var msgErrorLabel = $("#up-profilForm").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
     });
     $("#up_profil_modal").scrollTop(0);
     var up_idprofil = $("#up_idProfil").val();
@@ -744,7 +759,682 @@ function update_profil_record() {
               }, 3000);
             }
           },
-        });   
+        });
+    }
+  });
+}
+
+
+//projets
+
+function view_project() {
+  $.ajax({
+    url: "view_project.php",
+    method: "post",
+    success: function (data) {
+      try {
+        data = $.parseJSON(data);
+        if (data.status == "success") {
+          $("#liste_project").html(data.html);
+        }
+      } catch (e) {
+        console.error("Invalid Response!");
       }
+    },
+  });
+}
+
+
+function delete_project() {
+  $(document).on("click", "#btn_supprimer_projet", function () {
+    var Delete_ID = $(this).attr("data-id1");
+    $("#delete_project").modal("show");
+    $(document).on("click", "#supprimer_projet", function () {
+      $.ajax({
+        url: "delete_project.php",
+        method: "post",
+        data: {
+          DeleteID: Delete_ID
+        },
+        success: function (data) {
+          if (data.includes('text-echec')) {
+            $("#delete_project").modal("hide");
+            $("#deleteProject_echec").removeClass("text-checked").addClass("text-echec").html(data);
+            $("#EchecDeleteProject").modal("show");
+            setTimeout(function () {
+              if ($("#EchecDeleteProject").length > 0) {
+                $("#EchecDeleteProject").modal("hide");
+              }
+            }, 2000);
+          } else {
+            $("#delete_project").modal("hide");
+            $("#deleteProject_success").addClass("text-checked").html(data);
+            $("#SuccessDeleteProject").modal("show");
+            $("#deleteProject_success").removeClass("text-echec").addClass("text-checked");
+            setTimeout(function () {
+              if ($("#SuccessDeleteProject").length > 0) {
+                $("#SuccessDeleteProject").modal("hide");
+                view_project();
+              }
+            }, 2000);
+          }
+        },
+      });
+    });
+    $(document).on('hide.bs.modal', '#delete_project', function () {
+      Delete_ID = "";
+    });
+  });
+}
+
+
+function add_project() {
+  $(document).on("click", "#btn_openModel_addProject", function () {
+    $("#insert_projet_form").trigger("reset");
+    var msgErrorLabel = $("#insert_projet_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    $("#modal_addProject").modal("show");
+    $(document).on("click", "#btn_ajout_project", function () {
+      msgErrorLabel.each(function () {
+        $(this).html('');
+      });
+
+      var nom_projet = $("#nom_projet").val();
+      var client = $("#client").val();
+      var chef_projet = $("#chef_projet").val();
+      var description = $("#description").val();
+      var dateDebutprojet = $("#dateDebutprojet").val();
+      var dateFinprojet = $("#dateFinprojet").val();
+
+      var doc_projet = $("#doc_projet").prop("files")[0];
+      if (doc_projet == undefined) {
+        doc_projet = "";
+      }
+      confirmationProjet = "0";
+
+      let checkBox = document.querySelectorAll("input[type=checkbox]");
+      checkBox.forEach((v) => {
+        if (v.checked) {
+          confirmationProjet = "1";
+        }
+      });
+
+      if (nom_projet == "") {
+        $("#nom_projet_error").html("Saisir le nom du projet s'il vous plait.");
+        $("#nom_projet").focus();
+      } else if (client == null) {
+        $("#client_error").html("Choisir le client.");
+        $("#client").focus();
+      } else if (chef_projet == null) {
+        $("#chef_projet_error").html("Choisir le chef de projet.");
+        $("#chef_projet").focus();
+      } else if (description == "") {
+        $("#description_error").html("Saisir la description du projet s'il vous plait.");
+        $("#description").focus();
+      } else if (dateDebutprojet == "") {
+        $("#dateDebutprojet_error").html("Saisir la date de début.");
+        $("#dateDebutprojet").focus();
+      } else if (dateFinprojet == "") {
+        $("#dateFinprojet_error").html("Saisir la date de fin.");
+        $("#dateFinprojet").focus();
+      } else if (dateFinprojet < dateDebutprojet) {
+        $("#dateFinprojet_error").html("Vérifier la date de fin.");
+        $("#dateFinprojet").focus();
+      } else {
+        var form_data = new FormData();
+        form_data.append("nom_projet", nom_projet);
+        form_data.append("client", client);
+        form_data.append("chef_projet", chef_projet);
+        form_data.append("description", description);
+        form_data.append("dateDebutprojet", dateDebutprojet);
+        form_data.append("dateFinprojet", dateFinprojet);
+        form_data.append("doc_projet", doc_projet);
+        form_data.append("confirmationProjet", confirmationProjet);
+        $.ajax({
+          url: "add_project.php",
+          method: "post",
+          processData: false,
+          contentType: false,
+          data: form_data,
+          success: function (data) {
+            if (data.includes('text-echec')) {
+              $("#modal_addProject").modal("hide");
+              $("#addProject_echec").removeClass("text-checked").addClass("text-echec").html(data);
+              $("#EchecAddProject").modal("show");
+              setTimeout(function () {
+                if ($("#EchecAddProject").length > 0) {
+                  $("#EchecAddProject").modal("hide");
+                }
+              }, 2000);
+            } else {
+              $("#modal_addProject").modal("hide");
+              $("#addProject_success").addClass("text-checked").html(data);
+              $("#SuccessAddProject").modal("show");
+              $("#addProject_success").removeClass("text-echec").addClass("text-checked");
+              setTimeout(function () {
+                if ($("#SuccessAddProject").length > 0) {
+                  $("#SuccessAddProject").modal("hide");
+                  view_project();
+                }
+              }, 2000);
+            }
+          },
+        });
+      }
+    });
+  });
+}
+
+
+function get_data_etat() {
+  $(document).on("click", "#btn_modifier_Etatprojet", function () {
+    var updateID = $(this).attr("data-id2");
+    $("#update_etat_form").trigger("reset");
+    $.ajax({
+      url: "get_data_etat.php",
+      method: "post",
+      data: {
+        update_ID: updateID
+      },
+      dataType: "JSON",
+      success: function (data) {
+
+        $("#up_id_projet_Etat").val(data[0]);
+        $("#up_etat_projet").val(data[1]);
+        $("#update_etat_projet").modal("show");
+
+      },
+    });
+  });
+}
+
+function update_etat_project() {
+  $(document).on("click", "#btn_modifi_etat_projet", function () {
+    $("#update_etat_projet").scrollTop(0);
+    var id_projet = $("#up_id_projet_Etat").val();
+    var etat = $("#up_etat_projet").val();
+    $.ajax({
+      url: "update_etat_project.php",
+      method: "post",
+      data: {
+        etat: etat,
+        id_projet: id_projet,
+      },
+      success: function (data) {
+
+        if (data.includes('text-echec')) {
+          $("#update_etat_projet").modal("hide");
+          $("#UpdateEtatProject_echec").removeClass("text-checked").addClass("text-echec").html(data);
+          $("#EchecUpdateEtatProject").modal("show");
+          setTimeout(function () {
+            if ($("#EchecUpdateEtatProject").length > 0) {
+              $("#EchecUpdateEtatProject").modal("hide");
+            }
+          }, 2000);
+        } else {
+          $("#update_etat_projet").modal("hide");
+          $("#UpdateEtatProject_success").addClass("text-checked").html(data);
+          $("#SuccessUpdateEtatProject").modal("show");
+          $("#UpdateEtatProject_success").removeClass("text-echec").addClass("text-checked");
+          setTimeout(function () {
+            if ($("#SuccessUpdateEtatProject").length > 0) {
+              $("#SuccessUpdateEtatProject").modal("hide");
+              view_project();
+            }
+          }, 2000);
+        }
+      },
+    });
+  });
+}
+
+
+
+function get_data_project() {
+  $(document).on("click", "#btn_modifier_projet", function () {
+    $("#update_project_form").trigger("reset");
+    var msgErrorLabel = $("#update-user_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    var updateID = $(this).attr("data-id");
+    $.ajax({
+      url: "get_data_project.php",
+      method: "post",
+      data: {
+        update_ID: updateID
+      },
+      dataType: "JSON",
+      success: function (data) {
+        $("#idProject").val(data[0]);
+        $("#up_nom_projet").val(data[1]);
+        $("#up_dateDebutprojet").val(data[2]);
+        $("#up_dateFinprojet").val(data[3]);
+        $("#up_description").val(data[4]);
+        var chefProjet = data[5];
+        $('select[name=up_chef_projet]').val(chefProjet);
+        $('#up_chef_projet').selectpicker('refresh')
+        $("#up_chef_projet").val(chefProjet);
+        var client = data[6];
+        $('select[name=up_client]').val(client);
+        $('#up_client').selectpicker('refresh')
+        $("#up_client").val(client);
+        if (data[7] == '1') {
+          document.getElementById("up_confirmationProjet").checked = true;
+        }
+        $("#update_project_modal").modal("show");
+      },
+    });
+  });
+
+}
+
+function update_project() {
+  $(document).on("click", "#btn_updateProject", function () {
+    var msgErrorLabel = $("#update_project_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    $("#update_project_modal").scrollTop(0);
+
+    var update_ID = $("#idProject").val();
+    var nom_projet = $("#up_nom_projet").val();
+    var client = $("#up_client").val();
+    var chef_projet = $("#up_chef_projet").val();
+    var description = $("#up_description").val();
+    var dateDebutprojet = $("#up_dateDebutprojet").val();
+    var dateFinprojet = $("#up_dateFinprojet").val();
+
+    var doc_projet = $("#up_doc_projet").prop("files")[0];
+    if (doc_projet == undefined) {
+      doc_projet = "";
+    }
+    confirmationProjet = "0";
+    if (document.querySelector('#up_confirmationProjet:checked')) {
+      confirmationProjet = "1";
+    }
+    if (nom_projet == "") {
+      $("#nom_projet_error").html("Saisir le nom de projet s'il vous plait.");
+      $("#nom_projet").focus();
+    } else if (client == null) {
+      $("#client_error").html("Choisir le client.");
+      $("#client").focus();
+    } else if (chef_projet == null) {
+      $("#chef_projet_error").html("Choisir le chef de projet.");
+      $("#chef_projet").focus();
+    } else if (description == "") {
+      $("#description_error").html("Saisir la description de projet s'il vous plait.");
+      $("#description").focus();
+    } else if (dateDebutprojet == "") {
+      $("#up_dateDebutprojet_error").html("Saisir la date de début.");
+      $("#dateDebutprojet").focus();
+    } else if (dateFinprojet == "") {
+      $("#up_dateFinprojet_error").html("Saisir la date de fin.");
+      $("#dateFinprojet").focus();
+    } else if (dateFinprojet < dateDebutprojet) {
+      $("#up_dateFinprojet_error").html("Vérifier la date de fin.");
+      $("#dateFinprojet").focus();
+    } else {
+      var form_data = new FormData();
+      form_data.append("update_ID", update_ID);
+      form_data.append("nom_projet", nom_projet);
+      form_data.append("client", client);
+      form_data.append("chef_projet", chef_projet);
+      form_data.append("description", description);
+      form_data.append("dateDebutprojet", dateDebutprojet);
+      form_data.append("dateFinprojet", dateFinprojet);
+      form_data.append("doc_projet", doc_projet);
+      form_data.append("confirmationProjet", confirmationProjet);
+      $.ajax({
+        url: "update_project.php",
+        method: "post",
+        processData: false,
+        contentType: false,
+        data: form_data,
+        success: function (data) {
+          if (data.includes('text-echec')) {
+            $("#update_project_modal").modal("hide");
+            $("#UpdateProject_echec").removeClass("text-checked").addClass("text-echec").html(data);
+            $("#EchecUpdateProject").modal("show");
+            setTimeout(function () {
+              if ($("#EchecUpdateProject").length > 0) {
+                $("#EchecUpdateProject").modal("hide");
+              }
+            }, 2000);
+          } else {
+            $("#update_project_modal").modal("hide");
+            $("#UpdateProject_success").addClass("text-checked").html(data);
+            $("#SuccessUpdateProject").modal("show");
+            $("#UpdateProject_success").removeClass("text-echec").addClass("text-checked");
+            setTimeout(function () {
+              if ($("#SuccessUpdateProject").length > 0) {
+                $("#SuccessUpdateProject").modal("hide");
+                view_project();
+              }
+            }, 2000);
+          }
+        },
+
+      });
+    }
+  });
+}
+
+//tache
+function view_tache() {
+  var id_project = document.querySelector("input[name=id_Project]").value;
+  $.ajax({
+    url: "view_tache.php",
+    method: "post",
+    data: { id_project: id_project },
+    success: function (data) {
+      try {
+        data = $.parseJSON(data);
+        if (data.status == "success") {
+          $("#liste_tache").html(data.html);
+        }
+      } catch (e) {
+        console.error("Invalid Response!");
+      }
+    },
+  });
+}
+
+function add_tache() {
+  $(document).on("click", "#btn_openModel_addTache", function () {
+    $("#insert_tache_form").trigger("reset");
+    var msgErrorLabel = $("#insert_tache_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    $("#modal_addTache").modal("show");
+    $(document).on("click", "#btn_ajout_tache", function () {
+      msgErrorLabel.each(function () {
+        $(this).html('');
+      });
+
+      var id_project = document.querySelector("input[name=id_Project]").value;
+      var description = $("#description").val();
+      var dateDebutTache = $("#dateDebutTache").val();
+      var dateFinTache = $("#dateFinTache").val();
+      var employee = $("#employee_affect option:selected").map(function () {
+        return $(this).val();
+      }).get();
+      var doc_tache = $("#doc_tache").prop("files")[0];
+      if (doc_tache == undefined) {
+        doc_tache = "";
+      }
+      if (employee == "") {
+        $("#employee_affect_error").html("Choisir les employées affectées.");
+        $("#employee_affect").focus();
+      } else if (description == "") {
+        $("#description_error").html("Saisir la description du projet s'il vous plait.");
+        $("#description").focus();
+      } else if (dateDebutTache == "") {
+        $("#dateDebutTache_error").html("Saisir la date de début.");
+        $("#dateDebutTache").focus();
+      } else if (dateFinTache == "") {
+        $("#dateFinTache_error").html("Saisir la date de fin.");
+        $("#dateFinTache").focus();
+      } else if (dateFinTache < dateDebutTache) {
+        $("#dateFinTache_error").html("Vérifier la date de fin.");
+        $("#dateFinTache").focus();
+      } else {
+        var form_data = new FormData();
+        form_data.append("id_project", id_project);
+        form_data.append("employee", employee);
+        form_data.append("description", description);
+        form_data.append("dateDebutTache", dateDebutTache);
+        form_data.append("dateFinTache", dateFinTache);
+        form_data.append("doc_tache", doc_tache);
+        $.ajax({
+          url: "add_tache.php",
+          method: "post",
+          processData: false,
+          contentType: false,
+          data: form_data,
+          success: function (data) {
+            if (data.includes('text-echec')) {
+              $("#modal_addTache").modal("hide");
+              $("#addTache_echec").removeClass("text-checked").addClass("text-echec").html(data);
+              $("#EchecAddTache").modal("show");
+              setTimeout(function () {
+                if ($("#EchecAddTache").length > 0) {
+                  $("#EchecAddTache").modal("hide");
+                }
+              }, 2000);
+            } else {
+              $("#modal_addTache").modal("hide");
+              $("#addTache_success").addClass("text-checked").html(data);
+              $("#SuccessAddTache").modal("show");
+              $("#addTache_success").removeClass("text-echec").addClass("text-checked");
+              setTimeout(function () {
+                if ($("#SuccessAddTache").length > 0) {
+                  $("#SuccessAddTache").modal("hide");
+                  view_tache();
+                }
+              }, 2000);
+            }
+          },
+        });
+      }
+    });
+  });
+}
+
+
+
+function delete_tache() {
+  $(document).on("click", "#btn_supprimerTache", function () {
+    var Delete_ID = $(this).attr("data-id1");
+    $("#delete_tache").modal("show");
+    $(document).on("click", "#supprimer_tache", function () {
+      // alert("hi");
+      $.ajax({
+        url: "delete_tache.php",
+        method: "post",
+        data: {
+          DeleteID: Delete_ID
+        },
+        success: function (data) {
+          if (data.includes('text-echec')) {
+            $("#delete_tache").modal("hide");
+            $("#deleteTache_echec").removeClass("text-checked").addClass("text-echec").html(data);
+            $("#EchecDeleteTache").modal("show");
+            setTimeout(function () {
+              if ($("#EchecDeleteTache").length > 0) {
+                $("#EchecDeleteTache").modal("hide");
+              }
+            }, 2000);
+          } else {
+            $("#delete_tache").modal("hide");
+            $("#deleteTache_success").addClass("text-checked").html(data);
+            $("#SuccessDeleteTache").modal("show");
+            $("#deleteTache_success").removeClass("text-echec").addClass("text-checked");
+            setTimeout(function () {
+              if ($("#SuccessDeleteTache").length > 0) {
+                $("#SuccessDeleteTache").modal("hide");
+                view_tache();
+              }
+            }, 2000);
+          }
+        },
+      });
+    });
+  });
+}
+
+
+function get_data_etatTache() {
+  $(document).on("click", "#btn_modifier_EtatTache", function () {
+    var updateID = $(this).attr("data-id2");
+    $("#update_etatTache_form").trigger("reset");
+    $.ajax({
+      url: "get_data_etatTache.php",
+      method: "post",
+      data: {
+        update_ID: updateID
+      },
+      dataType: "JSON",
+      success: function (data) {
+
+        $("#up_id_tache_Etat").val(data[0]);
+        $("#up_etat_tache").val(data[1]);
+        $("#update_etatTache").modal("show");
+
+      },
+    });
+  });
+}
+
+function update_etat_tache() {
+  $(document).on("click", "#btn_modifi_etat_tache", function () {
+    $("#update_etatTache").scrollTop(0);
+    var id_tache = $("#up_id_tache_Etat").val();
+    var etat = $("#up_etat_tache").val();
+    $.ajax({
+      url: "update_etat_tache.php",
+      method: "post",
+      data: {
+        etat: etat,
+        id_tache: id_tache,
+      },
+      success: function (data) {
+
+        if (data.includes('text-echec')) {
+          $("#update_etatTache").modal("hide");
+          $("#UpdateEtatTache_echec").removeClass("text-checked").addClass("text-echec").html(data);
+          $("#EchecUpdateEtatTache").modal("show");
+          setTimeout(function () {
+            if ($("#EchecUpdateEtatTache").length > 0) {
+              $("#EchecUpdateEtatTache").modal("hide");
+            }
+          }, 2000);
+        } else {
+          $("#update_etatTache").modal("hide");
+          $("#UpdateEtatTache_success").addClass("text-checked").html(data);
+          $("#SuccessUpdateEtatTache").modal("show");
+          $("#UpdateEtatTache_success").removeClass("text-echec").addClass("text-checked");
+          setTimeout(function () {
+            if ($("#SuccessUpdateEtatTache").length > 0) {
+              $("#SuccessUpdateEtatTache").modal("hide");
+              view_tache();
+            }
+          }, 2000);
+        }
+      },
+    });
+  });
+}
+
+
+function get_data_tache() {
+  $(document).on("click", "#btn_modifierTache", function () {
+    $("#update_tache_form").trigger("reset");
+    var msgErrorLabel = $("#update_tache_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    var updateID = $(this).attr("data-id");
+    $.ajax({
+      url: "get_data_tache.php",
+      method: "post",
+      data: {
+        update_ID: updateID
+      },
+      dataType: "JSON",
+      success: function (data) {
+        $("#idTache").val(data[0]);
+        $("#up_description").val(data[1]);
+        $("#up_dateDebutTache").val(data[2]);
+        $("#up_dateFinTache").val(data[3]);
+        var users = data[4].split(",");
+        $('select[name=up_employee_affect]').val(users);
+        $('#up_employee_affect').selectpicker('refresh')
+        $("#up_employee_affect").val(users);
+
+        $("#update_tache_modal").modal("show");
+      },
+    });
+  });
+
+}
+
+function update_tache() {
+  $(document).on("click", "#btn_updateTache", function () {
+    var msgErrorLabel = $("#update_tache_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    $("#update_tache_modal").scrollTop(0);
+
+    var update_ID = $("#idTache").val();
+    var description = $("#up_description").val();
+    var dateDebutTache = $("#up_dateDebutTache").val();
+    var dateFinTache = $("#up_dateFinTache").val();
+    var employee = $("#up_employee_affect option:selected").map(function () {
+      return $(this).val();
+    }).get();
+    var doc_tache = $("#up_doc_tache").prop("files")[0];
+    if (doc_tache == undefined) {
+      doc_tache = "";
+    }
+    if (employee == "") {
+      $("#up_employee_affect_error").html("Choisir les employées affectées.");
+      $("#employee_affect").focus();
+    } else if (description == "") {
+      $("#up_description_error").html("Saisir la description du projet s'il vous plait.");
+      $("#description").focus();
+    } else if (dateDebutTache == "") {
+      $("#up_dateDebutTache_error").html("Saisir la date de début.");
+      $("#dateDebutTache").focus();
+    } else if (dateFinTache == "") {
+      $("#up_dateFinTache_error").html("Saisir la date de fin.");
+      $("#dateFinTache").focus();
+    } else if (dateFinTache < dateDebutTache) {
+      $("#up_dateFinTache_error").html("Vérifier la date de fin.");
+      $("#dateFinTache").focus();
+    } else {
+      var form_data = new FormData();
+      form_data.append("update_ID", update_ID);
+      form_data.append("employee", employee);
+      form_data.append("description", description);
+      form_data.append("dateDebutTache", dateDebutTache);
+      form_data.append("dateFinTache", dateFinTache);
+      form_data.append("doc_tache", doc_tache);
+      $.ajax({
+        url: "update_tache.php",
+        method: "post",
+        processData: false,
+        contentType: false,
+        data: form_data,
+        success: function (data) {
+          if (data.includes('text-echec')) {
+            $("#update_tache_modal").modal("hide");
+            $("#UpdateTache_echec").removeClass("text-checked").addClass("text-echec").html(data);
+            $("#EchecUpdateTache").modal("show");
+            setTimeout(function () {
+              if ($("#EchecUpdateTache").length > 0) {
+                $("#EchecUpdateTache").modal("hide");
+              }
+            }, 2000);
+          } else {
+            $("#update_tache_modal").modal("hide");
+            $("#UpdateTache_success").addClass("text-checked").html(data);
+            $("#SuccessUpdateTache").modal("show");
+            $("#UpdateTache_success").removeClass("text-echec").addClass("text-checked");
+            setTimeout(function () {
+              if ($("#SuccessUpdateTache").length > 0) {
+                $("#SuccessUpdateTache").modal("hide");
+                view_tache();
+              }
+            }, 2000);
+          }
+        },
+
+      });
+    }
   });
 }

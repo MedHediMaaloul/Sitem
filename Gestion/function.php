@@ -2,155 +2,155 @@
 include('connect_db.php');
 session_start();
 
-function Login(){
-    global $conn ;
-    $email=isset($_POST['email']) ? $_POST['email'] : null ;
-    $password=isset($_POST['password']) ? $_POST['password'] : null ;
+    function Login(){
+        global $conn ;
+        $email=isset($_POST['email']) ? $_POST['email'] : null ;
+        $password=isset($_POST['password']) ? $_POST['password'] : null ;
+        
+        //select email
+        $selectEmail = mysqli_query($conn, "SELECT * FROM user WHERE email_user = '".$_POST['email']."' ");
+        
+        // select si le compte exist et actif
+        $query=mysqli_query($conn,"select * from user as U
+        left join role as R on R.id_role =U.id_role  
+        where password_user='$password' && email_user='$email' && etat_user='1'");
     
-    //select email
-    $selectEmail = mysqli_query($conn, "SELECT * FROM user WHERE email_user = '".$_POST['email']."' ");
-    
-    // select si le compte exist et actif
-    $query=mysqli_query($conn,"select * from user as U
-    left join role as R on R.id_role =U.id_role  
-    where password_user='$password' && email_user='$email' && etat_user='1'");
-
-    if(mysqli_num_rows($selectEmail)>0) {
-    	$num_row = mysqli_num_rows($query);
-    	$row= mysqli_fetch_array($selectEmail);
-    	$status= $row['etat_user'];
-    	if ($num_row > 0) {	
-			$_SESSION['id_user']=$row['id_user'];
-			$_SESSION['nom_user']=$row['nom_user'];
-    		$_SESSION['Role']=$row['id_role'];
-			$_SESSION['Specialite']=$row['id_specialite'];
-    		$_SESSION['email_user']=$row['email_user'];
-			echo "<label class=\"myclass\">success</label>";
-    	}else{
-    		if ($status=='1') {
-    			echo "<label class=\"myclass\">Mot de passe incorrecte !</label>";
-    		}else if ($status=='2') {
-    			echo "<label class=\"myclass\">Compte désactivé !</label>";
-    		}else {
-    			echo "<label class=\"myclass\">Compte supprimé !</label>";
-    		}
-    	}		
-    }else{
-    	echo "<label class=\"myclass\">Compte introuvable !</label>";
+        if(mysqli_num_rows($selectEmail)>0) {
+        	$num_row = mysqli_num_rows($query);
+        	$row= mysqli_fetch_array($selectEmail);
+        	$status= $row['etat_user'];
+        	if ($num_row > 0) {	
+    			$_SESSION['id_user']=$row['id_user'];
+    			$_SESSION['nom_user']=$row['nom_user'];
+        		$_SESSION['Role']=$row['id_role'];
+    			$_SESSION['Specialite']=$row['id_specialite'];
+        		$_SESSION['email_user']=$row['email_user'];
+    			echo "<label class=\"myclass\">success</label>";
+        	}else{
+        		if ($status=='1') {
+        			echo "<label class=\"myclass\">Mot de passe incorrecte !</label>";
+        		}else if ($status=='2') {
+        			echo "<label class=\"myclass\">Compte désactivé !</label>";
+        		}else {
+        			echo "<label class=\"myclass\">Compte supprimé !</label>";
+        		}
+        	}		
+        }else{
+        	echo "<label class=\"myclass\">Compte introuvable !</label>";
+        }
     }
-}
-
-function viewUser(){
-    global $conn;
-    $value = '
-    <table class="table table-striped align-middle">
-        <thead>
-            <tr>
-                <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Nom </th>
-                <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Prénom </th>
-                <th style="text-align: center;" class="border-top-0"><i class="fa fa-pen"></i> Cin </th>
-                <th style="text-align: center;" class="border-top-0"><i class="fa fa-phone"></i> Téléphone</th>
-                <th style="text-align: center;" class="border-top-0" class="hidden-phone"><i class="fa fa-envelope"></i> Email</th>
-                <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Date de Naissance </th>
-                <th style="text-align: center;" class="border-top-0"><i class=" fa fas fa-map-marker-alt"></i> Adresse</th>
-                <th style="text-align: center;" class="border-top-0"><i class="fas fa-graduation-cap"></i> Specialité</th>
-                <th style="text-align: center;" class="border-top-0"><i class="fa fa-image"></i> Photo</th>
-                <th style="text-align: center;" class="border-top-0">Actions</th>
-            </tr>            
-        </thead>';
-
-    $query = "SELECT * FROM user WHERE etat_user != '0' ORDER BY etat_user ASC";
-    $result = mysqli_query($conn, $query);
-    while ($row = mysqli_fetch_assoc($result)) {
-        $query_sepcialite = "SELECT * FROM specialite";
-        $result_sepcialite = mysqli_query($conn, $query_sepcialite);
-        $table_specialite =explode(",",$row['id_specialite']);
-        $user_data="";
-        while ($row_specialite = mysqli_fetch_assoc($result_sepcialite)) {
-            if (in_array( $row_specialite['id_specialite'],  $table_specialite )){
-                $user_data=$user_data.' '.$row_specialite['nom_specialite'].' /';
+    //User
+    function viewUser(){
+        global $conn;
+        $value = '
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Nom </th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Prénom </th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-address-card"></i> Cin </th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-phone"></i> Téléphone</th>
+                    <th style="text-align: center;" class="border-top-0" class="hidden-phone"><i class="fa fa-envelope"></i> Email</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de Naissance </th>
+                    <th style="text-align: center;" class="border-top-0"><i class=" fa fas fa-map-marker-alt"></i> Adresse</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fas fa-graduation-cap"></i> Specialité</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-image"></i> Photo</th>
+                    <th style="text-align: center;" class="border-top-0">Actions</th>
+                </tr>            
+            </thead>';
+    
+        $query = "SELECT * FROM user WHERE etat_user != '0' ORDER BY etat_user ASC";
+        $result = mysqli_query($conn, $query);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $query_sepcialite = "SELECT * FROM specialite";
+            $result_sepcialite = mysqli_query($conn, $query_sepcialite);
+            $table_specialite =explode(",",$row['id_specialite']);
+            $user_data="";
+            while ($row_specialite = mysqli_fetch_assoc($result_sepcialite)) {
+                if (in_array( $row_specialite['id_specialite'],  $table_specialite )){
+                    $user_data=$user_data.' '.$row_specialite['nom_specialite'].' /';
+                }
+            }   
+            if( substr($user_data, -1)=="/"){
+                $user_data =substr($user_data, 0, -1);   
             }
-        }   
-        if( substr($user_data, -1)=="/"){
-            $user_data =substr($user_data, 0, -1);   
-        }
-
-        $value .= '<tbody>
-            <tr>
-                <td style="text-align: center;">' . $row['nom_user'] . '</td>
-                <td style="text-align: center;">' . $row['prenom_user'] . '</td>
-                <td style="text-align: center;">' . $row['cin_user'] . '</td>
-                <td style="text-align: center;">' . $row['numTel_user'] . '</td>
-                <td style="text-align: center;">' . $row['email_user'] . '</td>
-                <td style="text-align: center;">' . $row['date_naissance_user'] . '</td>
-                <td style="text-align: center;">' . $row['adresse_user'] . '</td>
-                <td style="text-align: center;">' . $user_data. '</td>
-                <td style="text-align: center;"><a '.(($row["photo_user"]!="")?"href='uploads/{$row["photo_user"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
-                <td style="text-align: center;">
-                    <div class="btn-group">';
-                        if($row['etat_user'] == '1'){
-                            $value .= '<button type="button" style="margin-right: 3px;" class="btn btn-success" id="btn_desactiver_user" data-id2=' . $row['id_user'] . '><i class="fas fa-check"></i></button>'; 
-                        }
-                        if($row['etat_user'] == '2'){
-                            $value .= '<button type="button" style="margin-right: 3px;" class="btn btn-outline-success" id="btn_activer_user" data-id3=' . $row['id_user'] . '><i class="fas fa-check"></i></button>'; 
-                        }
-                        $value .= '<button type="button" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifier_user" data-id=' . $row['id_user'] . '><i class="fa fa-pen fa-1x"></i></button> 
-                        <button type="button" class="btn btn-danger" id="btn_supprimer_user" data-id1=' . $row['id_user'] . '><i class="fa fa-trash fa-1x"></i></button> 
-                    </div>
-                </td>
-            </tr>';
-        }
-    $value .= '</tbody></table>';
-    echo json_encode(['status' => 'success', 'html' => $value]);
-}
+    
+            $value .= '<tbody>
+                <tr>
+                    <td style="text-align: center;">' . $row['nom_user'] . '</td>
+                    <td style="text-align: center;">' . $row['prenom_user'] . '</td>
+                    <td style="text-align: center;">' . $row['cin_user'] . '</td>
+                    <td style="text-align: center;">' . $row['numTel_user'] . '</td>
+                    <td style="text-align: center;">' . $row['email_user'] . '</td>
+                    <td style="text-align: center;">' . $row['date_naissance_user'] . '</td>
+                    <td style="text-align: center;">' . $row['adresse_user'] . '</td>
+                    <td style="text-align: center;">' . $user_data. '</td>
+                    <td style="text-align: center;"><a '.(($row["photo_user"]!="")?"href='uploads/user/{$row["photo_user"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
+                    <td style="text-align: center;">
+                        <div class="btn-group">';
+                            if($row['etat_user'] == '1'){
+                                $value .= '<button type="button" title="Désactiver Utilisateur" style="margin-right: 3px;" class="btn btn-success" id="btn_desactiver_user" data-id2=' . $row['id_user'] . '><i class="fas fa-check"></i></button>'; 
+                            }
+                            if($row['etat_user'] == '2'){
+                                $value .= '<button type="button" title="Activer Utilisateur" style="margin-right: 3px;" class="btn btn-outline-success" id="btn_activer_user" data-id3=' . $row['id_user'] . '><i class="fas fa-check"></i></button>'; 
+                            }
+                            $value .= '<button type="button" style="margin-right: 3px;" title="Modifier Utilisateur" class="btn btn-primary" id="btn_modifier_user" data-id=' . $row['id_user'] . '><i class="fa fa-pen fa-1x"></i></button> 
+                            <button type="button" class="btn btn-danger" title="Supprimer Utilisateur" id="btn_supprimer_user" data-id1=' . $row['id_user'] . '><i class="fa fa-trash fa-1x"></i></button> 
+                        </div>
+                    </td>
+                </tr>';
+            }
+        $value .= '</tbody></table>';
+        echo json_encode(['status' => 'success', 'html' => $value]);
+    }
 
     	
-function addUser(){
-	global $conn ;
-	$role= $_POST['role'];
-	$specialite=isset($_POST['specialite']) ? $_POST['specialite'] : null ;
-	$nom = $_POST['nom'];
-	$prenom = $_POST['prenom'];
-	$address = $_POST['address'];
-	$numCIN = $_POST['numCIN'];
-	$email = $_POST['email'];
-	$numTel = $_POST['numTel'];
-	$dateNaissance = $_POST['dateNaissance'];
-	$password = $_POST['password'];
-	$doc_photoProfile=isset($_FILES["doc_photoProfile"]) ? $_FILES['doc_photoProfile'] : "" ;
-	$photoProfile_filname = "";
-
-	if ($doc_photoProfile != ""){
-		$photoProfile_filname = $numCIN . "." . strtolower(pathinfo($doc_photoProfile["name"], PATHINFO_EXTENSION));
-		move_uploaded_file($doc_photoProfile["tmp_name"], "uploads/".$photoProfile_filname);
-	}
-	    
-    $selectEmail = mysqli_query($conn, "SELECT * FROM user WHERE email_user = '".$_POST['email']."' ");
-	$row= mysqli_fetch_array($selectEmail);
-	while ($row = mysqli_fetch_assoc($selectEmail)) {
-		$status= $row['etat_user'];
-		}
-	$selectCIN = mysqli_query($conn, "SELECT * FROM user WHERE cin_user!='0' and cin_user = '".$_POST['numCIN']."'");
-
-	if(mysqli_num_rows($selectEmail)) {
-		if ($status!="0"){
-			echo "<div class='text-echec'>L'email est déjà utilisée</div> ";
-		}else{
-			echo "<div class='text-echec'>L'email est supprimé, contactez votre administrateur.</div> ";
-		}
-	}else if(mysqli_num_rows($selectCIN)) {
-		echo "<div class='text-echec'>Ce numéro de CIN est déjà utilisé</div> ";
-	}else {
-		$query= "INSERT into user(nom_user,prenom_user,cin_user,numTel_user,email_user,password_user,date_naissance_user,id_role,id_specialite,adresse_user,photo_user,etat_user)
-		values('$nom','$prenom','$numCIN','$numTel','$email','$password','$dateNaissance','$role','$specialite','$address','$photoProfile_filname','1')";
-		$result=mysqli_query($conn,$query);
-		if ($result) {
-			echo "<div class='text-success'>L'utilisateur est ajouté avec succès</div>";
-		} else {
-			echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
-		}
-	}
-}
+    function addUser(){
+    	global $conn ;
+    	$role= $_POST['role'];
+    	$specialite=isset($_POST['specialite']) ? $_POST['specialite'] : null ;
+    	$nom = $_POST['nom'];
+    	$prenom = $_POST['prenom'];
+    	$address = $_POST['address'];
+    	$numCIN = $_POST['numCIN'];
+    	$email = $_POST['email'];
+    	$numTel = $_POST['numTel'];
+    	$dateNaissance = $_POST['dateNaissance'];
+    	$password = $_POST['password'];
+    	$doc_photoProfile=isset($_FILES["doc_photoProfile"]) ? $_FILES['doc_photoProfile'] : "" ;
+    	$photoProfile_filname = "";
+    
+    	if ($doc_photoProfile != ""){
+    		$photoProfile_filname = $numCIN . "." . strtolower(pathinfo($doc_photoProfile["name"], PATHINFO_EXTENSION));
+    		move_uploaded_file($doc_photoProfile["tmp_name"], "uploads/user/".$photoProfile_filname);
+    	}
+    	    
+        $selectEmail = mysqli_query($conn, "SELECT * FROM user WHERE email_user = '".$_POST['email']."' ");
+    	$row= mysqli_fetch_array($selectEmail);
+    	while ($row = mysqli_fetch_assoc($selectEmail)) {
+    		$status= $row['etat_user'];
+    		}
+    	$selectCIN = mysqli_query($conn, "SELECT * FROM user WHERE cin_user!='0' and cin_user = '".$_POST['numCIN']."'");
+    
+    	if(mysqli_num_rows($selectEmail)) {
+    		if ($status!="0"){
+    			echo "<div class='text-echec'>L'email est déjà utilisée</div> ";
+    		}else{
+    			echo "<div class='text-echec'>L'email est supprimé, contactez votre administrateur.</div> ";
+    		}
+    	}else if(mysqli_num_rows($selectCIN)) {
+    		echo "<div class='text-echec'>Ce numéro de CIN est déjà utilisé</div> ";
+    	}else {
+    		$query= "INSERT into user(nom_user,prenom_user,cin_user,numTel_user,email_user,password_user,date_naissance_user,id_role,id_specialite,adresse_user,photo_user)
+    		values('$nom','$prenom','$numCIN','$numTel','$email','$password','$dateNaissance','$role','$specialite','$address','$photoProfile_filname')";
+    		$result=mysqli_query($conn,$query);
+    		if ($result) {
+    			echo "<div class='text-success'>L'utilisateur est ajouté avec succès</div>";
+    		} else {
+    			echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+    		}
+    	}
+    }
 	
 
     function disableAccount(){
@@ -245,7 +245,7 @@ function addUser(){
 
 		if ($doc_photoProfile != ""){
 			$photoProfile_filname = $numCIN . "." . strtolower(pathinfo($doc_photoProfile["name"], PATHINFO_EXTENSION));
-			move_uploaded_file($doc_photoProfile["tmp_name"], "uploads/".$photoProfile_filname);
+			move_uploaded_file($doc_photoProfile["tmp_name"], "uploads/user/".$photoProfile_filname);
 		}
 
 	    $selectEmail = mysqli_query($conn, "SELECT * FROM user WHERE email_user='$email' and  id_user!='$idUser'");
@@ -295,6 +295,7 @@ function addUser(){
 
 	}
 
+    //Profile
 	function getProfilRecord(){
 		global $conn ;
 		$iduser= $_SESSION['id_user'];
@@ -354,7 +355,7 @@ function addUser(){
 
         if($up_profilPhoto != "") {
             $Namefile_photo_profil=$row_profil['cin_user'];
-            $emplacement_photoProfil = "uploads/";
+            $emplacement_photoProfil = "uploads/user/";
             $file_photo_profil = $emplacement_photoProfil . basename($_FILES["up_profilPhoto"]["name"]);
             $uploadOk_photo_profil = 1;
             $type_passport = strtolower(pathinfo($file_photo_profil,PATHINFO_EXTENSION));
@@ -400,4 +401,455 @@ function addUser(){
             return;
         }
     }
+    
+    //Project
+    function viewProject(){
+        global $conn;
+        $value = '
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Client </th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-pen"></i> Nom du projet</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Chef de projet </th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-bookmark"></i> Description </th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de début</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de fin</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fas fa-check"></i> Confirmation</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-history"></i> Etat</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-tasks"></i> Tâche</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-upload"></i> Pièce jointe</th>
+                    <th style="text-align: center;" class="border-top-0">Actions</th>
+                </tr>            
+            </thead>';
+            $id_user = $_SESSION['id_user'];
+            if($_SESSION['Role']==1){ 
+                $query = "SELECT * 
+                FROM projet as P
+                LEFT JOIN user as U ON U.id_user =P.chef_projet
+                LEFT JOIN client AS C ON C.id_client = P.nom_client_projet
+                where etat_projet !='0' and U.id_user =$id_user
+                ORDER BY date_created_projet ASC";
+            }else{
+                $query = "SELECT * 
+                FROM projet as P
+                LEFT JOIN user as U ON U.id_user =P.chef_projet
+                LEFT JOIN client AS C ON C.id_client = P.nom_client_projet
+                where etat_projet !='0' 
+                ORDER BY date_created_projet ASC";
+            }   
+        
+        $result = mysqli_query($conn, $query);
+        while ($row = mysqli_fetch_assoc($result)) {
+            if($row['etat_projet'] != "0" && $row['etat_projet'] != "3"){
+                    $value .= '<tbody>
+                        <tr>
+                            <td style="text-align: center;">' . $row['nom_client_projet'] . '</td>
+                            <td style="text-align: center;">' . $row['nom_projet'] . '</td>
+                            <td style="text-align: center;">' . $row['nom_user'] . ' ' . $row['prenom_user'] . '</td>
+                            <td style="text-align: center;">' . $row['description_projet'] . '</td>
+                            <td style="text-align: center;">' . $row['date_debut_projet'] . '</td>
+                            <td style="text-align: center;">' . $row['date_fin_projet'] . '</td>';
+                                                       
+                            if($row['confirmation_projet'] == "1"){
+                                $value .= ' <td style="text-align: center;">Confirmé</td>';
+                            }else{
+                                $value .= ' <td style="text-align: center;">Non Confirmé</td>';
+                            } 
+                            if($row['etat_projet'] == "1"){
+                                $value .= ' <td style="text-align: center;background-color:#C1FFEC;" width="100px">En attente</td>';
+                            }else if($row['etat_projet'] == "2"){
+                                $value .= ' <td style="text-align: center; background-color:#7DFFD6;" width="100px">En cours</td>';
+                            }
+                            $value .= '
+                            <td style="text-align: center;"><a href="tache.php?id_project=' . $row['id_projet'] . '" >Consulter les tâches </a></td>
+                            <td style="text-align: center;"><a '.(($row["piece_joint_projet"]!="")?"href='uploads/projet/{$row["piece_joint_projet"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
+                            ';
+                            
+                            if (($_SESSION['Role']) != "1") {
+                                $value .= ' 
+                                <td style="text-align: center;">
+                                    <div class="btn-group">
+                                        <button type="button" title="Modifier Projet" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifier_projet" data-id=' . $row['id_projet'] . '><i class="fa fa-pen fa-1x"></i></button> 
+                                        <button type="button" title="Supprimer Projet" class="btn btn-danger" id="btn_supprimer_projet" data-id1=' . $row['id_projet'] . '><i class="fa fa-trash fa-1x"></i></button> 
+                                    </div>
+                                </td>';
+                            } else {
+                                $value .= '
+                                <td>
+                                    <button type="button" title="Modifier Etat Projet" class="btn btn-primary" id="btn_modifier_Etatprojet" data-id2=' . $row['id_projet'] . '><i class="fa fa-pen fa-1x"></i></button> 
+                                </td>';
+                            }
+                        $value .= ' </tr>';
+            }
+        }
+        $value .= '</tbody></table>';
+        echo json_encode(['status' => 'success', 'html' => $value]);
+    }
+            
+
+    function deleteProject(){
+  
+		global $conn;
+		$id_project = $_POST['DeleteID'];
+		$date = date('Y-m-d H:i:s');
+		$query = "UPDATE projet SET etat_projet ='0',date_updated_projet='$date' WHERE id_projet='$id_project'";
+		$result=mysqli_query($conn,$query);
+		if ($result) {
+			echo "<div class='text-success'>Le projet est supprimé avec succès</div>";
+		} else {
+			echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+		}
+	}
+
+    function addProject(){
+    	global $conn ;
+
+    	$nom_projet= isset($_POST['nom_projet']) ? $_POST['nom_projet'] : null ;
+    	$client = isset($_POST['client']) ? $_POST['client'] : null ;
+    	$chef_projet = isset($_POST['chef_projet']) ? $_POST['chef_projet'] : null ;
+    	$description = isset($_POST['description']) ? $_POST['description'] : null ;
+    	$dateDebutprojet = isset($_POST['dateDebutprojet']) ? $_POST['dateDebutprojet'] : null ;
+    	$dateFinprojet = isset($_POST['dateFinprojet']) ? $_POST['dateFinprojet'] : null ;
+        $confirmationProjet=$_POST['confirmationProjet'];
+    	$doc_projet=isset($_FILES["doc_projet"]) ? $_FILES['doc_projet'] : "" ;
+
+    	$doc_projet_filname = "";
+    
+    	if ($doc_projet != ""){
+    		$doc_projet_filname = $nom_projet . "." . strtolower(pathinfo($doc_projet["name"], PATHINFO_EXTENSION));
+    		move_uploaded_file($doc_projet["tmp_name"], "uploads/projet/".$doc_projet_filname);
+    	}
+        $query= "INSERT into projet(nom_projet,date_debut_projet,date_fin_projet,description_projet,chef_projet,nom_client_projet,piece_joint_projet, confirmation_projet)
+        values('$nom_projet','$dateDebutprojet','$dateFinprojet','$description','$chef_projet','$client','$doc_projet_filname','$confirmationProjet')";
+    
+    	$result=mysqli_query($conn,$query);
+    	if ($result) {
+    		echo "<div class='text-success'>Le projet est ajouté avec succès</div>";
+    	} else {
+    		echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+    	}
+    	
+    }
+
+    function get_dataEtat()
+	{
+		global $conn;
+		$idProject = $_POST['update_ID'];
+	
+		$query = "SELECT etat_projet FROM projet WHERE id_projet='$idProject'";
+	
+	
+        $result = mysqli_query($conn, $query);
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $etat_data = [];
+            $etat_data[0] = $idProject;
+            $etat_data[1] = $row['etat_projet'];            
+        }
+        echo json_encode($etat_data);
+	}
+
+    function update_etatProject(){
+        global $conn;
+        $date = date('Y-m-d H:i:s');
+        $etat = $_POST['etat'];
+        $id_projet = $_POST['id_projet'];
+    
+    
+        $query = "UPDATE projet SET etat_projet='$etat',date_updated_projet='$date' WHERE id_projet='$id_projet'";
+        $result = mysqli_query($conn, $query);
+        if ($result) {
+            echo "L'etat est modifie avec succès ";
+        } else {
+            echo "<div class='text-danger'> Veuillez vérifier votre requête</div> ";
+        }
+    }
+    
+    function get_dataProject()
+	{
+		global $conn;
+		$idProject = $_POST['update_ID'];
+	
+		$query = "SELECT * FROM projet WHERE id_projet='$idProject'";
+	
+		$result = mysqli_query($conn, $query);
+	
+		while ($row = mysqli_fetch_assoc($result)) {
+			$update_project= [];
+			$update_project[0] = $idProject;
+			$update_project[1] = $row['nom_projet'];
+			$update_project[2] = $row['date_debut_projet'];
+			$update_project[3] = $row['date_fin_projet'];
+			$update_project[4] = $row['description_projet'];
+			$update_project[5] = $row['chef_projet'];
+			$update_project[6] = $row['nom_client_projet'];
+			$update_project[7] = $row['confirmation_projet'];
+			
+		}
+		echo json_encode($update_project);
+	}
+    
+	
+    function updateProject(){
+		global $conn ;
+		$date = date('Y-m-d H:i:s');
+        $idProject = $_POST['update_ID'];
+        $nom_projet= $_POST['nom_projet'];
+        $client = $_POST['client'];
+        $chef_projet = $_POST['chef_projet'];
+        $description = $_POST['description'];
+        $dateDebutprojet = $_POST['dateDebutprojet'];
+        $dateFinprojet = $_POST['dateFinprojet'];
+        $confirmationProjet=$_POST['confirmationProjet'];
+	    $doc_projet=isset($_FILES["doc_projet"]) ? $_FILES['doc_projet'] : "" ;
+
+	    $doc_projet_filname = "";
+
+        if ($doc_projet != ""){
+            $doc_projet_filname = $nom_projet . "." . strtolower(pathinfo($doc_projet["name"], PATHINFO_EXTENSION));
+            move_uploaded_file($doc_projet["tmp_name"], "uploads/projet/".$doc_projet_filname);
+        }
+    	$query = "UPDATE projet SET nom_projet='$nom_projet',date_debut_projet='$dateDebutprojet',date_fin_projet='$dateFinprojet',description_projet='$description',chef_projet='$chef_projet',nom_client_projet='$client',piece_joint_projet='$doc_projet_filname',confirmation_projet='$confirmationProjet',date_updated_projet='$date' WHERE id_projet='$idProject'";
+
+        $result=mysqli_query($conn,$query);
+        
+	    if ($result) {
+            echo "<div class='text-success'>Les informations sont mises à jour avec succès</div>";					    		
+	    } else {
+            echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+	    }
+        
+	}
+    
+    function viewTache(){
+        global $conn;
+		$id_project = $_POST['id_project'];
+        $query="select * from user as U
+        left join projet as P on P.chef_projet =U.id_user where P.id_projet ='$id_project'";
+    
+        $result_chef_projet = mysqli_query($conn, $query);
+        while ($row1 = mysqli_fetch_assoc($result_chef_projet)) {
+            $chef_projet= $row1['chef_projet'];
+            $chefName=$row1['nom_user'] . ' ' . $row1['prenom_user'];
+            $nomProject= $row1['nom_projet'];
+        }
+        
+        $value = '
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-list"></i> Id tâche</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-bookmark"></i> Description </th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Chef de projet </th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de début du tâche</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de fin du tâche</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-history"></i> Etat</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-upload"></i> Pièce jointe</th>';
+                    if($chef_projet==$_SESSION['id_user']){
+                        $value .= ' 
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Employées </th>';
+                    }
+                    $value .= ' <th style="text-align: center;" class="border-top-0">Actions</th>
+                </tr>            
+            </thead>';
+        
+           
+            if($chef_projet==$_SESSION['id_user']){
+                $query1 = "SELECT * FROM tache where id_projet='$id_project' and etat_tache !='0'";
+
+            }else {
+                $query1 = "SELECT * FROM tache ";
+
+            }
+        $i=1;
+        $result = mysqli_query($conn, $query1);
+        while ($row = mysqli_fetch_assoc($result)) {
+
+            $query_sepcialite = "SELECT * FROM user";
+            $result_sepcialite = mysqli_query($conn, $query_sepcialite);
+            $table_specialite =explode(",",$row['id_users']);
+            $user_data="";
+            while ($row_specialite = mysqli_fetch_assoc($result_sepcialite)) {
+                if (in_array( $row_specialite['id_user'],  $table_specialite )){
+                    $user_data=$user_data.' '.$row_specialite['nom_user'].' '.$row_specialite['prenom_user'].' /';
+                }
+            }   
+            if( substr($user_data, -1)=="/"){
+                $user_data =substr($user_data, 0, -1);   
+            }
+    
+
+                    $value .= '<tbody>
+                        <tr>
+                            <td style="text-align: center;">' . $i++ . '</td>
+                            <td style="text-align: center;">' . $row['description_tache'] . '</td>
+                            <td style="text-align: center;">' . $chefName . '</td>
+                            <td style="text-align: center;">' . $row['date_debut_tache'] . '</td>
+                            <td style="text-align: center;">' . $row['date_fin_tache'] . '</td>';                                                       
+                           
+                            if($row['etat_tache'] == "1"){
+                                $value .= ' <td style="text-align: center;background-color:#C1FFEC;" width="100px">En attente</td>';
+                            }else if($row['etat_tache'] == "2"){
+                                $value .= ' <td style="text-align: center; background-color:#7DFFD6;" width="100px">En cours</td>';
+                            }else if($row['etat_tache'] == "3") {
+                                $value .= ' <td style="text-align: center;background-color:#05DD9A; " width="100px">Terminé</td>';
+                            }
+                            $value .= '
+                            <td style="text-align: center;"><a '.(($row["piece_joint_tache"]!="")?"href='uploads/projet/tache/{$row["piece_joint_tache"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
+                            ';
+                            
+                            if($chef_projet==$_SESSION['id_user']){
+                                $value .= ' 
+                                <td style="text-align: center;">' .$user_data. '</td>
+                                <td style="text-align: center;">
+                                    <div class="btn-group">
+                                        <button type="button" title="Modifier tâche" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifierTache" data-id=' . $row['id_tache'] . '><i class="fa fa-pen fa-1x"></i></button> 
+                                        <button type="button" title="Supprimer tâche" class="btn btn-danger" id="btn_supprimerTache" data-id1=' . $row['id_tache'] . '><i class="fa fa-trash fa-1x"></i></button> 
+                                    </div>
+                                </td>';
+                            } else {
+                                $value .= '
+                                <td>
+                                    <button type="button" title="Modifier etat tâche" class="btn btn-primary" id="btn_modifier_EtatTache" data-id2=' . $row['id_tache'] . '><i class="fa fa-pen fa-1x"></i></button> 
+                                </td>';
+                            }
+                        $value .= ' </tr>';
+            }
+        
+        $value .= '</tbody></table>';
+        echo json_encode(['status' => 'success', 'html' => $value]);
+    }
+
+    
+    function addTache(){
+    	global $conn ;
+    	$id_project = isset($_POST['id_project']) ? $_POST['id_project'] : null ;
+    	$description = isset($_POST['description']) ? $_POST['description'] : null ;
+    	$dateDebutTache = isset($_POST['dateDebutTache']) ? $_POST['dateDebutTache'] : null ;
+    	$dateFinTache = isset($_POST['dateFinTache']) ? $_POST['dateFinTache'] : null ;
+    	$employee=isset($_POST['employee']) ? $_POST['employee'] : null ;
+    	$doc_tache=isset($_FILES["doc_tache"]) ? $_FILES['doc_tache'] : "" ;
+    	$doc_tache_filname = "";
+    
+    	if ($doc_tache != ""){
+    		$doc_tache_filname = "tache" . "." . strtolower(pathinfo($doc_tache["name"], PATHINFO_EXTENSION));
+    		move_uploaded_file($doc_tache["tmp_name"], "uploads/projet/tache/".$doc_tache_filname);
+    	}
+        $query= "INSERT INTO tache(description_tache, id_projet, date_debut_tache, date_fin_tache, piece_joint_tache, id_users) 
+        VALUES ('$description','$id_project','$dateDebutTache','$dateFinTache','$doc_tache_filname','$employee')";
+    
+    	$result=mysqli_query($conn,$query);
+    	if ($result) {
+    		echo "<div class='text-success'>La tâche du projet est ajouté avec succès</div>";
+    	} else {
+    		echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+    	}
+    	
+    }
+
+    
+	function deleteTache(){
+  
+		global $conn;
+		$id_tache = $_POST['DeleteID'];
+		$date = date('Y-m-d H:i:s');
+		$query = "UPDATE tache SET etat_tache ='0',date_updated_tache='$date' WHERE id_tache='$id_tache'";
+		$result=mysqli_query($conn,$query);
+		if ($result) {
+			echo "<div class='text-success'>La tâche est supprimé avec succès</div>";
+		} else {
+			echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+		}
+	}
+
+   
+
+    function get_dataEtatTache()
+	{
+		global $conn;
+		$id_tache = $_POST['update_ID'];
+	
+		$query = "SELECT etat_tache FROM tache WHERE id_tache='$id_tache'";
+	
+	
+        $result = mysqli_query($conn, $query);
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $etat_data = [];
+            $etat_data[0] = $id_tache;
+            $etat_data[1] = $row['etat_tache'];            
+        }
+        echo json_encode($etat_data);
+	}
+    
+	
+    function update_etatTache(){
+        global $conn;
+        $date = date('Y-m-d H:i:s');
+        $etat = $_POST['etat'];
+        $id_tache = $_POST['id_tache'];
+    
+    
+        $query = "UPDATE tache SET etat_tache='$etat',date_updated_tache='$date' WHERE id_tache='$id_tache'";
+        $result = mysqli_query($conn, $query);
+        if ($result) {
+            echo "L'etat du tâche est modifie avec succès ";
+        } else {
+            echo "<div class='text-danger'> Veuillez vérifier votre requête</div> ";
+        }
+    }
+
+    
+    function get_dataTache()
+	{
+		global $conn;
+		$id_tache = $_POST['update_ID'];
+	
+        $query = "SELECT * FROM tache WHERE id_tache='$id_tache'";
+
+		$result = mysqli_query($conn, $query);
+	
+		while ($row = mysqli_fetch_assoc($result)) {
+			$update_tache= [];
+			$update_tache[0] = $id_tache;
+			$update_tache[1] = $row['description_tache'];
+			$update_tache[2] = $row['date_debut_tache'];
+			$update_tache[3] = $row['date_fin_tache'];
+			$update_tache[4] = $row['id_users'];
+           
+		}
+		echo json_encode($update_tache);
+	}
+    
+	
+    function updateTache(){
+		global $conn ;
+        $date = date('Y-m-d H:i:s');
+		$idTache = $_POST['update_ID'] ;
+    	$description = $_POST['description'];
+    	$dateDebutTache = $_POST['dateDebutTache'] ;
+    	$dateFinTache = $_POST['dateFinTache'];
+    	$employee=$_POST['employee'];
+        $doc_tache=isset($_FILES["doc_tache"]) ? $_FILES['doc_tache'] : "" ;
+    	$doc_tache_filname = "";
+    
+    	if ($doc_tache != ""){
+    		$doc_tache_filname = "tache" . "." . strtolower(pathinfo($doc_tache["name"], PATHINFO_EXTENSION));
+    		move_uploaded_file($doc_tache["tmp_name"], "uploads/projet/tache/".$doc_tache_filname);
+    	}
+        $query = "UPDATE tache SET description_tache='$description',date_debut_tache='$dateDebutTache',date_fin_tache='$dateFinTache',piece_joint_tache='$doc_tache_filname',id_users='$employee',date_updated_tache='$date' WHERE id_tache='$idTache'";
+        $result=mysqli_query($conn,$query);
+    
+    	$result=mysqli_query($conn,$query);
+    	if ($result) {
+    		echo "<div class='text-success'>Les informations du tâche mises à jour avec succès</div>";
+    	} else {
+    		echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+    	}
+
+
+	}
+    
+
 ?>
