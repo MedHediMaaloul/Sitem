@@ -384,19 +384,24 @@ body {
   border: 2px solid #05dd9a;
 }
 
+.icon {
+  display: block;
+  font-size: 26px;
+  margin-top: -6px;
+}
 
-#notification {
+.topbar-btn {
   position: relative;
   background: black;
   padding: 11px;
   border-radius: 50%;
 }
 
-#notification:hover .icon i {
+.topbar-btn:hover .icon i {
   color: #05dd9a !important;
 }
 
-#notification::before {
+.topbar-btn::before {
   content: '';
   position: absolute;
   top: 0;
@@ -409,7 +414,7 @@ body {
   pointer-events: none;
 }
 
-#notification:hover::before {
+.topbar-btn:hover::before {
   transform: scale(1.2);
   border: 2px solid #05dd9a;
 }
@@ -469,4 +474,8 @@ input[type=checkbox] {
 .msgError {
   color: #D8000C;
   text-align: center;
+}
+/* font title page*/
+.fnt{
+  font-size: 2.3rem;
 }

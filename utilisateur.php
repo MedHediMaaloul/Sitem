@@ -5,7 +5,7 @@ include 'Gestion/header.php'
 <div class="page-wrapper">
   <div class="page-content">
     <div class="row">                
-      <h3 class="mb-4" style="color:#05DD9A;"><i class="fa fa-angle-right"></i> Utilisateur</h3>
+      <h3 class="mb-4" style="color:#05DD9A;"><i class="fa fa-angle-right"></i> Utilisateurs</h3>
       <div class="row mt">
         <div class="col-md-12">
           <div class="content-panel">                  

@@ -1,5 +1,6 @@
 $(document).ready(function () {
   login();
+  /* User */
   view_user();
   add_user();
   delete_user();
@@ -7,8 +8,15 @@ $(document).ready(function () {
   get_data_user();
   disable_account();
   activate_account();
+  /* Profil */
   get_profil_record();
   update_profil_record();
+  /* Materiel */
+  add_materiel_record();
+  view_materiel();
+  get_materiel_record();
+  update_materiel_record();
+  delete_materiel();
 });
 
 //close modal
@@ -159,16 +167,16 @@ function view_user() {
 
 function add_user() {
   $(document).on("click", "#btn_openModel", function () {
-    document.getElementById('sh1').style.display = 'none';
+    document.getElementById("sh1").style.display = "none";
     $("#insert-user_form").trigger("reset");
     var paragraphs = $("#insert-user_form").find("p");
     paragraphs.each(function () {
-      $(this).html('');
+      $(this).html("");
     });
     $("#modal_add").modal("show");
     $(document).on("click", "#btn_ajout_user", function () {
       paragraphs.each(function () {
-        $(this).html('');
+        $(this).html("");
       });
       var role = $("#role").val();
       var nom = $("#nom").val();
@@ -182,9 +190,11 @@ function add_user() {
       var password = $("#password").val();
       var confirmPassword = $("#confirmPassword").val();
 
-      var specialite = $("#specialite option:selected").map(function () {
-        return $(this).val();
-      }).get();
+      var specialite = $("#specialite option:selected")
+        .map(function () {
+          return $(this).val();
+        })
+        .get();
 
       if (doc_photoProfile == undefined) {
         doc_photoProfile = "";
@@ -227,13 +237,17 @@ function add_user() {
         $("#address_error").html("Saisir votre adresse s'il vous plait.");
         $("#address").focus();
       } else if (dateNaissance == "") {
-        $("#dateNaissance_error").html("Saisir votre date de Naissance s'il vous plait.");
+        $("#dateNaissance_error").html(
+          "Saisir votre date de Naissance s'il vous plait."
+        );
         $("#dateNaissance").focus();
       } else if (password == "") {
         $("#password_error").html("Saisir votre mot de passe s'il vous plait.");
         $("#password").focus();
       } else if (confirmPassword == "" || password != confirmPassword) {
-        $("#confirmPassword_error").html("Confirmer votre  Mot de Passe s'il vous plait.");
+        $("#confirmPassword_error").html(
+          "Confirmer votre  Mot de Passe s'il vous plait."
+        );
         $("#confirmPassword").focus();
       } else {
         var form_data = new FormData();
@@ -255,9 +269,12 @@ function add_user() {
           contentType: false,
           data: form_data,
           success: function (data) {
-            if (data.includes('text-echec')) {
+            if (data.includes("text-echec")) {
               $("#modal_add").modal("hide");
-              $("#adduser_echec").removeClass("text-checked").addClass("text-echec").html(data);
+              $("#adduser_echec")
+                .removeClass("text-checked")
+                .addClass("text-echec")
+                .html(data);
               $("#EchecAddUser").modal("show");
               setTimeout(function () {
                 if ($("#EchecAddUser").length > 0) {
@@ -268,7 +285,9 @@ function add_user() {
               $("#modal_add").modal("hide");
               $("#adduser_success").addClass("text-checked").html(data);
               $("#SuccessAddUser").modal("show");
-              $("#adduser_success").removeClass("text-echec").addClass("text-checked");
+              $("#adduser_success")
+                .removeClass("text-echec")
+                .addClass("text-checked");
               setTimeout(function () {
                 if ($("#SuccessAddUser").length > 0) {
                   $("#SuccessAddUser").modal("hide");
@@ -283,7 +302,6 @@ function add_user() {
   });
 }
 
-
 function disable_account() {
   $(document).on("click", "#btn_desactiver_user", function () {
     var user_ID = $(this).attr("data-id2");
@@ -293,12 +311,15 @@ function disable_account() {
         url: "disable_account.php",
         method: "post",
         data: {
-          user_ID: user_ID
+          user_ID: user_ID,
         },
         success: function (data) {
-          if (data.includes('text-echec')) {
+          if (data.includes("text-echec")) {
             $("#disable_user").modal("hide");
-            $("#disableUser_echec").removeClass("text-checked").addClass("text-echec").html(data);
+            $("#disableUser_echec")
+              .removeClass("text-checked")
+              .addClass("text-echec")
+              .html(data);
             $("#EchecDisableUser").modal("show");
             setTimeout(function () {
               if ($("#EchecDisableUser").length > 0) {
@@ -309,7 +330,9 @@ function disable_account() {
             $("#disable_user").modal("hide");
             $("#disableUser_success").addClass("text-checked").html(data);
             $("#SuccessDisableUser").modal("show");
-            $("#disableUser_success").removeClass("text-echec").addClass("text-checked");
+            $("#disableUser_success")
+              .removeClass("text-echec")
+              .addClass("text-checked");
             setTimeout(function () {
               if ($("#SuccessDisableUser").length > 0) {
                 $("#SuccessDisableUser").modal("hide");
@@ -321,7 +344,6 @@ function disable_account() {
       });
     });
   });
-
 }
 
 function activate_account() {
@@ -333,12 +355,15 @@ function activate_account() {
         url: "activate_account.php",
         method: "post",
         data: {
-          user_ID: user_ID
+          user_ID: user_ID,
         },
         success: function (data) {
-          if (data.includes('text-echec')) {
+          if (data.includes("text-echec")) {
             $("#activate_user").modal("hide");
-            $("#activateUser_echec").removeClass("text-checked").addClass("text-echec").html(data);
+            $("#activateUser_echec")
+              .removeClass("text-checked")
+              .addClass("text-echec")
+              .html(data);
             $("#EchecActivateUser").modal("show");
             setTimeout(function () {
               if ($("#EchecActivateUser").length > 0) {
@@ -349,7 +374,9 @@ function activate_account() {
             $("#activate_user").modal("hide");
             $("#activateUser_success").addClass("text-checked").html(data);
             $("#SuccessActivateUser").modal("show");
-            $("#activateUser_success").removeClass("text-echec").addClass("text-checked");
+            $("#activateUser_success")
+              .removeClass("text-echec")
+              .addClass("text-checked");
             setTimeout(function () {
               if ($("#SuccessActivateUser").length > 0) {
                 $("#SuccessActivateUser").modal("hide");
@@ -372,12 +399,15 @@ function delete_user() {
         url: "delete_user.php",
         method: "post",
         data: {
-          DeleteID: Delete_ID
+          DeleteID: Delete_ID,
         },
         success: function (data) {
-          if (data.includes('text-echec')) {
+          if (data.includes("text-echec")) {
             $("#delete_user").modal("hide");
-            $("#deleteUser_echec").removeClass("text-checked").addClass("text-echec").html(data);
+            $("#deleteUser_echec")
+              .removeClass("text-checked")
+              .addClass("text-echec")
+              .html(data);
             $("#EchecDeleteUser").modal("show");
             setTimeout(function () {
               if ($("#EchecDeleteUser").length > 0) {
@@ -388,7 +418,9 @@ function delete_user() {
             $("#delete_user").modal("hide");
             $("#deleteUser_success").addClass("text-checked").html(data);
             $("#SuccessDeleteUser").modal("show");
-            $("#deleteUser_success").removeClass("text-echec").addClass("text-checked");
+            $("#deleteUser_success")
+              .removeClass("text-echec")
+              .addClass("text-checked");
             setTimeout(function () {
               if ($("#SuccessDeleteUser").length > 0) {
                 $("#SuccessDeleteUser").modal("hide");
@@ -399,7 +431,7 @@ function delete_user() {
         },
       });
     });
-    $(document).on('hide.bs.modal', '#delete_user', function () {
+    $(document).on("hide.bs.modal", "#delete_user", function () {
       Delete_ID = "";
     });
   });
@@ -407,28 +439,28 @@ function delete_user() {
 
 function get_data_user() {
   $(document).on("click", "#btn_modifier_user", function () {
-    document.getElementById('sh2').style.display = 'none';
+    document.getElementById("sh2").style.display = "none";
     $("#passwordupdate").prop("checked", false);
     $("#passwordchange_form ").css("display", "none");
     $("#update-user_form").trigger("reset");
     var paragraphs = $("#update-user_form").find("p");
     paragraphs.each(function () {
-      $(this).html('');
+      $(this).html("");
     });
     var updateID = $(this).attr("data-id");
     $.ajax({
       url: "get_data_user.php",
       method: "post",
       data: {
-        update_ID: updateID
+        update_ID: updateID,
       },
       dataType: "JSON",
       success: function (data) {
         $("#idUser").val(data[0]);
         $("#up_role").val(data[1]);
         var specialite = data[2].split(",");
-        $('select[name=up_specialite]').val(specialite);
-        $('#up_specialite').selectpicker('refresh')
+        $("select[name=up_specialite]").val(specialite);
+        $("#up_specialite").selectpicker("refresh");
         $("#up_specialite").val(specialite);
         $("#up_nom").val(data[3]);
         $("#up_prenom").val(data[4]);
@@ -440,32 +472,29 @@ function get_data_user() {
 
         $("#update_user_modal").modal("show");
         if ($("#up_role").val() == "1") {
-          document.getElementById('sh2').style.display = 'block';
+          document.getElementById("sh2").style.display = "block";
         }
         const id_up_role = document.getElementById("up_role");
         id_up_role.addEventListener("change", handleSelectChange);
         function handleSelectChange(event) {
           const id_role = event.target.value;
-          document.getElementById('sh2').style.display = 'none';
+          document.getElementById("sh2").style.display = "none";
           if (id_role == "1") {
-            document.getElementById('sh2').style.display = 'block';
-          }else{
+            document.getElementById("sh2").style.display = "block";
+          } else {
             $("#up_specialite").val("");
           }
         }
-
       },
     });
   });
-
 }
-
 
 function update_user() {
   $(document).on("click", "#btn_update_user", function () {
     var paragraphs = $("#update-user_form").find("p");
     paragraphs.each(function () {
-      $(this).html('');
+      $(this).html("");
     });
     $("#update_user_modal").scrollTop(0);
     var idUser = $("#idUser").val();
@@ -527,13 +556,25 @@ function update_user() {
       $("#up_address_error").html("Saisir votre adresse s'il vous plait.");
       $("#up_address").focus();
     } else if (dateNaissance == "") {
-      $("#up_dateNaissance_error").html("Saisir votre date de Naissance s'il vous plait.");
+      $("#up_dateNaissance_error").html(
+        "Saisir votre date de Naissance s'il vous plait."
+      );
       $("#up_dateNaissance").focus();
-    } else if (document.getElementById("passwordupdate").checked == true && password == "") {
-      $("#up_password_error").html("Saisir votre mot de passe actuel s'il vous plait.");
+    } else if (
+      document.getElementById("passwordupdate").checked == true &&
+      password == ""
+    ) {
+      $("#up_password_error").html(
+        "Saisir votre mot de passe actuel s'il vous plait."
+      );
       $("#up_password").focus();
-    } else if (document.getElementById("passwordupdate").checked == true && newPassword == "") {
-      $("#newPassword_error").html("Saisir le nouveau mot de passe s'il vous plait.");
+    } else if (
+      document.getElementById("passwordupdate").checked == true &&
+      newPassword == ""
+    ) {
+      $("#newPassword_error").html(
+        "Saisir le nouveau mot de passe s'il vous plait."
+      );
       $("#newPassword").focus();
     } else {
       var form_data = new FormData();
@@ -558,9 +599,12 @@ function update_user() {
         contentType: false,
         data: form_data,
         success: function (data) {
-          if (data.includes('text-echec')) {
+          if (data.includes("text-echec")) {
             $("#update_user_modal").modal("hide");
-            $("#UpdateUser_echec").removeClass("text-checked").addClass("text-echec").html(data);
+            $("#UpdateUser_echec")
+              .removeClass("text-checked")
+              .addClass("text-echec")
+              .html(data);
             $("#EchecUpdateUser").modal("show");
             setTimeout(function () {
               if ($("#EchecUpdateUser").length > 0) {
@@ -571,7 +615,9 @@ function update_user() {
             $("#update_user_modal").modal("hide");
             $("#UpdateUser_success").addClass("text-checked").html(data);
             $("#SuccessUpdateUser").modal("show");
-            $("#UpdateUser_success").removeClass("text-echec").addClass("text-checked");
+            $("#UpdateUser_success")
+              .removeClass("text-echec")
+              .addClass("text-checked");
             setTimeout(function () {
               if ($("#SuccessUpdateUser").length > 0) {
                 $("#SuccessUpdateUser").modal("hide");
@@ -579,14 +625,13 @@ function update_user() {
               }
             }, 2000);
           }
-        }
-
+        },
       });
     }
   });
 }
 
-   /* profil*/
+/* profil*/
 
 function get_profil_record() {
   $.ajax({
@@ -607,16 +652,16 @@ function get_profil_record() {
       $("#userpaasword").val(data[6]);
       $("#userspecialité").html(data[12]);
       if (data[11] != "") {
-        $("#profilphoto").attr("src", "uploads/" + data[11]);
+        $("#profilphoto").attr("src", "uploads/user/" + data[11]);
       }
     },
   });
   $(document).on("click", "#up_profil_btn", function () {
     $("#passwordupdate").prop("checked", false);
     $("#passwordchange_form ").css("display", "none");
-    var paragraphs = $("#up-profilForm").find("p");
-    paragraphs.each(function() {
-    $(this).html('');
+    var msgErrorlabel = $("#up-profilForm").find("p");
+    msgErrorlabel.each(function () {
+      $(this).html("");
     });
     $.ajax({
       url: "get_profil_record.php",
@@ -632,8 +677,8 @@ function get_profil_record() {
         $("#up_profilPhone").val(data[4]);
         $("#up_profilAdresse").val(data[10]);
         var specialites = data[9].split(",");
-        $('select[name=up_specialitename]').val(specialites);
-        $('#up_profilspecialite').selectpicker('refresh')
+        $("select[name=up_specialitename]").val(specialites);
+        $("#up_profilspecialite").selectpicker("refresh");
         $("#up_profil_modal").modal("show");
       },
     });
@@ -641,9 +686,9 @@ function get_profil_record() {
 }
 function update_profil_record() {
   $(document).on("click", "#btn_update_profil_user", function () {
-    var paragraphs = $("#up-profilForm").find("p");
-    paragraphs.each(function() {
-    $(this).html('');
+    var msgErrorlabel = $("#up-profilForm").find("p");
+    msgErrorlabel.each(function () {
+      $(this).html("");
     });
     $("#up_profil_modal").scrollTop(0);
     var up_idprofil = $("#up_idProfil").val();
@@ -671,28 +716,47 @@ function update_profil_record() {
         $(" #up_profilNom").focus();
         break;
       case up_profilPrenom == "":
-        $(" #UpPrenomMessageErreur").html("Saisir votre prénom s'il vous plaît");
+        $(" #UpPrenomMessageErreur").html(
+          "Saisir votre prénom s'il vous plaît"
+        );
         $(" #up_profilPrenom").focus();
         break;
       case up_profilDateNaissance == "":
-        $(" #UpNaissanceMessageErreur").html("Saisir votre date de naissance s'il vous plaît");
+        $(" #UpNaissanceMessageErreur").html(
+          "Saisir votre date de naissance s'il vous plaît"
+        );
         $(" #up_profilDateNaissance").focus();
         break;
       case up_profilPhone == "":
-        $(" #UpPhoneMessageErreur").html("Saisir votre numéro de téléphone s'il vous plaît");
+        $(" #UpPhoneMessageErreur").html(
+          "Saisir votre numéro de téléphone s'il vous plaît"
+        );
+        $(" #up_profilPhone").focus();
+        break;
+      case !validatePhoneNumber(up_profilPhone):
+        $(" #UpPhoneMessageErreur").html("Numéro téléphone invalide");
         $(" #up_profilPhone").focus();
         break;
       case up_profilAdresse == "":
-        $(" #UpAdresseMessageErreur").html("Saisir votre adresse s'il vous plaît");
+        $(" #UpAdresseMessageErreur").html(
+          "Saisir votre adresse s'il vous plaît"
+        );
         $(" #up_profilAdresse").focus();
         break;
+      case selectedspecialite == "":
+        $(" #upSpecialiteError").html("Choisir une spécialité s'il vous plaît");
+        $(" #up_profilspecialite").focus();
+        break;
       case isChecked && up_profilactuelpassword == "":
-        $(" #UpPassMessageErreur").html("Saisir votre mot de passe actuel s'il vous plaît");
-        $(" #actuelpasswordprofil").focus();
+        $(" #UpPassMessageErreur").html(
+          "Saisir votre mot de passe actuel s'il vous plaît"
+        );
         $(" #actuelpasswordprofil").focus();
         break;
       case isChecked && up_profilnouveaupassword == "":
-        $(" #UpNewPassMessageErreur").html("Saisir votre nouveau mot de passe actuel s'il vous plaît");
+        $(" #UpNewPassMessageErreur").html(
+          "Saisir votre nouveau mot de passe s'il vous plaît"
+        );
         $(" #newpasswordprofil").focus();
         break;
       default:
@@ -744,7 +808,254 @@ function update_profil_record() {
               }, 3000);
             }
           },
-        });   
+        });
+    }
+  });
+}
+
+/*Materiel*/
+
+function add_materiel_record() {
+  $(document).on("click", "#btn_InsertMateriel", function () {
+    $("#insert_materiel_form").trigger("reset");
+    var msgErrorLabel = $("#insert_materiel_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html("");
+    });
+    $("#modal_addMateriel").modal("show");
+    $(document).on("click", "#btn_ajout_materiel", function () {
+      msgErrorLabel.each(function () {
+        $(this).html("");
+      });
+      var nom = $("#nom_materiel").val();
+      var prix = $("#prix_materiel").val();
+      var dateAchat = $("#date_acha_materiel").val();
+      var facture = $("#facture_materiel").prop("files")[0];
+      var EmplyeeID = $("#liste_materiel_employee").val();
+      switch (true) {
+        case nom == "":
+          $(" #nom_materiel_error").html(
+            "Saisir le nom de materiel s'il vous plaît"
+          );
+          $(" #nom_materiel").focus();
+          break;
+        case prix == "":
+          $(" #prix_materiel_materiel").html("Saisir le prix s'il vous plaît");
+          $(" #prix_materiel").focus();
+          break;
+        case dateAchat == "":
+          $(" #date_acha_materiel_error").html(
+            "Saisir la date d'achat s'il vous plaît"
+          );
+          $(" #date_acha_materiel").focus();
+          break;
+        case EmplyeeID == "":
+          $(" #liste_materiel_employee_error").html(
+            "Choisir un employée s'il vous plaît"
+          );
+          $(" #liste_materiel_employee").focus();
+          break;
+        default:
+          var form_data = new FormData();
+          form_data.append("nom", nom);
+          form_data.append("prix", prix);
+          form_data.append("dateAchat", dateAchat);
+          form_data.append("facture", facture);
+          form_data.append("EmplyeeID", EmplyeeID);
+          $.ajax({
+            url: "add_materiel.php",
+            method: "post",
+            processData: false,
+            contentType: false,
+            data: form_data,
+            success: function (data) {
+              if (data.includes("text-echec")) {
+                $("#modal_addMateriel").modal("hide");
+                $("#addMateriel_echec")
+                  .removeClass("text-checked")
+                  .addClass("text-echec")
+                  .html(data);
+                $("#EchecAddMateriel").modal("show");
+                setTimeout(function () {
+                  if ($("#EchecAddMateriel").length > 0) {
+                    $("#EchecAddMateriel").modal("hide");
+                  }
+                }, 2000);
+              } else {
+                $("#modal_addMateriel").modal("hide");
+                $("#addMateriel_success").addClass("text-checked").html(data);
+                $("#SuccessAddMateriel").modal("show");
+                $("#addMateriel_success")
+                  .removeClass("text-echec")
+                  .addClass("text-checked");
+                setTimeout(function () {
+                  if ($("#SuccessAddMateriel").length > 0) {
+                    $("#SuccessAddMateriel").modal("hide");
+                    view_materiel();
+                  }
+                }, 2000);
+              }
+            },
+          });
       }
+    });
+  });
+}
+
+function view_materiel() {
+  $.ajax({
+    url: "view_materiel.php",
+    method: "post",
+    success: function (data) {
+      try {
+        data = $.parseJSON(data);
+        if (data.status == "success") {
+          $("#liste_materiel").html(data.html);
+        }
+      } catch (e) {
+        console.error("Invalid Response!");
+      }
+    },
+  });
+}
+
+function get_materiel_record() {
+  $(document).on("click", "#btn_modifier_materiel", function () {
+    var msgErrorlabel = $("#update_materiel_form").find("p");
+    msgErrorlabel.each(function () {
+      $(this).html("");
+    });
+    var IDMateriel = $(this).attr("data-id");
+    $.ajax({
+      url: "get_materiel_record.php",
+      method: "post",
+      dataType: "JSON",
+      data: { IDMateriel: IDMateriel },
+      success: function (data) {
+        $("#up_idMateriel").val(data[0]);
+        $("#up_nom_materiel").val(data[1]);
+        $("#up_prix_materiel").val(data[2]);
+        $("#up_date_acha_materiel").val(data[3]);
+        $("#up_liste_materiel_employee").find('option[value='+data[4]+']').prop('selected', true);
+        $("#up_liste_materiel_employee").prop('disabled', true);
+        $("#up_liste_materiel_employee").selectpicker("refresh");
+        $("#modal_updateMateriel").modal("show");
+      },
+    });
+  });
+}
+
+function update_materiel_record() {
+  $(document).on("click", "#btn_up_materiel", function () {
+    var msgErrorlabel = $("#update_materiel_form").find("p");
+    msgErrorlabel.each(function () {
+      $(this).html("");
+    });
+    $("#modal_updateMateriel").scrollTop(0);
+    var up_idMateriel= $("#up_idMateriel").val();
+    var up_nom_materiel= $("#up_nom_materiel").val();
+    var up_prix_materiel=$("#up_prix_materiel").val();
+    var up_date_acha_materiel= $("#up_date_acha_materiel").val();
+    var up_facture_materiel = $("#up_facture_materiel").prop("files")[0];
+    switch (true) {
+      case up_nom_materiel == "":
+        $(" #up_nom_materiel_error").html("Saisir le nom de materiel s'il vous plaît");
+        $(" #up_nom_materiel").focus();
+        break;
+      case up_prix_materiel == "":
+        $(" #up_prix_materiel_error").html(
+          "Saisir le prix s'il vous plaît"
+        );
+        $(" #up_prix_materiel").focus();
+        break;
+      case up_date_acha_materiel == "":
+        $(" #up_date_acha_materiel_error").html(
+          "Saisir la date d'achat s'il vous plaît"
+        );
+        $(" #up_date_acha_materiel").focus();
+      default:
+        var form_data = new FormData();
+        form_data.append("up_idMateriel",up_idMateriel);
+        form_data.append("up_nom_materiel", up_nom_materiel);
+        form_data.append("up_prix_materiel", up_prix_materiel);
+        form_data.append("up_date_acha_materiel", up_date_acha_materiel);
+        form_data.append("up_facture_materiel", up_facture_materiel);
+        $.ajax({
+          url: "update_materiel_record.php",
+          method: "POST",
+          processData: false,
+          contentType: false,
+          data: form_data,
+          success: function (data) {
+             if (data.includes("text-checked")) {
+              $("#modal_updateMateriel").modal("hide");
+              $("#UpdateMateriel_success")
+                .removeClass("text-echec")
+                .addClass("text-checked")
+                .html(data);
+              $("#SuccessUpdateMateriel").modal("show");
+
+              
+              setTimeout(function () {
+                $("#SuccessUpdateMateriel").modal("hide");
+                view_materiel();
+              }, 3000);
+            } else {
+              $("#modal_updateMateriel").modal("hide");
+              $("#UpdateMateriel_echec")
+                .removeClass("text-echec")
+                .addClass("text-checked")
+                .html(data);
+              $("#EchecUpdateMateriel").modal("show");
+              setTimeout(function () {
+                $("#EchecUpdateMateriel").modal("hide");
+              }, 3000);
+            }
+          },
+        });
+    }
+  });
+}
+
+function delete_materiel() {
+  $(document).on("click", "#btn_supprimer_materiel", function () {
+    var id_materiel = $(this).attr("data-id1");
+    $("#delete_materiel").modal("show");
+    $(document).on("click", "#supprimer_materiel", function () {
+      $.ajax({
+        url: "delete_materiel.php",
+        method: "post",
+        data: {
+          id_materiel: id_materiel,
+        },
+        success: function (data) {
+          if (data.includes("text-echec")) {
+            $("#delete_materiel").modal("hide");
+            $("#deletemateriel_echec")
+              .addClass("text-echec")
+              .html(data);
+            $("#EchecDeleteMateriel").modal("show");
+            setTimeout(function () {
+              if ($("#EchecDeleteMateriel").length > 0) {
+                $("#EchecDeleteMateriel").modal("hide");
+              }
+            }, 2000);
+          } else {
+            $("#delete_materiel").modal("hide");
+            $("#deleteMateriel_success").addClass("text-checked").html(data);
+            $("#SuccessDeleteMateriel").modal("show");
+            setTimeout(function () {
+              if ($("#SuccessDeleteMateriel").length > 0) {
+                $("#SuccessDeleteMateriel").modal("hide");
+                view_materiel();
+              }
+            }, 2000);
+          }
+        },
+      });
+    });
+    $(document).on("hide.bs.modal", "#delete_user", function () {
+      Delete_ID = "";
+    });
   });
 }

@@ -15,7 +15,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js" integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function() {
+    // menu style in case page displayed//
     $('.hex-content').click(function(e) {
         $('.hex-item').children().css('background','transparent');
         $('.hex-item:first-child').css('transform', 'scale(1)');
@@ -30,6 +31,17 @@ $(document).ready(function() {
         hexItem.css('transform', 'scale(1.2)');
         hexChildren.children().css('background','#05dd9a');
     });
+    // menu style in case user role/
+    var role=<?php echo $idRole ?>;
+    if(role!=1){
+     $('#hexagon_content').css('display','grid');
+     $('#hexagon_content').css('grid-template-columns','repeat(2, auto)');
+     $('#hexagon_content').css('grid-template-rows','repeat(2, auto)');
+     $('.hexagon-item').css('margin-left','-13px');
+     $('#hexagon_content').css('margin-top','34px');
+     $('.hexagon-item').css('margin-bottom','33px');
+     $('#hexagon_content').css('margin-left','0px');
+     }
 });
 </script>
 </body>

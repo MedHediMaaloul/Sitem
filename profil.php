@@ -27,10 +27,6 @@ include 'Gestion/connect_db.php';
         background: black;
     }
 
-    .page-wrapper {
-        margin-top: 50px !important;
-        margin-left: 0px !important;
-    }
 
     #fiche_1row {
         display: grid !important;
@@ -45,20 +41,20 @@ include 'Gestion/connect_db.php';
         grid-template-columns: repeat(2, auto);
         gap: 25px;
     }
-    #btn dropdown-toggle btn-light data-id{
-        border:1px solid black
+    .page-wrapper {
+    margin-top: 40px;
     }
     </style>
     <div class="page-content">
         <div class="row">
-            <section>
-                <div class="container py-5">
+            <section >
+                <div class="py-5">
                     <div class="row">
-                        <h1 class="mb-4" style="color:#05DD9A;"><i class="fa fa-angle-right"></i> Profil</h1>
+                        <h1 class="mb-4 fnt" style="color:#05DD9A;"><i class="fa fa-angle-right"></i> Profil</h1>
                         <div class="col-lg-4">
                             <div class="card mb-4">
                                 <div class="card-body text-center">
-                                    <img id="profilphoto" src="uploads/avatar.png" style="width: 160px;"
+                                    <img id="profilphoto" src="uploads/user/avatar.png" style="width: 160px;"
                                         class="rounded-circle img-fluid">
                                     <h5 class="my-3" id="nameuser"></h5>
                                     <p class="text-muted " id="userspecialité"></p>
@@ -227,14 +223,14 @@ include 'Gestion/connect_db.php';
                                         <div class="col-md-12 p-0">
                                             <input type="text" id="up_profilNom" class="form-control">
                                         </div>
-                                        <p for="up_profilNom" class="error msgError" id="UpNomMessageErreur"></p>
+                                        <p for="up_profilNom" class="error msgError mt-2" id="UpNomMessageErreur"></p>
                                     </div>
                                     <div class="form-group mb-4">
                                         <label class="col-md-12 p-0">Prénom<span class="text-danger">*</span></label>
                                         <div class="col-md-12 p-0">
                                             <input type="text" id="up_profilPrenom" class="form-control">
                                         </div>
-                                        <p for="up_profilPrenom" class="error msgError" id="UpPrenomMessageErreur"></p>
+                                        <p for="up_profilPrenom" class="error msgError mt-2" id="UpPrenomMessageErreur"></p>
 
                                     </div>
                                     <div class="form-group mb-4">
@@ -243,7 +239,7 @@ include 'Gestion/connect_db.php';
                                         <div class="col-md-12 p-0">
                                             <input type="date" id="up_profilDateNaissance" class="form-control">
                                         </div>
-                                        <label for="up_profilDateNaissance" class="error msgError" id="UpNaissanceMessageErreur"></label>
+                                        <p for="up_profilDateNaissance" class="error msgError mt-2" id="UpNaissanceMessageErreur"></p>
                                     </div>
                                 </div>
                                 <div id="fiche_1row">
@@ -266,7 +262,7 @@ include 'Gestion/connect_db.php';
                                             <input id="up_profilPhone" "
                                                 class=" form-control">
                                         </div>
-                                        <label for="up_profilPhone" class="error msgError" id="UpPhoneMessageErreur"></label>
+                                        <p for="up_profilPhone" class="error msgError mt-2" id="UpPhoneMessageErreur"></p>
                                     </div>
                                 </div>
                                 <div id="fiche_1row">
@@ -275,7 +271,7 @@ include 'Gestion/connect_db.php';
                                         <div class="col-md-12 p-0">
                                             <input type="text" id="up_profilAdresse" class="form-control">
                                         </div>
-                                        <label for="up_profilAdresse" class="error msgError" id="UpAdresseMessageErreur"></label>
+                                        <p for="up_profilAdresse" class="error msgError mt-2" id="UpAdresseMessageErreur"></p>
                                     </div>
                                     <div class="form-group mb-4">
                                         <label class="col-md-12 p-0">Spécialité<span
@@ -296,6 +292,7 @@ include 'Gestion/connect_db.php';
                                  ?>
                                             </select>
                                         </div>
+                                        <p for="up_profilspecialite" class="error msgError mt-2" id="upSpecialiteError"></p>  
                                     </div>
                                     <div class="form-group mb-4">
                                         <label class="col-md-12 p-0">Photo de profil</label>
@@ -303,7 +300,7 @@ include 'Gestion/connect_db.php';
                                             <input style=" width: 295px;" type="file" id="up_profilPhoto"
                                                 class="form-control">
                                         </div>
-                                        <label for="up_profilPhoto" class="error msgError" id="UpPhotoMessageErreur"></label>
+                                        <p for="up_profilPhoto" class="error msgError" id="UpPhotoMessageErreur"></p>
                                     </div>
                                 </div>
                                 <div class="form-group mb-4">
@@ -322,7 +319,7 @@ include 'Gestion/connect_db.php';
                                                 <input style=" width: 70%;" type="text" id="actuelpasswordprofil"
                                                     class="form-control">
                                             </div>
-                                            <label for="actuelpasswordprofil" class="error msgError" id="UpPassMessageErreur"></label>
+                                            <p style="text-align: inherit;" for="actuelpasswordprofil" class="error msgError mt-2" id="UpPassMessageErreur"></p>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-12 p-0">Nouveau mot de passe<span
@@ -331,7 +328,7 @@ include 'Gestion/connect_db.php';
                                                 <input style=" width: 70%;" type="text" id="newpasswordprofil"
                                                     class="form-control">
                                             </div>
-                                            <label  class="error msgError" style="margin-top: -50px;" id="UpNewPassMessageErreur"></label>
+                                            <p style="text-align: inherit;"  for="newpasswordprofil" class="error msgError mt-2" id="UpNewPassMessageErreur"></p>
 
                                         </div>
                                     </div>
