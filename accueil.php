@@ -119,7 +119,7 @@ $idRole=$_SESSION['Role'];
                                         <div></div>
                                         <div></div>
                                     </div>
-                                    <a class="hex-content">
+                                    <a class="hex-content" href="projet.php">
                                         <span class="hex-content-inner">
                                             <span class="icon">
                                                 <i class="fa fa-tasks" aria-hidden="true"></i>
