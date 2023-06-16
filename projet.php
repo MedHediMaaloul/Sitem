@@ -264,7 +264,7 @@ include 'Gestion/header.php'
                           <div class="form-group">
                             <label class="col-md-12 p-0">Etat du projet<span class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
-                              <select type="text" name="type"  id="up_etat_projet" name="up_etat_projet" class="form-control" required style="margin-bottom:8px" onclick="showSpecialite(this)">
+                              <select type="text" name="type"  id="up_etat_projet" name="up_etat_projet" class="form-control" required style="margin-bottom:8px">
                                 <option value="Choisissez" selected disabled>Choisissez état</option>
                                 <option value="1">En attente</option>
                                 <option value="2">En cours</option>

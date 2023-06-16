@@ -238,7 +238,7 @@ include 'Gestion/header.php'
                           <div class="form-group">
                             <label class="col-md-12 p-0">Etat du tâche<span class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
-                              <select type="text" name="type"  id="up_etat_tache" name="up_etat_tache" class="form-control" required style="margin-bottom:8px" onclick="showSpecialite(this)">
+                              <select type="text" name="type"  id="up_etat_tache" name="up_etat_tache" class="form-control" required style="margin-bottom:8px">
                                 <option value="Choisissez" selected disabled>Choisissez état</option>
                                 <option value="1">En attente</option>
                                 <option value="2">En cours</option>
@@ -464,10 +464,10 @@ include 'Gestion/header.php'
   
   today = yyyy+'-'+mm+'-'+dd;
   
-  document.getElementById("up_dateDebutprojet").setAttribute("min", today);
-  document.getElementById("up_dateFinprojet").setAttribute("min", today);
+  document.getElementById("up_dateDebutTache").setAttribute("min", today);
+  document.getElementById("up_dateFinTache").setAttribute("min", today);
 
-  document.getElementById("dateDebutprojet").setAttribute("min", today);
-  document.getElementById("dateFinprojet").setAttribute("min", today);
+  document.getElementById("dateDebutTache").setAttribute("min", today);
+  document.getElementById("dateFinTache").setAttribute("min", today);
   
 </script>

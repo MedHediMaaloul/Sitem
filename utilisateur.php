@@ -24,6 +24,8 @@ include 'Gestion/header.php'
                     </div>
                     <div class="modal-body">
                       <form id="insert-user_form" autocomplete="off" class="form-horizontal form-material">
+                      <input type="text" class="form-control" style="margin-bottom:8px" id="id_role_user" IdRoleusUr="<?php echo $idRole ?>" placeholder="Nom" hidden/>
+                      <?php if ($idRole=="0"){?>
                         <div id="fiche_1row">
                           <div class="form-group">
                             <label class="col-md-12 p-0">Role<span
@@ -45,7 +47,7 @@ include 'Gestion/header.php'
                             </div>
                           </div>
                         </div>
-                      
+                      <?php  } ?>
                         <div id="fiche_1row">
                           <div class="form-group" id="sh1" style="display:none;">
                             <label class="col-md-12 p-0">Spécialité<span
@@ -436,13 +438,13 @@ include 'Gestion/header.php'
                     <div class="modal-body">
                       <form id="update-user_form" autocomplete="off" class="form-horizontal form-material">
                         <div class="form-group">
-                          <input type="hidden" id="idUser">
+                          <input type="hidden" id="idUser" UpIdRoleusUr="<?php echo $idRole ?>">
                         </div>
-                        <div id="fiche_1row">
-                          <div class="form-group">
+                        <div id="fiche_1row" >
+                          <div class="form-group" <?php  ($idRole=="2")? print 'hidden':print ''?>>
                             <label class="col-md-12 p-0">Role<span class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
-                              <select type="text" name="type"  id="up_role" name="up_role" class="form-control" required style="margin-bottom:8px" onclick="showSpecialite(this)">
+                              <select type="text" name="type"  id="up_role" name="up_role" class="form-control" required style="margin-bottom:8px" >
                                 <option value="Choisissez" selected disabled>Choisissez Role</option>
                                 <?php
                                 global $conn;
@@ -640,6 +642,8 @@ include 'Gestion/header.php'
   ?>
 
 <script>
+  var idRole=<?php echo $idRole ?>;
+  if (idRole=="0"){
   //specialite display where role= employee
   const Select_role = document.getElementById("role");
   Select_role.addEventListener("change", handleSelectChange);
@@ -653,7 +657,7 @@ include 'Gestion/header.php'
       document.getElementById('sh1').style.display = 'block';
     }
   }
-
+  }
   //date
   var today = new Date();
   var dd = today.getDate();

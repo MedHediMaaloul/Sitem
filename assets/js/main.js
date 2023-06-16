@@ -9,14 +9,15 @@ $(document).ready(function () {
   disable_account();
   activate_account();
   /* Profil */
-  get_profil_record();
-  update_profil_record();
+  get_data_profil();
+  update_profil();
   /* Materiel */
-  add_materiel_record();
+  add_materiel();
   view_materiel();
-  get_materiel_record();
-  update_materiel_record();
+  get_data_materiel();
+  update_materiel();
   delete_materiel();
+  /* Projet */
   view_project();
   add_project();
   delete_project();
@@ -24,6 +25,7 @@ $(document).ready(function () {
   update_etat_project();
   get_data_project();
   update_project();
+    /* Tache */
   view_tache();
   add_tache();
   delete_tache();
@@ -193,7 +195,13 @@ function add_user() {
       msgErrorLabel.each(function () {
         $(this).html('');
       });
-      var role = $("#role").val();
+      var id_role_user = $("#id_role_user").attr("IdRoleusUr");
+      if (id_role_user == "2") {
+        var role = "0";
+      }
+      else {
+        var role = $("#role").val();
+      }
       var nom = $("#nom").val();
       var prenom = $("#prenom").val();
       var address = $("#address").val();
@@ -508,9 +516,15 @@ function update_user() {
     msgErrorLabel.each(function () {
       $(this).html('');
     });
+    var up_id_role_user = $("#idUser").attr("UpIdRoleusUr");
     $("#update_user_modal").scrollTop(0);
     var idUser = $("#idUser").val();
-    var role = $("#up_role").val();
+    if (id_role_user == "2") {
+      var role = "0";
+    }
+    else {
+      var role = $("#up_role").val();
+    }
     var nom = $("#up_nom").val();
     var prenom = $("#up_prenom").val();
     var address = $("#up_address").val();
@@ -645,9 +659,9 @@ function update_user() {
 
 /* profil*/
 
-function get_profil_record() {
+function get_data_profil() {
   $.ajax({
-    url: "get_profil_record.php",
+    url: "get_data_profil.php",
     method: "post",
     dataType: "JSON",
     success: function (data) {
@@ -676,7 +690,7 @@ function get_profil_record() {
       $(this).html('');
     });
     $.ajax({
-      url: "get_profil_record.php",
+      url: "get_data_profil.php",
       method: "post",
       dataType: "JSON",
       success: function (data) {
@@ -696,13 +710,14 @@ function get_profil_record() {
     });
   });
 }
-function update_profil_record() {
+function update_profil() {
   $(document).on("click", "#btn_update_profil_user", function () {
     var msgErrorLabel = $("#up-profilForm").find("p");
     msgErrorLabel.each(function () {
       $(this).html('');
     });
     $("#up_profil_modal").scrollTop(0);
+    var id_role = $("#up_idProfil").attr("id_role");
     var up_idprofil = $("#up_idProfil").val();
     var up_profilNom = $("#up_profilNom").val();
     var up_profilPrenom = $("#up_profilPrenom").val();
@@ -755,7 +770,7 @@ function update_profil_record() {
         );
         $(" #up_profilAdresse").focus();
         break;
-      case selectedspecialite == "":
+      case   id_role=="1" && selectedspecialite == "":
         $(" #upSpecialiteError").html("Choisir une spécialité s'il vous plaît");
         $(" #up_profilspecialite").focus();
         break;
@@ -784,7 +799,7 @@ function update_profil_record() {
         form_data.append("up_profilactuelpassword", up_profilactuelpassword);
         form_data.append("up_profilnouveaupassword", up_profilnouveaupassword);
         $.ajax({
-          url: "update_profil_record.php",
+          url: "update_profil.php",
           method: "POST",
           processData: false,
           contentType: false,
@@ -816,7 +831,7 @@ function update_profil_record() {
               $("#SuccessUpProfil").modal("show");
               setTimeout(function () {
                 $("#SuccessUpProfil").modal("hide");
-                get_profil_record();
+                location.reload();
               }, 3000);
             }
           },
@@ -827,7 +842,7 @@ function update_profil_record() {
 
 /*Materiel*/
 
-function add_materiel_record() {
+function add_materiel() {
   $(document).on("click", "#btn_InsertMateriel", function () {
     $("#insert_materiel_form").trigger("reset");
     var msgErrorLabel = $("#insert_materiel_form").find("p");
@@ -931,7 +946,7 @@ function view_materiel() {
   });
 }
 
-function get_materiel_record() {
+function get_data_materiel() {
   $(document).on("click", "#btn_modifier_materiel", function () {
     var msgErrorlabel = $("#update_materiel_form").find("p");
     msgErrorlabel.each(function () {
@@ -939,7 +954,7 @@ function get_materiel_record() {
     });
     var IDMateriel = $(this).attr("data-id");
     $.ajax({
-      url: "get_materiel_record.php",
+      url: "get_data_materiel.php",
       method: "post",
       dataType: "JSON",
       data: { IDMateriel: IDMateriel },
@@ -957,7 +972,7 @@ function get_materiel_record() {
   });
 }
 
-function update_materiel_record() {
+function update_materiel() {
   $(document).on("click", "#btn_up_materiel", function () {
     var msgErrorlabel = $("#update_materiel_form").find("p");
     msgErrorlabel.each(function () {
@@ -993,7 +1008,7 @@ function update_materiel_record() {
         form_data.append("up_date_acha_materiel", up_date_acha_materiel);
         form_data.append("up_facture_materiel", up_facture_materiel);
         $.ajax({
-          url: "update_materiel_record.php",
+          url: "update_materiel.php",
           method: "POST",
           processData: false,
           contentType: false,
@@ -1432,7 +1447,7 @@ function update_project() {
 
 //tache
 function view_tache() {
-  var id_project = document.querySelector("input[name=id_Project]").value;
+  var id_project = $("input[name='id_Project']").val();
   $.ajax({
     url: "view_tache.php",
     method: "post",
@@ -1444,7 +1459,6 @@ function view_tache() {
           $("#liste_tache").html(data.html);
         }
       } catch (e) {
-        console.error("Invalid Response!");
       }
     },
   });
@@ -1539,7 +1553,6 @@ function delete_tache() {
     var Delete_ID = $(this).attr("data-id1");
     $("#delete_tache").modal("show");
     $(document).on("click", "#supprimer_tache", function () {
-      // alert("hi");
       $.ajax({
         url: "delete_tache.php",
         method: "post",

@@ -72,7 +72,7 @@ $idRole=$_SESSION['Role'];
                                             <span class="icon">
                                                 <i class="fa fa-users" aria-hidden="true"></i>
                                             </span>
-                                            <span class="title">Utilisateurs</span>
+                                           <span class="title">Utilisateurs</span>
                                         </span>
                                         <svg viewBox="0 0 173.20508075688772 200" height="200" width="174" version="1.1"
                                             xmlns="http://www.w3.org/2000/svg">

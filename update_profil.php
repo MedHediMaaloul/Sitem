@@ -1,5 +1,5 @@
 <?php
 include 'Gestion/connect_db.php';
 include 'Gestion/function.php';
-getProfilRecord();
+updateProfil();
 ?>

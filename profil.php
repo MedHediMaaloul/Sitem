@@ -54,10 +54,14 @@ include 'Gestion/connect_db.php';
                         <div class="col-lg-4">
                             <div class="card mb-4">
                                 <div class="card-body text-center">
-                                    <img id="profilphoto" src="uploads/user/avatar.png" style="width: 160px;"
+                                    <img id="profilphoto" src="assets/images/profil.png" style="width: 160px;"
                                         class="rounded-circle img-fluid">
                                     <h5 class="my-3" id="nameuser"></h5>
-                                    <p class="text-muted " id="userspecialité"></p>
+                                    <?php 
+                                    if ($idRole=="1"){
+                                   echo" <p class='text-muted' id='userspecialité'></p>";
+                                    }
+                                    ?>
                                     <div class="d-flex justify-content-center mb-2">
                                         <button id="up_profil_btn" type="button"
                                             class="btn btn-outline-success ms-1">Modifier</button>
@@ -205,7 +209,7 @@ include 'Gestion/connect_db.php';
             <div class="modal fade bd-example-modal-lg" id="up_profil_modal" tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
+                    <div class="modal-content" style="width: fit-content;">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modifier profil</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -216,7 +220,7 @@ include 'Gestion/connect_db.php';
                             <form id="up-profilForm" autocomplete="off" class="form-horizontal form-material">
                                 <div id="fiche_1row">
                                     <div hidden>
-                                        <input type="text" id="up_idProfil" class="form-control">
+                                        <input type="text" id="up_idProfil" id_role="<?php echo $idRole ?>"  class="form-control">
                                     </div>
                                     <div>
                                         <label class="col-md-12 p-0">Nom<span class="text-danger">*</span></label>
@@ -269,10 +273,11 @@ include 'Gestion/connect_db.php';
                                     <div class="form-group mb-4">
                                         <label class="col-md-12 p-0">Adresse<span class="text-danger">*</span></label>
                                         <div class="col-md-12 p-0">
-                                            <input type="text" id="up_profilAdresse" class="form-control">
+                                            <input type="text" id="up_profilAdresse" class="form-control" style="width:250px">
                                         </div>
                                         <p for="up_profilAdresse" class="error msgError mt-2" id="UpAdresseMessageErreur"></p>
                                     </div>
+                                    <?php   if ($idRole=="1"){  ?>
                                     <div class="form-group mb-4">
                                         <label class="col-md-12 p-0">Spécialité<span
                                                 class="text-danger">*</span></label>
@@ -281,8 +286,7 @@ include 'Gestion/connect_db.php';
                                     $result = mysqli_query($conn, $query);
                                         ?>
                                         <div class="col-md-12 p-0">
-                                        <select class="selectpicker form-control" id="up_profilspecialite" name="up_specialitename" style="margin-bottom:8px" multiple aria-label="select">
-                                <option value="" disabled>Selectionner votre spécialité</option>
+                                        <select class="selectpicker form-control" id="up_profilspecialite" data-none-selected-text="Sélectionner spécialité" name="up_specialitename" style="margin-bottom:8px" multiple aria-label="select">
                                  <?php
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
@@ -294,6 +298,8 @@ include 'Gestion/connect_db.php';
                                         </div>
                                         <p for="up_profilspecialite" class="error msgError mt-2" id="upSpecialiteError"></p>  
                                     </div>
+                                    <?php }?>
+
                                     <div class="form-group mb-4">
                                         <label class="col-md-12 p-0">Photo de profil</label>
                                         <div class="col-md-12 p-0">

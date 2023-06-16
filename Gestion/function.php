@@ -52,16 +52,23 @@ session_start();
                     <th style="text-align: center;" class="border-top-0"><i class="fa fa-phone"></i> Téléphone</th>
                     <th style="text-align: center;" class="border-top-0" class="hidden-phone"><i class="fa fa-envelope"></i> Email</th>
                     <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de Naissance </th>
-                    <th style="text-align: center;" class="border-top-0"><i class=" fa fas fa-map-marker-alt"></i> Adresse</th>
-                    <th style="text-align: center;" class="border-top-0"><i class="fas fa-graduation-cap"></i> Specialité</th>
-                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-image"></i> Photo</th>
+                    <th style="text-align: center;" class="border-top-0"><i class=" fa fas fa-map-marker-alt"></i> Adresse</th>';
+                    if($_SESSION['Role'] != '2'){
+                    $value .= ' <th style="text-align: center;" class="border-top-0"><i class="fas fa-graduation-cap"></i> Specialité</th>';
+                    }
+                    $value .=' <th style="text-align: center;" class="border-top-0"><i class="fa fa-image"></i> Photo</th>
                     <th style="text-align: center;" class="border-top-0">Actions</th>
                 </tr>            
             </thead>';
-    
-        $query = "SELECT * FROM user WHERE etat_user != '0' ORDER BY etat_user ASC";
-        $result = mysqli_query($conn, $query);
-        while ($row = mysqli_fetch_assoc($result)) {
+
+            if($_SESSION['Role']=="2"){
+                $query = "SELECT * FROM user WHERE etat_user != '0' AND id_role='0' ORDER BY etat_user ASC";
+            }
+            else{
+                $query = "SELECT * FROM user WHERE etat_user != '0' AND id_role='1' ORDER BY etat_user ASC";
+            }
+            $result = mysqli_query($conn, $query);
+            while ($row = mysqli_fetch_assoc($result)) {
             $query_sepcialite = "SELECT * FROM specialite";
             $result_sepcialite = mysqli_query($conn, $query_sepcialite);
             $table_specialite =explode(",",$row['id_specialite']);
@@ -83,9 +90,11 @@ session_start();
                     <td style="text-align: center;">' . $row['numTel_user'] . '</td>
                     <td style="text-align: center;">' . $row['email_user'] . '</td>
                     <td style="text-align: center;">' . $row['date_naissance_user'] . '</td>
-                    <td style="text-align: center;">' . $row['adresse_user'] . '</td>
-                    <td style="text-align: center;">' . $user_data. '</td>
-                    <td style="text-align: center;"><a '.(($row["photo_user"]!="")?"href='uploads/user/{$row["photo_user"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
+                    <td style="text-align: center;">' . $row['adresse_user'] . '</td>';
+                    if($_SESSION['Role'] != '2'){
+                    $value .= ' <td style="text-align: center;">' . $user_data. '</td>';
+                    }
+                    $value .= ' <td style="text-align: center;"><a '.(($row["photo_user"]!="")?"href='uploads/user/{$row["photo_user"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
                     <td style="text-align: center;">
                         <div class="btn-group">';
                             if($row['etat_user'] == '1'){
@@ -295,7 +304,7 @@ function get_dataUser()
 }
 
     //Profile
-	function getProfilRecord(){
+	function getProfil(){
 		global $conn ;
 		$iduser= $_SESSION['id_user'];
     $query = "SELECT * FROM user
@@ -330,7 +339,7 @@ function get_dataUser()
     echo json_encode($user_data);
 }
 
-function updateProfilRecord()
+function updateProfil()
 {
     global $conn;
     $date = date('Y-m-d H:i:s');
@@ -355,15 +364,15 @@ function updateProfilRecord()
         $emplacement_photoProfil = "uploads/user/";
         $file_photo_profil = $emplacement_photoProfil . basename($_FILES["up_profilPhoto"]["name"]);
         $uploadOk_photo_profil = 1;
-        $type_passport = strtolower(pathinfo($file_photo_profil, PATHINFO_EXTENSION));
-        if ($type_passport != "jpg" && $type_passport != "png" && $type_passport != "jpeg" && $type_passport != "gif") {
+        $type_photo_profil = strtolower(pathinfo($file_photo_profil, PATHINFO_EXTENSION));
+        if ($type_photo_profil != "jpg" && $type_photo_profil != "png" && $type_photo_profil != "jpeg" && $type_photo_profil != "gif") {
             echo "<div class='text-echec-photo'>les formats autorisés sont JPG, JPEG, PNG et GIF.</div>";
             $uploadOk_photo_profil = 0;
             return;
         }
         if ($uploadOk_photo_profil != 0) {
-            move_uploaded_file($_FILES["up_profilPhoto"]["tmp_name"], $emplacement_photoProfil . $Namefile_photo_profil . "." . $type_passport);
-            $up_profilPhoto = $Namefile_photo_profil . "." . $type_passport;
+            move_uploaded_file($_FILES["up_profilPhoto"]["tmp_name"], $emplacement_photoProfil . $Namefile_photo_profil . "." . $type_photo_profil);
+            $up_profilPhoto = $Namefile_photo_profil . "." . $type_photo_profil;
         }
     } else {
         $up_profilPhoto = $row_profil['photo_user'];
@@ -473,7 +482,7 @@ function viewMateriel()
     echo json_encode(['status' => 'success', 'html' => $value]);
 }
 
-function getMaterielRecord(){
+function getMateriel(){
     global $conn;
     $IDMateriel = $_POST['IDMateriel'];
     $query = "SELECT * FROM materiel AS M
@@ -490,7 +499,7 @@ function getMaterielRecord(){
         echo json_encode($user_data);
 }
 
-function updateMaterielRecord(){
+function updateMateriel(){
     global $conn;
     $date = date('Y-m-d H:i:s');
     $up_idMateriel = $_POST["up_idMateriel"];

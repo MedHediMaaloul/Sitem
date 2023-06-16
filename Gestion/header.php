@@ -83,7 +83,7 @@ WHERE id_user= '$iduser'";
                             <span class="icon">
                                 <i class="fa fa-users" aria-hidden="true"></i>
                             </span>
-                            <span class="title">Utilisateurs</span>
+                        <span class="title">Utilisateurs</span>
                         </span>
                         <svg viewBox="0 0 173.20508075688772 200" class="svgicon" version="1.1"
                             xmlns="http://www.w3.org/2000/svg">
@@ -280,7 +280,7 @@ WHERE id_user= '$iduser'";
         <header>
             <div class="topbar d-flex align-items-center">
                 <nav class="navbar navbar-expand">
-                    <a href="" class="circleiconsslink"> <img src="uploads/user/<?php  (empty($row['photo_user']))? print 'avatar.png':print $row['photo_user']?>"
+                    <a href="" class="circleiconsslink"> <img id="ImageProfilHeader" <?php  (empty($row['photo_user']))? print 'src="assets/images/profil.png':print 'src="uploads/user/'.$row["photo_user"].'"'?>"
                             class="rounded-circle shadow-4 circleiconss" style="width: 55px; height:55px;"
                             alt="Avatar" />
                     </a>
