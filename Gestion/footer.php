@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
      $('#hexagon_content').css('grid-template-rows','repeat(2, auto)');
      $('.hexagon-item').css('margin-left','-13px');
      $('#hexagon_content').css('margin-top','34px');
-     $('.hexagon-item').css('margin-bottom','33px');
+     $('.hexagon-item').css('margin-bottom','-13px');
      $('#hexagon_content').css('margin-left','0px');
      }
 });
