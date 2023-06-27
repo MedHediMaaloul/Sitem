@@ -301,14 +301,8 @@ function get_dataUser()
 
 }
 
-<<<<<<< HEAD
     //Profile
 	function getProfil(){
-=======
-    /*Profile*/
-
-	function getProfilRecord(){
->>>>>>> siwarkassas-S2
 		global $conn ;
 		$iduser= $_SESSION['id_user'];
     $query = "SELECT * FROM user
