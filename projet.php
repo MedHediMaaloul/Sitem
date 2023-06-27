@@ -165,7 +165,7 @@ include 'Gestion/header.php'
                       <div class="circleerror">
                         <i class="fa fa-times"></i>
                       </div>
-                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="addProject_echec"></center>
                       </div>
                     </div>
@@ -235,7 +235,7 @@ include 'Gestion/header.php'
                       <div class="circleerror">
                         <i class="fa fa-times"></i>
                       </div>
-                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="deleteProject_echec"></center>
                       </div>
                     </div>
@@ -264,7 +264,7 @@ include 'Gestion/header.php'
                           <div class="form-group">
                             <label class="col-md-12 p-0">Etat du projet<span class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
-                              <select type="text" name="type"  id="up_etat_projet" name="up_etat_projet" class="form-control" required style="margin-bottom:8px" onclick="showSpecialite(this)">
+                              <select id="up_etat_projet" name="up_etat_projet" class="form-control" required style="margin-bottom:8px">
                                 <option value="Choisissez" selected disabled>Choisissez état</option>
                                 <option value="1">En attente</option>
                                 <option value="2">En cours</option>
@@ -284,51 +284,51 @@ include 'Gestion/header.php'
               </div>
               <!-- end update etat projet model -->
               
-                    <!-- Model alert update etat project succès -->
-                    <div class="modal fade" id="SuccessUpdateEtatProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modification Etat du projet</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                          </div>
-                          <div class="modal-echec-succes">
-                            <div class="circlechecked">
-                              <i class="fas fa-check"></i>
-                            </div>
-                            <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
-                              <center id="UpdateEtatProject_success"></center>
-                            </div>
-                          </div>
-                        </div>
+              <!-- Model alert update etat project succès -->
+              <div class="modal fade" id="SuccessUpdateEtatProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Modification Etat du projet</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-echec-succes">
+                      <div class="circlechecked">
+                        <i class="fas fa-check"></i>
+                      </div>
+                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                        <center id="UpdateEtatProject_success"></center>
                       </div>
                     </div>
-                    <!-- end Model alert update etat project succès -->
-                    
-                    <!-- Model alert update etat project echec -->
-                    <div class="modal fade" id="EchecUpdateEtatProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modification Etat du projet</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                          </div>
-                          <div class="modal-echec-succes">
-                            <div class="circleerror">
-                              <i class="fa fa-times"></i>
-                            </div>
-                            <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
-                              <center id="UpdateEtatProject_echec"></center>
-                            </div>
-                          </div>
-                        </div>
+                  </div>
+                </div>
+              </div>
+              <!-- end Model alert update etat project succès -->
+              
+              <!-- Model alert update etat project echec -->
+              <div class="modal fade" id="EchecUpdateEtatProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Modification Etat du projet</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-echec-succes">
+                      <div class="circleerror">
+                        <i class="fa fa-times"></i>
+                      </div>
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                        <center id="UpdateEtatProject_echec"></center>
                       </div>
                     </div>
-                    <!-- end Model alert update etat project echec -->
+                  </div>
+                </div>
+              </div>
+              <!-- end Model alert update etat project echec -->
                     
               
               <!-- update project Modal -->
@@ -481,7 +481,7 @@ include 'Gestion/header.php'
                             <div class="circleerror">
                               <i class="fa fa-times"></i>
                             </div>
-                            <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                            <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                               <center id="UpdateProject_echec"></center>
                             </div>
                           </div>

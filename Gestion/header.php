@@ -17,7 +17,6 @@ WHERE id_user= '$iduser'";
     <title>Sitem</title>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
     <link rel='stylesheet' href='assets/css/bootstrap.min.css'>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <link href="https://fonts.cdnfonts.com/css/bambino-2" rel="stylesheet">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css'>
     <link rel="stylesheet" href="assets/css/header.css">
@@ -27,7 +26,8 @@ WHERE id_user= '$iduser'";
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" integrity="sha512-mR/b5Y7FRsKqrYZou7uysnOdCIJib/7r5QeJMFvLNHNhtye3xJp1TdJVPLtetkukFn227nKpXD9OjUc09lx97Q==" crossorigin="anonymous"
   referrerpolicy="no-referrer" />
-
+<!-- fullcalendar -->
+  <link rel="stylesheet" href="evennement/fullcalendar.css" />
 </head>
 <style>
 .svgicon {
@@ -156,7 +156,7 @@ WHERE id_user= '$iduser'";
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="../profil.php">
+                    <a class="hex-content" href="planning.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>

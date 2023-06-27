@@ -7,11 +7,9 @@ $idRole=$_SESSION['Role'];
 
 <head>
     <meta charset="UTF-8">
-    <title>CodePen - menu with awesome hover </title>
-
+    <title>Sitem</title>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css'>
-    <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.cdnfonts.com/css/bambino-2" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/accueil.css">
 
@@ -145,7 +143,7 @@ $idRole=$_SESSION['Role'];
                                         <div></div>
                                         <div></div>
                                     </div>
-                                    <a class="hex-content">
+                                    <a class="hex-content" href="planning.php">
                                         <span class="hex-content-inner">
                                             <span class="icon">
                                                 <i class="fa fa-calendar" aria-hidden="true"></i>

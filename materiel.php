@@ -129,7 +129,7 @@ include 'Gestion/header.php'
                       <div class="circleerror">
                         <i class="fas fa-check"></i>
                       </div>
-                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="addMateriel_echec"></center>
                       </div>
                     </div>
@@ -199,7 +199,7 @@ include 'Gestion/header.php'
                       <div class="circleerror">
                         <i class="fas fa-check"></i>
                       </div>
-                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="deleteMateriel_echec"></center>
                       </div>
                     </div>
@@ -324,7 +324,7 @@ if ($result->num_rows > 0) {
                       <div class="circleerror">
                       <i class="fa fa-times"></i>
                       </div>
-                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="UpdateMateriel_echec"></center>
                       </div>
                     </div>

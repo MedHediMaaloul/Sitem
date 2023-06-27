@@ -29,7 +29,7 @@ include 'Gestion/header.php'
                             <label class="col-md-12 p-0">Role<span
                             class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
-                              <select type="text" name="type"  id="role" name="role" class="form-control" required style="margin-bottom:8px">
+                              <select id="role" name="role" class="form-control" required style="margin-bottom:8px">
                                 <option value="Choisissez" selected disabled>Choisissez Role</option>
                                 <?php
                                 global $conn;
@@ -202,7 +202,7 @@ include 'Gestion/header.php'
                       <div class="circleerror">
                         <i class="fa fa-times"></i>
                       </div>
-                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="adduser_echec"></center>
                       </div>
                     </div>
@@ -248,7 +248,7 @@ include 'Gestion/header.php'
                       <div class="circleerror">
                         <i class="fa fa-times"></i>
                       </div>
-                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="deleteUser_echec"></center>
                       </div>
                     </div>
@@ -342,7 +342,7 @@ include 'Gestion/header.php'
                       <div class="circleerror">
                         <i class="fa fa-times"></i>
                       </div>
-                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="disableUser_echec"></center>
                       </div>
                     </div>
@@ -413,7 +413,7 @@ include 'Gestion/header.php'
                       <div class="circleerror">
                         <i class="fa fa-times"></i>
                       </div>
-                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="activateUser_echec"></center>
                       </div>
                     </div>
@@ -442,7 +442,7 @@ include 'Gestion/header.php'
                           <div class="form-group">
                             <label class="col-md-12 p-0">Role<span class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
-                              <select type="text" name="type"  id="up_role" name="up_role" class="form-control" required style="margin-bottom:8px" onclick="showSpecialite(this)">
+                              <select id="up_role" name="up_role" class="form-control" required style="margin-bottom:8px">
                                 <option value="Choisissez" selected disabled>Choisissez Role</option>
                                 <?php
                                 global $conn;
@@ -618,7 +618,7 @@ include 'Gestion/header.php'
                       <div class="circleerror">
                       <i class="fa fa-times"></i>
                       </div>
-                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="UpdateUser_echec"></center>
                       </div>
                     </div>
