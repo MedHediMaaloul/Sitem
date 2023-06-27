@@ -39,7 +39,7 @@ session_start();
         	echo "<label class=\"myclass\">Compte introuvable !</label>";
         }
     }
-    //User
+    /*User*/
     function viewUser(){
         global $conn;
         $value = '
@@ -135,7 +135,6 @@ session_start();
     	}
     	    
         $selectEmail = mysqli_query($conn, "SELECT * FROM user WHERE email_user = '".$_POST['email']."' ");
-    	$row= mysqli_fetch_array($selectEmail);
     	while ($row = mysqli_fetch_assoc($selectEmail)) {
     		$status= $row['etat_user'];
     		}
@@ -258,7 +257,6 @@ function get_dataUser()
 		}
 
     $selectEmail = mysqli_query($conn, "SELECT * FROM user WHERE email_user='$email' and  id_user!='$idUser'");
-    // $row= mysqli_fetch_array($selectEmail);
     while ($row = mysqli_fetch_assoc($selectEmail)) {
 
 		$status= $row['etat_user'];
@@ -303,8 +301,14 @@ function get_dataUser()
 
 }
 
+<<<<<<< HEAD
     //Profile
 	function getProfil(){
+=======
+    /*Profile*/
+
+	function getProfilRecord(){
+>>>>>>> siwarkassas-S2
 		global $conn ;
 		$iduser= $_SESSION['id_user'];
     $query = "SELECT * FROM user
@@ -548,91 +552,115 @@ function deleteMateriel()
     }
 }
     
-    //Project
+    /*Project*/
+    
     function viewProject(){
         global $conn;
+        $id_user = $_SESSION['id_user'];
         $value = '
-        <table class="table table-striped align-middle">
+            <table class="table table-striped align-middle">
             <thead>
-                <tr>
-                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Client </th>
-                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-pen"></i> Nom du projet</th>
-                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Chef de projet </th>
-                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-bookmark"></i> Description </th>
-                    <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de début</th>
-                    <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de fin</th>
-                    <th style="text-align: center;" class="border-top-0"><i class="fas fa-check"></i> Confirmation</th>
-                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-history"></i> Etat</th>
-                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-tasks"></i> Tâche</th>
-                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-upload"></i> Pièce jointe</th>
-                    <th style="text-align: center;" class="border-top-0">Actions</th>
-                </tr>            
+            <tr>
+            <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Client </th>
+            <th style="text-align: center;" class="border-top-0"><i class="fa fa-pen"></i> Nom du projet</th>
+            <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Chef de projet </th>
+            <th style="text-align: center;" class="border-top-0"><i class="fa fa-bookmark"></i> Description </th>
+            <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de début</th>
+            <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de fin</th>
+            <th style="text-align: center;" class="border-top-0"><i class="fas fa-check"></i> Confirmation</th>
+            <th style="text-align: center;" class="border-top-0"><i class="fa fa-history"></i> Etat</th>
+            <th style="text-align: center;" class="border-top-0"><i class="fa fa-tasks"></i> Tâche</th>
+            <th style="text-align: center;" class="border-top-0"><i class="fa fa-tasks"></i> Employés affectés</th>
+            <th style="text-align: center;" class="border-top-0"><i class="fa fa-upload"></i> Pièce jointe</th>
+            <th style="text-align: center;" class="border-top-0">Actions</th>
+            </tr>            
             </thead>';
-            $id_user = $_SESSION['id_user'];
-            if($_SESSION['Role']==1){ 
-                $query = "SELECT * 
-                FROM projet as P
-                LEFT JOIN user as U ON U.id_user =P.chef_projet
-                LEFT JOIN client AS C ON C.id_client = P.nom_client_projet
-                where etat_projet !='0' and U.id_user =$id_user
-                ORDER BY date_created_projet ASC";
-            }else{
-                $query = "SELECT * 
-                FROM projet as P
-                LEFT JOIN user as U ON U.id_user =P.chef_projet
-                LEFT JOIN client AS C ON C.id_client = P.nom_client_projet
-                where etat_projet !='0' 
-                ORDER BY date_created_projet ASC";
-            }   
         
-        $result = mysqli_query($conn, $query);
-        while ($row = mysqli_fetch_assoc($result)) {
-            if($row['etat_projet'] != "0" && $row['etat_projet'] != "3"){
+            $query = "SELECT *
+            FROM projet as P
+            LEFT JOIN user as U ON U.id_user =P.chef_projet
+            LEFT JOIN client AS C ON C.id_client = P.nom_client_projet
+            where P.etat_projet !='0' 
+            ORDER BY P.date_created_projet ASC";
+
+            $result = mysqli_query($conn, $query);
+            while ($row = mysqli_fetch_assoc($result)) {
+                $id_project=$row['id_projet'];
+    
+                $selectTache = mysqli_query($conn, "SELECT * FROM tache WHERE etat_tache !='0' and id_projet = '$id_project'");
+                $user_data='';
+                $list=array();$x=0;
+                while ($rowTache = mysqli_fetch_assoc($selectTache)) {
+                    $users= $rowTache['id_users'];
+                    if ($users==$id_user){
+                        $user_data=$id_user;
+                    }
+                    if (!in_array($users,$list)){
+                        $list[$x]=$users;$x++;
+                    }
+                }
+                $query_users = "SELECT * FROM user";
+                $result_users = mysqli_query($conn, $query_users);
+                $userData="";
+                while ($row_users = mysqli_fetch_assoc($result_users)) {
+                    if (in_array( $row_users['id_user'],  $list )){
+                        $userData=$userData.' '.$row_users['nom_user'].' '.$row_users['prenom_user'].' /';
+                    }
+                }   
+                if( substr($userData, -1)=="/"){
+                    $userData =substr($userData, 0, -1);   
+                }
+                
+                if(($_SESSION['Role']!="1") || ($row['chef_projet']==$id_user)||($user_data==$id_user)){
                     $value .= '<tbody>
-                        <tr>
-                            <td style="text-align: center;">' . $row['nom_client_projet'] . '</td>
-                            <td style="text-align: center;">' . $row['nom_projet'] . '</td>
-                            <td style="text-align: center;">' . $row['nom_user'] . ' ' . $row['prenom_user'] . '</td>
-                            <td style="text-align: center;">' . $row['description_projet'] . '</td>
-                            <td style="text-align: center;">' . $row['date_debut_projet'] . '</td>
-                            <td style="text-align: center;">' . $row['date_fin_projet'] . '</td>';
-                                                       
-                            if($row['confirmation_projet'] == "1"){
-                                $value .= ' <td style="text-align: center;">Confirmé</td>';
-                            }else{
-                                $value .= ' <td style="text-align: center;">Non Confirmé</td>';
-                            } 
-                            if($row['etat_projet'] == "1"){
-                                $value .= ' <td style="text-align: center;background-color:#C1FFEC;" width="100px">En attente</td>';
-                            }else if($row['etat_projet'] == "2"){
-                                $value .= ' <td style="text-align: center; background-color:#7DFFD6;" width="100px">En cours</td>';
-                            }
-                            $value .= '
-                            <td style="text-align: center;"><a href="tache.php?id_project=' . $row['id_projet'] . '" >Consulter les tâches </a></td>
-                            <td style="text-align: center;"><a '.(($row["piece_joint_projet"]!="")?"href='uploads/projet/{$row["piece_joint_projet"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
-                            ';
-                            
-                            if (($_SESSION['Role']) != "1") {
-                                $value .= ' 
-                                <td style="text-align: center;">
-                                    <div class="btn-group">
-                                        <button type="button" title="Modifier Projet" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifier_projet" data-id=' . $row['id_projet'] . '><i class="fa fa-pen fa-1x"></i></button> 
-                                        <button type="button" title="Supprimer Projet" class="btn btn-danger" id="btn_supprimer_projet" data-id1=' . $row['id_projet'] . '><i class="fa fa-trash fa-1x"></i></button> 
-                                    </div>
-                                </td>';
-                            } else {
-                                $value .= '
-                                <td>
-                                    <button type="button" title="Modifier Etat Projet" class="btn btn-primary" id="btn_modifier_Etatprojet" data-id2=' . $row['id_projet'] . '><i class="fa fa-pen fa-1x"></i></button> 
-                                </td>';
-                            }
-                        $value .= ' </tr>';
+                    <tr>
+                    <td style="text-align: center;">' . $row['nom_client_projet'] . '</td>
+                    <td style="text-align: center;">' . $row['nom_projet'] . '</td>
+                    <td style="text-align: center;">' . $row['nom_user'] . ' ' . $row['prenom_user'] . '</td>
+                    <td style="text-align: center;">' . $row['description_projet'] . '</td>
+                    <td style="text-align: center;">' . $row['date_debut_projet'] . '</td>
+                    <td style="text-align: center;">' . $row['date_fin_projet'] . '</td>';
+                    
+                    if($row['confirmation_projet'] == "1"){
+                        $value .= ' <td style="text-align: center;">Confirmé</td>';
+                    }else{
+                        $value .= ' <td style="text-align: center;">Non Confirmé</td>';
+                    } 
+                    if($row['etat_projet'] == "1"){
+                        $value .= ' <td style="text-align: center;background-color:#C1FFEC;" width="100px">En attente</td>';
+                    }else if($row['etat_projet'] == "2"){
+                        $value .= ' <td style="text-align: center; background-color:#7DFFD6;" width="100px">En cours</td>';
+                    }else if($row['etat_projet'] == "3"){
+                        $value .= ' <td style="text-align: center; background-color:#7DFDD6;" width="100px">Terminé</td>';
+                    }
+                    $value .= '
+                    <td style="text-align: center;"><a href="tache.php?id_project=' . $row['id_projet'] . '" >Consulter les tâches </a></td>
+                    <td style="text-align: center;">' . $userData. ' </td>
+                    <td style="text-align: center;"><a '.(($row["piece_joint_projet"]!="")?"href='uploads/projet/{$row["piece_joint_projet"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
+                    ';
+                
+                    if (($_SESSION['Role']) != "1") {
+                        $value .= ' 
+                        <td style="text-align: center;">
+                        <div class="btn-group">
+                        <button type="button" title="Modifier Projet" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifier_projet" data-id=' . $row['id_projet'] . '><i class="fa fa-pen fa-1x"></i></button> 
+                        <button type="button" title="Supprimer Projet" class="btn btn-danger" id="btn_supprimer_projet" data-id1=' . $row['id_projet'] . '><i class="fa fa-trash fa-1x"></i></button> 
+                        </div>
+                        </td>';
+                    } else{
+                        $value .= '
+                        <td>
+                        <button type="button" title="Modifier Etat Projet" class="btn btn-primary" id="btn_modifier_Etatprojet" data-id2=' . $row['id_projet'] . '><i class="fa fa-pen fa-1x"></i></button> 
+                        </td>';
+                    }
+                    $value .= ' </tr>';
+                }
+                
             }
-        }
         $value .= '</tbody></table>';
         echo json_encode(['status' => 'success', 'html' => $value]);
     }
-            
+
 
     function deleteProject(){
   
@@ -684,8 +712,6 @@ function deleteMateriel()
 		$idProject = $_POST['update_ID'];
 	
 		$query = "SELECT etat_projet FROM projet WHERE id_projet='$idProject'";
-	
-	
         $result = mysqli_query($conn, $query);
 
         while ($row = mysqli_fetch_assoc($result)) {
@@ -702,7 +728,6 @@ function deleteMateriel()
         $etat = $_POST['etat'];
         $id_projet = $_POST['id_projet'];
     
-    
         $query = "UPDATE projet SET etat_projet='$etat',date_updated_projet='$date' WHERE id_projet='$id_projet'";
         $result = mysqli_query($conn, $query);
         if ($result) {
@@ -716,9 +741,8 @@ function deleteMateriel()
 	{
 		global $conn;
 		$idProject = $_POST['update_ID'];
-	
+
 		$query = "SELECT * FROM projet WHERE id_projet='$idProject'";
-	
 		$result = mysqli_query($conn, $query);
 	
 		while ($row = mysqli_fetch_assoc($result)) {
@@ -736,7 +760,6 @@ function deleteMateriel()
 		echo json_encode($update_project);
 	}
     
-	
     function updateProject(){
 		global $conn ;
 		$date = date('Y-m-d H:i:s');
@@ -765,14 +788,17 @@ function deleteMateriel()
 	    } else {
             echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
 	    }
-        
 	}
     
     function viewTache(){
         global $conn;
+        $date = date('Y-m-d H:i:s');
 		$id_project = $_POST['id_project'];
+        $id=$_SESSION['id_user'];
+
         $query="select * from user as U
-        left join projet as P on P.chef_projet =U.id_user where P.id_projet ='$id_project'";
+        left join projet as P on P.chef_projet =U.id_user 
+        where P.id_projet ='$id_project'";
     
         $result_chef_projet = mysqli_query($conn, $query);
         while ($row1 = mysqli_fetch_assoc($result_chef_projet)) {
@@ -785,88 +811,87 @@ function deleteMateriel()
         <table class="table table-striped align-middle">
             <thead>
                 <tr>
-                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-list"></i> Id tâche</th>
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-list"></i> N° tâche</th>
                     <th style="text-align: center;" class="border-top-0"><i class="fa fa-bookmark"></i> Description </th>
                     <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Chef de projet </th>
                     <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de début du tâche</th>
                     <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de fin du tâche</th>
                     <th style="text-align: center;" class="border-top-0"><i class="fa fa-history"></i> Etat</th>
                     <th style="text-align: center;" class="border-top-0"><i class="fa fa-upload"></i> Pièce jointe</th>';
-                    if($chef_projet==$_SESSION['id_user']){
+                    if(($chef_projet==$id)||($_SESSION['Role']!='1')){
                         $value .= ' 
                     <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Employées </th>';
                     }
                     $value .= ' <th style="text-align: center;" class="border-top-0">Actions</th>
                 </tr>            
             </thead>';
-        
-           
-            if($chef_projet==$_SESSION['id_user']){
-                $query1 = "SELECT * FROM tache where id_projet='$id_project' and etat_tache !='0'";
+            $query1 = "SELECT * FROM tache  as T
+             left join user as U on T.id_users =U.id_user 
+            where id_projet='$id_project' and etat_tache !='0' 
+            ORDER BY date_created_tache ASC";
 
-            }else {
-                $query1 = "SELECT * FROM tache ";
+            $i=1;
+            $list=array();$x=0;
+            $result = mysqli_query($conn, $query1);
+            while ($row = mysqli_fetch_assoc($result)) {
+                $etat_tache=$row['etat_tache'];
 
-            }
-        $i=1;
-        $result = mysqli_query($conn, $query1);
-        while ($row = mysqli_fetch_assoc($result)) {
+                $list[$x]=$etat_tache;$x++;
 
-            $query_sepcialite = "SELECT * FROM user";
-            $result_sepcialite = mysqli_query($conn, $query_sepcialite);
-            $table_specialite =explode(",",$row['id_users']);
-            $user_data="";
-            while ($row_specialite = mysqli_fetch_assoc($result_sepcialite)) {
-                if (in_array( $row_specialite['id_user'],  $table_specialite )){
-                    $user_data=$user_data.' '.$row_specialite['nom_user'].' '.$row_specialite['prenom_user'].' /';
-                }
-            }   
-            if( substr($user_data, -1)=="/"){
-                $user_data =substr($user_data, 0, -1);   
-            }
-    
-
+                if(($chef_projet==$id)||($_SESSION['Role']!='1')||($row['id_users']==$id)){
                     $value .= '<tbody>
-                        <tr>
-                            <td style="text-align: center;">' . $i++ . '</td>
-                            <td style="text-align: center;">' . $row['description_tache'] . '</td>
-                            <td style="text-align: center;">' . $chefName . '</td>
-                            <td style="text-align: center;">' . $row['date_debut_tache'] . '</td>
-                            <td style="text-align: center;">' . $row['date_fin_tache'] . '</td>';                                                       
-                           
-                            if($row['etat_tache'] == "1"){
-                                $value .= ' <td style="text-align: center;background-color:#C1FFEC;" width="100px">En attente</td>';
-                            }else if($row['etat_tache'] == "2"){
-                                $value .= ' <td style="text-align: center; background-color:#7DFFD6;" width="100px">En cours</td>';
-                            }else if($row['etat_tache'] == "3") {
-                                $value .= ' <td style="text-align: center;background-color:#05DD9A; " width="100px">Terminé</td>';
-                            }
+                    <tr>
+                        <td style="text-align: center;">T' .$i++ . '</td>
+                        <td style="text-align: center;">' . $row['description_tache'] . '</td>
+                        <td style="text-align: center;">' . $chefName . '</td>
+                        <td style="text-align: center;">' . $row['date_debut_tache'] . '</td>
+                        <td style="text-align: center;">' . $row['date_fin_tache'] . '</td>';                                                       
+                       
+                        if($row['etat_tache'] == "1"){
+                            $value .= ' <td style="text-align: center;background-color:#C1FFEC;" width="100px">En attente</td>';
+                        }else if($row['etat_tache'] == "2"){
+                            $value .= ' <td style="text-align: center; background-color:#7DFFD6;" width="100px">En cours</td>';
+                        }else if($row['etat_tache'] == "3") {
+                            $value .= ' <td style="text-align: center;background-color:#05DD9A; " width="100px">Terminé</td>';
+                        }
+                        $value .= '
+                        <td style="text-align: center;"><a '.(($row["piece_joint_tache"]!="")?"href='uploads/projet/tache/{$row["piece_joint_tache"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
+                        ';
+                        
+                        if(($chef_projet==$id)||($_SESSION['Role']!='1')){
+                            $value .= ' 
+                            <td style="text-align: center;">'.$row['nom_user'].' '.$row['prenom_user'].'</td>
+                            <td style="text-align: center;">
+                                <div class="btn-group">
+                                    <button type="button" title="Modifier tâche" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifierTache" data-id=' . $row['id_tache'] . '><i class="fa fa-pen fa-1x"></i></button> 
+                                    <button type="button" title="Supprimer tâche" class="btn btn-danger" id="btn_supprimerTache" data-id1=' . $row['id_tache'] . '><i class="fa fa-trash fa-1x"></i></button> 
+                                </div>
+                            </td>';
+                        } else {
                             $value .= '
-                            <td style="text-align: center;"><a '.(($row["piece_joint_tache"]!="")?"href='uploads/projet/tache/{$row["piece_joint_tache"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
-                            ';
-                            
-                            if($chef_projet==$_SESSION['id_user']){
-                                $value .= ' 
-                                <td style="text-align: center;">' .$user_data. '</td>
-                                <td style="text-align: center;">
-                                    <div class="btn-group">
-                                        <button type="button" title="Modifier tâche" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifierTache" data-id=' . $row['id_tache'] . '><i class="fa fa-pen fa-1x"></i></button> 
-                                        <button type="button" title="Supprimer tâche" class="btn btn-danger" id="btn_supprimerTache" data-id1=' . $row['id_tache'] . '><i class="fa fa-trash fa-1x"></i></button> 
-                                    </div>
-                                </td>';
-                            } else {
-                                $value .= '
-                                <td>
-                                    <button type="button" title="Modifier etat tâche" class="btn btn-primary" id="btn_modifier_EtatTache" data-id2=' . $row['id_tache'] . '><i class="fa fa-pen fa-1x"></i></button> 
-                                </td>';
-                            }
-                        $value .= ' </tr>';
+                            <td>
+                                <button type="button" title="Modifier etat tâche" class="btn btn-primary" id="btn_modifier_EtatTache" data-id2=' . $row['id_tache'] . '><i class="fa fa-pen fa-1x"></i></button> 
+                            </td>';
+                        }
+                    $value .= ' </tr>';
+                }
+                
             }
-        
-        $value .= '</tbody></table>';
-        echo json_encode(['status' => 'success', 'html' => $value]);
-    }
+            $value .= '</tbody></table>';
 
+            $allValuesAreTheSame = (count(array_unique($list, SORT_REGULAR)) === 1);
+            if ($list!=array()){
+                if ($allValuesAreTheSame==true){
+                    $etat_projet=$list[0];
+                    $updateEtat = "UPDATE projet SET etat_projet='$etat_projet',date_updated_projet='$date' WHERE id_projet='$id_project'";
+                }else if ($allValuesAreTheSame==false){
+                    $updateEtat = "UPDATE projet SET etat_projet='2',date_updated_projet='$date' WHERE id_projet='$id_project'";
+                }
+                $resultEtat=mysqli_query($conn,$updateEtat);
+            }
+            
+            echo json_encode(['status' => 'success', 'html' => $value]);
+    }
     
     function addTache(){
     	global $conn ;
@@ -894,7 +919,6 @@ function deleteMateriel()
     	
     }
 
-    
 	function deleteTache(){
   
 		global $conn;
@@ -908,8 +932,6 @@ function deleteMateriel()
 			echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
 		}
 	}
-
-   
 
     function get_dataEtatTache()
 	{
@@ -945,7 +967,6 @@ function deleteMateriel()
             echo "<div class='text-danger'> Veuillez vérifier votre requête</div> ";
         }
     }
-
     
     function get_dataTache()
 	{
@@ -968,7 +989,6 @@ function deleteMateriel()
 		echo json_encode($update_tache);
 	}
     
-	
     function updateTache(){
 		global $conn ;
         $date = date('Y-m-d H:i:s');
@@ -986,16 +1006,10 @@ function deleteMateriel()
     	}
         $query = "UPDATE tache SET description_tache='$description',date_debut_tache='$dateDebutTache',date_fin_tache='$dateFinTache',piece_joint_tache='$doc_tache_filname',id_users='$employee',date_updated_tache='$date' WHERE id_tache='$idTache'";
         $result=mysqli_query($conn,$query);
-    
-    	$result=mysqli_query($conn,$query);
     	if ($result) {
     		echo "<div class='text-success'>Les informations du tâche mises à jour avec succès</div>";
     	} else {
     		echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
     	}
-
-
 	}
-    
-
 ?>

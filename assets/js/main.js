@@ -33,29 +33,32 @@ $(document).ready(function () {
   update_etat_tache();
   get_data_tache();
   update_tache();
-
 });
 
-//close modal
+/*close modal*/
+
 $(document).on("click", "#btn-close", function () {
   location.reload(true);
 });
 
-//validate phone
+/*validate phone*/
+
 function validatePhoneNumber(input_str) {
   var re = /^\(?\d{2}\)?[- ]?(\d{3})[- ]?(\d{3})$/;
 
   return re.test(input_str);
 }
 
-//validate CIN
+/*validate CIN*/
+
 function validateCIN_Number(input_str) {
   var re = /^\(?(\d{8})$/;
 
   return re.test(input_str);
 }
 
-//validate email
+/*validate email*/
+
 function IsValidEmail(email) {
   //Check minimum valid length of an Email.
   if (email.length <= 2) {
@@ -163,7 +166,8 @@ function login() {
   });
 }
 
-//User
+/*User*/
+
 function view_user() {
   $.ajax({
     url: "view_user.php",
@@ -180,7 +184,6 @@ function view_user() {
     },
   });
 }
-
 
 function add_user() {
   $(document).on("click", "#btn_openModelAddUser", function () {
@@ -963,7 +966,7 @@ function get_data_materiel() {
         $("#up_nom_materiel").val(data[1]);
         $("#up_prix_materiel").val(data[2]);
         $("#up_date_acha_materiel").val(data[3]);
-        $("#up_liste_materiel_employee").find('option[value='+data[4]+']').prop('selected', true);
+        $("#up_liste_materiel_employee").find('option[value=' + data[4] + ']').prop('selected', true);
         $("#up_liste_materiel_employee").prop('disabled', true);
         $("#up_liste_materiel_employee").selectpicker("refresh");
         $("#modal_updateMateriel").modal("show");
@@ -979,10 +982,10 @@ function update_materiel() {
       $(this).html("");
     });
     $("#modal_updateMateriel").scrollTop(0);
-    var up_idMateriel= $("#up_idMateriel").val();
-    var up_nom_materiel= $("#up_nom_materiel").val();
-    var up_prix_materiel=$("#up_prix_materiel").val();
-    var up_date_acha_materiel= $("#up_date_acha_materiel").val();
+    var up_idMateriel = $("#up_idMateriel").val();
+    var up_nom_materiel = $("#up_nom_materiel").val();
+    var up_prix_materiel = $("#up_prix_materiel").val();
+    var up_date_acha_materiel = $("#up_date_acha_materiel").val();
     var up_facture_materiel = $("#up_facture_materiel").prop("files")[0];
     switch (true) {
       case up_nom_materiel == "":
@@ -1002,7 +1005,7 @@ function update_materiel() {
         $(" #up_date_acha_materiel").focus();
       default:
         var form_data = new FormData();
-        form_data.append("up_idMateriel",up_idMateriel);
+        form_data.append("up_idMateriel", up_idMateriel);
         form_data.append("up_nom_materiel", up_nom_materiel);
         form_data.append("up_prix_materiel", up_prix_materiel);
         form_data.append("up_date_acha_materiel", up_date_acha_materiel);
@@ -1014,7 +1017,7 @@ function update_materiel() {
           contentType: false,
           data: form_data,
           success: function (data) {
-             if (data.includes("text-checked")) {
+            if (data.includes("text-checked")) {
               $("#modal_updateMateriel").modal("hide");
               $("#UpdateMateriel_success")
                 .removeClass("text-echec")
@@ -1022,7 +1025,7 @@ function update_materiel() {
                 .html(data);
               $("#SuccessUpdateMateriel").modal("show");
 
-              
+
               setTimeout(function () {
                 $("#SuccessUpdateMateriel").modal("hide");
                 view_materiel();
@@ -1087,8 +1090,7 @@ function delete_materiel() {
   });
 }
 
-
-//projets
+/*projets*/
 
 function view_project() {
   $.ajax({
@@ -1106,7 +1108,6 @@ function view_project() {
     },
   });
 }
-
 
 function delete_project() {
   $(document).on("click", "#btn_supprimer_projet", function () {
@@ -1149,7 +1150,6 @@ function delete_project() {
     });
   });
 }
-
 
 function add_project() {
   $(document).on("click", "#btn_openModel_addProject", function () {
@@ -1250,7 +1250,6 @@ function add_project() {
   });
 }
 
-
 function get_data_etat() {
   $(document).on("click", "#btn_modifier_Etatprojet", function () {
     var updateID = $(this).attr("data-id2");
@@ -1312,8 +1311,6 @@ function update_etat_project() {
     });
   });
 }
-
-
 
 function get_data_project() {
   $(document).on("click", "#btn_modifier_projet", function () {
@@ -1379,26 +1376,26 @@ function update_project() {
       confirmationProjet = "1";
     }
     if (nom_projet == "") {
-      $("#nom_projet_error").html("Saisir le nom de projet s'il vous plait.");
-      $("#nom_projet").focus();
+      $("#up_nom_projet_error").html("Saisir le nom de projet s'il vous plait.");
+      $("#up_nom_projet").focus();
     } else if (client == null) {
-      $("#client_error").html("Choisir le client.");
-      $("#client").focus();
+      $("#up_client_error").html("Choisir le client.");
+      $("#up_client").focus();
     } else if (chef_projet == null) {
-      $("#chef_projet_error").html("Choisir le chef de projet.");
-      $("#chef_projet").focus();
+      $("#up_chef_projet_error").html("Choisir le chef de projet.");
+      $("#up_chef_projet").focus();
     } else if (description == "") {
-      $("#description_error").html("Saisir la description de projet s'il vous plait.");
-      $("#description").focus();
+      $("#up_description_error").html("Saisir la description de projet s'il vous plait.");
+      $("#up_description").focus();
     } else if (dateDebutprojet == "") {
       $("#up_dateDebutprojet_error").html("Saisir la date de début.");
-      $("#dateDebutprojet").focus();
+      $("#up_dateDebutprojet").focus();
     } else if (dateFinprojet == "") {
       $("#up_dateFinprojet_error").html("Saisir la date de fin.");
-      $("#dateFinprojet").focus();
+      $("#up_dateFinprojet").focus();
     } else if (dateFinprojet < dateDebutprojet) {
       $("#up_dateFinprojet_error").html("Vérifier la date de fin.");
-      $("#dateFinprojet").focus();
+      $("#up_dateFinprojet").focus();
     } else {
       var form_data = new FormData();
       form_data.append("update_ID", update_ID);
@@ -1445,9 +1442,10 @@ function update_project() {
   });
 }
 
-//tache
+/*tache*/
+
 function view_tache() {
-  var id_project = $("input[name='id_Project']").val();
+  var id_project = $("input[name=id_Project]").val();
   $.ajax({
     url: "view_tache.php",
     method: "post",
@@ -1546,8 +1544,6 @@ function add_tache() {
   });
 }
 
-
-
 function delete_tache() {
   $(document).on("click", "#btn_supprimerTache", function () {
     var Delete_ID = $(this).attr("data-id1");
@@ -1586,7 +1582,6 @@ function delete_tache() {
     });
   });
 }
-
 
 function get_data_etatTache() {
   $(document).on("click", "#btn_modifier_EtatTache", function () {
@@ -1649,7 +1644,6 @@ function update_etat_tache() {
     });
   });
 }
-
 
 function get_data_tache() {
   $(document).on("click", "#btn_modifierTache", function () {

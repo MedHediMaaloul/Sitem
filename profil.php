@@ -212,9 +212,9 @@ include 'Gestion/connect_db.php';
                     <div class="modal-content" style="width: fit-content;">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modifier profil</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                         </div>
                         <div class="modal-body">
                             <form id="up-profilForm" autocomplete="off" class="form-horizontal form-material">
@@ -389,7 +389,7 @@ include 'Gestion/connect_db.php';
                       <div class="circleerror">
                       <i class="fas fa-check"></i>
                       </div>
-                      <div style="color:#05DD9A; font-size:20px; margin-top:109px; margin-bottom:10px;">
+                      <div style="color:#FF0000; font-size:20px; margin-top:109px; margin-bottom:10px;">
                         <center id="upprofil_echec"></center>
                       </div>
                     </div>

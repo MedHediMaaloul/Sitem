@@ -16,10 +16,9 @@
     <body>
         <div class="main">
             <section class="signup">
-                <!-- <img src="images/signup-bg.jpg" alt=""> -->
                 <div class="container">
                     <div class="signup-content">
-                        <form class="signup-form">
+                        <form class="signup-form" onsubmit="return false">
                             <center><img src="assets/images/logo_sitem_noir.png" width="150px" style=" margin-top:25px;margin-bottom:50px;" /></center></a>
                             <div class="form-group">
                                 <input type="text" style="margin-bottom:8px" class="form-input" name="email" id="email" placeholder="Email"/>
@@ -33,7 +32,7 @@
                                 </div>
                             </div>
                             <div class="button-panel">
-                                <input type="button" class="form-submit" title="Log In" name="btn_login" id="btn_login" value="Connexion"></input>
+                                <input type="submit" class="form-submit" title="Log In" name="btn_login" id="btn_login" value="Connexion"></input>
                             </div>
                         </form>
                         <div style=" color: #D8000C;text-align: right;"  class="button-panel" id="messageError"></div>
