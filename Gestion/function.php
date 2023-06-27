@@ -976,7 +976,6 @@ function deleteMateriel()
     		move_uploaded_file($doc_tache["tmp_name"], "uploads/projet/tache/".$doc_tache_filname);
     	}
         $query = "UPDATE tache SET description_tache='$description',date_debut_tache='$dateDebutTache',date_fin_tache='$dateFinTache',piece_joint_tache='$doc_tache_filname',id_users='$employee',date_updated_tache='$date' WHERE id_tache='$idTache'";
-        $result=mysqli_query($conn,$query);
     
     	$result=mysqli_query($conn,$query);
     	if ($result) {
@@ -988,5 +987,240 @@ function deleteMateriel()
 
 	}
     
+function add_client(){
+    global $conn ;
+    	$nom_entreprise_client= $_POST['nom_entreprise_client'];
+    	$email_client = $_POST['email_client'];
+        $addresse_client = $_POST['addresse_client'];
+        $numtel_client = $_POST['numtel_client'];
+        $commentaire_client = $_POST['commentaire_client'];
 
-?>
+        $selectEmail = mysqli_query($conn, "SELECT * FROM client WHERE email_client = '".$_POST['email_client']."' ");
+
+    	if(mysqli_num_rows($selectEmail)) {
+    		echo "<div class='text-echec'>L'email est déjà utilisée</div>";
+        }else{    
+        $query= "INSERT into client(nom_client_projet,email_client,numTel_client,adresse_client,commentaire_client) 
+        VALUES('$nom_entreprise_client','$email_client','$numtel_client','$addresse_client','$commentaire_client')";
+        $result=mysqli_query($conn,$query);
+        if ($result) {
+            echo "<div class='text-success'>le client  est ajouté avec succès</div>";
+        } else {
+            echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+        }
+        }      
+}
+
+function viewclient(){
+    global $conn;
+    $value ='<table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Nom entreprise </th>
+                <th style="text-align: center;" class="border-top-0" class="hidden-phone"><i class="fa fa-envelope"></i> Email</th>
+                <th style="text-align: center;" class="border-top-0"><i class="fa fa-phone"></i> Téléphone</th>
+                <th style="text-align: center;" class="border-top-0"><i class=" fa fas fa-map-marker-alt"></i> Adresse</th>
+                <th style="text-align: center;" class="border-top-0"><i class="fas fa-graduation-cap"></i>Commentaire</th>
+                <th style="text-align: center;" class="border-top-0">Actions</th>
+            </tr>            
+        </thead>';
+        $query = "SELECT * FROM client WHERE etat_client= '1' ORDER BY nom_client_projet ASC";
+        $result = mysqli_query($conn, $query);
+        while ($row = mysqli_fetch_assoc($result)) {
+        $value .= '<tbody>
+                <tr>
+                    <td style="text-align: center;">' . $row['nom_client_projet'] . '</td>
+                    <td style="text-align: center;">' . $row['email_client'] . '</td>
+                    <td style="text-align: center;">' . $row['numTel_client'] . '</td>
+                    <td style="text-align: center;">' . $row['adresse_client'] . '</td>
+                    <td style="text-align: center;">' . $row['commentaire_client'] . '</td>
+                    <td style="text-align: center;">
+                        <div class="btn-group">';
+                            $value .= '<button type="button" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifier_client" data-id=' . $row['id_client'] . '><i class="fa fa-pen fa-1x"></i></button> 
+                            <button type="button" class="btn btn-danger" title="Supprimer client" id="btn_supprimer_client" data-id1=' . $row['id_client'] . '><i class="fa fa-trash fa-1x"></i></button> 
+                        </div>
+                    </td>
+
+                </tr>';
+        }
+        $value .= '</tbody></table>';
+        echo json_encode(['status' => 'success', 'html' => $value]);
+}
+   
+function deleteClient(){
+
+            global $conn;
+            $id_client = $_POST['DeleteID'];
+            $date = date('Y-m-d H:i:s');
+            $query = "UPDATE client SET etat_client='0', date_updated_client='$date' WHERE id_client='$id_client'";
+                $result=mysqli_query($conn,$query);
+            if ($result) {
+                echo "<div class='text-success'>le client est supprimé avec succès</div>";
+            } else {
+                echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+            }
+        }
+
+        function get_data_client()
+        {
+            global $conn;
+            $idclient = $_POST['update_ID'];
+        
+            $query = "SELECT * FROM client WHERE id_client='$idclient'";
+        
+            $result = mysqli_query($conn, $query);
+        
+            while ($row = mysqli_fetch_assoc($result)) {
+                    $update_client= [];
+                $update_client[0] = $idclient;
+                $update_client[1] = $row['nom_client_projet'];
+                $update_client[2] = $row['email_client'];
+                $update_client[3] = $row['numTel_client'];
+                $update_client[4] = $row['adresse_client'];
+                $update_client[5] = $row['commentaire_client'];
+       
+            }
+            echo json_encode($update_client);
+        }   
+        
+        
+        function updateClient(){
+            global $conn ;
+            $idclient= $_POST['idclient'];
+                $nom_entreprise_client= $_POST['nom_entreprise_client'];
+                $email_client = $_POST['email_client'];
+                $addresse_client = $_POST['addresse_client'];
+                $numtel_client = $_POST['numtel_client'];
+                $commentaire_client = $_POST['commentaire_client'];
+$selectEmail = mysqli_query($conn, "SELECT * FROM client WHERE email_client='$email_client' and  id_client!='$idclient'and etat_client='1'");
+         if(mysqli_num_rows($selectEmail)) {
+             echo "<div class='text-echec'>L'email est déjà utilisée</div> ";
+             }else{
+            $query = "UPDATE client SET nom_client_projet='$nom_entreprise_client',email_client='$email_client',adresse_client='$addresse_client',numTel_client='$numtel_client',commentaire_client='$commentaire_client' WHERE id_client='$idclient'";
+               
+        $result=mysqli_query($conn,$query);
+    
+        if ($result) {
+            echo "<div class='text-success'>Les informations sont mises à jour avec succès</div>";
+        } else {
+            echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+        }
+         }            
+     
+        }
+
+        function addAgence(){
+            global $conn ;
+                $nom_agence= $_POST['nom_agence'];
+                $email_agence = $_POST['email_agence'];
+                $numtel_agence = $_POST['numtel_agence'];
+        
+                $selectEmail = mysqli_query($conn, "SELECT * FROM agence WHERE email_agence='$email_agence' ");
+        
+                if(mysqli_num_rows($selectEmail)) {
+                    echo "<div class='text-echec'>L'email est déjà utilisée</div>";
+                }else{    
+                $query= "INSERT into agence (nom_agence,email_agence,tel_agence) 
+                VALUES('$nom_agence','$email_agence','$numtel_agence')";
+                $result=mysqli_query($conn,$query);
+                
+                if ($result) {
+                    echo "<div class='text-success'>l'agence est ajoutée avec succès</div>";
+                } else {
+                    echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+                }
+                }      
+        }
+        
+
+        function viewAgence (){
+            global $conn;
+            $value ='<table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Nom agence </th>
+                        <th style="text-align: center;" class="border-top-0" class="hidden-phone"><i class="fa fa-envelope"></i> Email</th>
+                        <th style="text-align: center;" class="border-top-0"><i class="fa fa-phone"></i> Téléphone</th>
+                        <th style="text-align: center;" class="border-top-0">Actions</th>
+                    </tr>            
+                </thead>';
+                $query = "SELECT * FROM agence WHERE action_agence= '1' ORDER BY nom_agence ASC";
+                $result = mysqli_query($conn, $query);
+                while ($row = mysqli_fetch_assoc($result)) {
+                $value .= '<tbody>
+                        <tr>
+                            <td style="text-align: center;">' . $row['nom_agence'] . '</td>
+                            <td style="text-align: center;">' . $row['email_agence'] . '</td>
+                            <td style="text-align: center;">' . $row['tel_agence'] . '</td>
+                            <td style="text-align: center;">
+                                <div class="btn-group">';
+                                    $value .= '<button type="button" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifier_agence" data-id='.$row['id_agence'].'><i class="fa fa-pen fa-1x"></i></button> 
+                                    <button type="button" class="btn btn-danger" title="Supprimer agence" id="btn_supprimer_agence" data-id1='.$row['id_agence'].'><i class="fa fa-trash fa-1x"></i></button> 
+                                </div>
+                            </td>
+        
+                        </tr>';
+                }
+                $value .= '</tbody></table>';
+                echo json_encode(['status' => 'success', 'html' => $value]);
+                
+        
+              
+        }   
+        
+        function get_dataAgence()
+        {
+            global $conn;
+            $idAgence = $_POST['update_ID'];
+        
+            $query = "SELECT * FROM agence WHERE id_agence ='$idAgence'";
+        
+            $result = mysqli_query($conn, $query);
+        
+            while ($row = mysqli_fetch_assoc($result)) {
+                $update_agence= [];
+                $update_agence[0] = $idAgence;
+                $update_agence[1] = $row['nom_agence'];
+                $update_agence[2] = $row['email_agence'];
+                $update_agence[3] = $row['tel_agence'];
+            }
+            echo json_encode($update_agence);
+        } 
+        
+        
+        function updateAgence(){
+             global $conn ;
+             $idagence= $_POST['idagence'];
+                 $nom_agence= $_POST['nom_agence'];
+                 $email_agence = $_POST['email_agence'];
+                 $numtel_agence = $_POST['numtel_agence'];
+                 $selectEmail = mysqli_query($conn, "SELECT * FROM agence WHERE email_agence='$email_agence' and  id_agence!='$idagence'");
+
+          if(mysqli_num_rows($selectEmail)) {
+              echo "<div class='text-echec'>L'email est déjà utilisée</div> ";
+            }else{
+             $query = "UPDATE agence SET nom_agence='$nom_agence',email_agence='$email_agence',tel_agence='$numtel_agence' WHERE id_agence='$idagence'";
+               $result=mysqli_query($conn,$query);
+    
+         if ($result) {
+             echo "<div class='text-success'>Les informations sont mises à jour avec succès</div>";
+         } else {
+             echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+         }
+        }   
+     
+        
+         }
+         function deleteAgence(){
+
+            global $conn;
+            $id_agence = $_POST['DeleteID'];
+            $date = date('Y-m-d H:i:s');
+            $query = "UPDATE agence SET action_agence='0', date_updated_agence='$date' WHERE id_agence='$id_agence'";
+                $result=mysqli_query($conn,$query);
+            if ($result) {
+                echo "<div class='text-success'>l'agence est supprimée avec succès</div>";
+            } else {
+                echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
+            }
+        }

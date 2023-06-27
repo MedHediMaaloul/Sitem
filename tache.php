@@ -464,10 +464,10 @@ include 'Gestion/header.php'
   
   today = yyyy+'-'+mm+'-'+dd;
   
-  document.getElementById("up_dateDebutprojet").setAttribute("min", today);
-  document.getElementById("up_dateFinprojet").setAttribute("min", today);
+  document.getElementById("up_dateDebutTache").setAttribute("min", today);
+  document.getElementById("up_dateFinTache").setAttribute("min", today);
 
-  document.getElementById("dateDebutprojet").setAttribute("min", today);
-  document.getElementById("dateFinprojet").setAttribute("min", today);
+  document.getElementById("dateDebutTache").setAttribute("min", today);
+  document.getElementById("dateFinTache").setAttribute("min", today);
   
 </script>

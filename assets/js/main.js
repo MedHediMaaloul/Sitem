@@ -31,6 +31,18 @@ $(document).ready(function () {
   update_etat_tache();
   get_data_tache();
   update_tache();
+  // Client
+  view_client();
+  add_client();
+  delete_client();
+  get_data_client();
+  update_client();
+  //Agence
+  view_agence();
+  add_agence();
+  get_data_agence();
+  update_agence();
+  delete_agence();
 
 });
 
@@ -948,7 +960,7 @@ function get_materiel_record() {
         $("#up_nom_materiel").val(data[1]);
         $("#up_prix_materiel").val(data[2]);
         $("#up_date_acha_materiel").val(data[3]);
-        $("#up_liste_materiel_employee").find('option[value='+data[4]+']').prop('selected', true);
+        $("#up_liste_materiel_employee").find('option[value=' + data[4] + ']').prop('selected', true);
         $("#up_liste_materiel_employee").prop('disabled', true);
         $("#up_liste_materiel_employee").selectpicker("refresh");
         $("#modal_updateMateriel").modal("show");
@@ -964,10 +976,10 @@ function update_materiel_record() {
       $(this).html("");
     });
     $("#modal_updateMateriel").scrollTop(0);
-    var up_idMateriel= $("#up_idMateriel").val();
-    var up_nom_materiel= $("#up_nom_materiel").val();
-    var up_prix_materiel=$("#up_prix_materiel").val();
-    var up_date_acha_materiel= $("#up_date_acha_materiel").val();
+    var up_idMateriel = $("#up_idMateriel").val();
+    var up_nom_materiel = $("#up_nom_materiel").val();
+    var up_prix_materiel = $("#up_prix_materiel").val();
+    var up_date_acha_materiel = $("#up_date_acha_materiel").val();
     var up_facture_materiel = $("#up_facture_materiel").prop("files")[0];
     switch (true) {
       case up_nom_materiel == "":
@@ -987,7 +999,7 @@ function update_materiel_record() {
         $(" #up_date_acha_materiel").focus();
       default:
         var form_data = new FormData();
-        form_data.append("up_idMateriel",up_idMateriel);
+        form_data.append("up_idMateriel", up_idMateriel);
         form_data.append("up_nom_materiel", up_nom_materiel);
         form_data.append("up_prix_materiel", up_prix_materiel);
         form_data.append("up_date_acha_materiel", up_date_acha_materiel);
@@ -999,7 +1011,7 @@ function update_materiel_record() {
           contentType: false,
           data: form_data,
           success: function (data) {
-             if (data.includes("text-checked")) {
+            if (data.includes("text-checked")) {
               $("#modal_updateMateriel").modal("hide");
               $("#UpdateMateriel_success")
                 .removeClass("text-echec")
@@ -1007,7 +1019,7 @@ function update_materiel_record() {
                 .html(data);
               $("#SuccessUpdateMateriel").modal("show");
 
-              
+
               setTimeout(function () {
                 $("#SuccessUpdateMateriel").modal("hide");
                 view_materiel();
@@ -1432,7 +1444,8 @@ function update_project() {
 
 //tache
 function view_tache() {
-  var id_project = document.querySelector("input[name=id_Project]").value;
+  var id_project = $("input[name=id_Project]").val();
+
   $.ajax({
     url: "view_tache.php",
     method: "post",
@@ -1444,7 +1457,6 @@ function view_tache() {
           $("#liste_tache").html(data.html);
         }
       } catch (e) {
-        console.error("Invalid Response!");
       }
     },
   });
@@ -1746,3 +1758,521 @@ function update_tache() {
     }
   });
 }
+
+
+
+//client
+function view_client() {
+  $.ajax({
+    url: "view_client.php",
+    method: "post",
+    success: function (data) {
+      try {
+        data = $.parseJSON(data);
+        if (data.status == "success") {
+          $("#liste_client").html(data.html);
+        }
+      } catch (e) {
+        console.error("Invalid Response!");
+      }
+    },
+  });
+}
+
+
+
+function add_client() {
+  $(document).on("click", "#btn_openModelAddclient", function () {
+    $("#insert-client_form").trigger("reset");
+    $("#modal_addclient").modal("show");
+    var msgErrorLabel = $("#insert-client_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    $(document).on("click", "#btn_ajout_client", function () {
+      msgErrorLabel.each(function () {
+        $(this).html('');
+      });
+
+      var nom_entreprise_client = $("#nom_entreprise_client").val();
+      var email_client = $("#email_client").val();
+      var addresse_client = $("#addresse_client").val();
+      var numtel_client = $("#numtel_client").val();
+      var commentaire_client = $("#commentaire_client").val();
+
+      if (nom_entreprise_client == "") {
+        $("#nom_error").html("Saisir votre nom de votre entreprise s'il vous plait.");
+        $("#nom_entreprise_client").focus();
+      } else if (email_client == "") {
+        $("#email_error").html("Saisir votre email s'il vous plait.");
+        $("#email_client").focus();
+      } else if (!IsValidEmail(email_client)) {
+        $("#email_error").html("Adresse email invalide");
+        $("#email_client").focus();
+      } else if (addresse_client == "") {
+        $("#addresse_client_error").html("Saisir votre adresse s'il vous plait.");
+        $("#addresse_client").focus();
+      } else if (numtel_client == "") {
+        $("#numtel_error").html("Saisir votre Téléphone s'il vous plait.");
+        $("#numtel_client").focus();
+        
+      } else if (!validatePhoneNumber(numtel_client)) {
+        $("#numtel_error").html("Numéro téléphone invalide");
+        $("#numtel_client").focus();
+      } else {
+        var form_data = new FormData();
+        form_data.append("nom_entreprise_client", nom_entreprise_client);
+        form_data.append("email_client", email_client);
+        form_data.append("addresse_client", addresse_client);
+        form_data.append("numtel_client", numtel_client);
+        form_data.append("commentaire_client", commentaire_client);
+        $.ajax({
+          url: "add_client.php",
+          method: "post",
+          processData: false,
+          contentType: false,
+          data: form_data,
+          success: function (data) {
+            if (data.includes('text-echec')) {
+              $("#modal_addclient").modal("hide");
+              $("#addclient_echec").removeClass("text-checked").addClass("text-echec").html(data);
+              $("#EchecAddclient").modal("show");
+              setTimeout(function () {
+                if ($("#EchecAddclient").length > 0) {
+                  $("#EchecAddclient").modal("hide");
+                }
+              }, 2000);
+            } else {
+              $("#modal_addclient").modal("hide");
+              $("#addclient_success").addClass("text-checked").html(data);
+              $("#SuccessAddclient").modal("show");
+              $("#addclient_success")
+                .removeClass("text-echec")
+                .addClass("text-checked");
+              setTimeout(function () {
+                if ($("#SuccessAddclient").length > 0) {
+                  $("#SuccessAddclient").modal("hide");
+                  view_client();
+                }
+              }, 2000);
+            }
+          },
+        })
+      }
+     
+    });
+  });
+}
+
+function delete_client() {
+  $(document).on("click", "#btn_supprimer_client", function () {
+    var Delete_ID = $(this).attr("data-id1");
+    $("#delete_client").modal("show");
+    $(document).on("click", "#supprimer_client", function () {
+      $.ajax({
+        url: "delete_client.php",
+        method: "post",
+        data: {
+          DeleteID: Delete_ID,
+        },
+        success: function (data) {
+          if (data.includes("text-echec")) {
+            $("#delete_client").modal("hide");
+            $("#deleteclient_echec")
+              .removeClass("text-checked")
+              .addClass("text-echec")
+              .html(data);
+            $("#EchecDeleteclient").modal("show");
+            setTimeout(function () {
+              if ($("#EchecDeleteclient").length > 0) {
+                $("#EchecDeleteclient").modal("hide");
+              }
+            }, 2000);
+          } else {
+            $("#delete_client").modal("hide");
+            $("#deleteclient_success").addClass("text-checked").html(data);
+            $("#SuccessDeleteclient").modal("show");
+            $("#deleteclient_success")
+              .removeClass("text-echec")
+              .addClass("text-checked");
+            setTimeout(function () {
+              if ($("#SuccessDeleteclient").length > 0) {
+                $("#SuccessDeleteclient").modal("hide");
+                view_client();
+              }
+            }, 2000);
+          }
+        },
+      });
+    });
+  });
+  $(document).on("hide.bs.modal", "#delete_client", function () {
+    Delete_ID = "";
+  });
+}
+
+
+function get_data_client() {
+  $(document).on("click", "#btn_modifier_client", function () {
+    $("#update-client_form").trigger("reset");
+    var msgErrorLabel = $("#update-client_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    var updateID = $(this).attr("data-id");
+    $.ajax({
+      url: "get_data_client.php",
+      method: "post",
+      data: {
+        update_ID: updateID,
+      },
+      dataType: "JSON",
+      success: function (data) {
+        $("#idclient").val(data[0]);
+        $("#up_nom_entreprise_client").val(data[1]);
+        $("#up_email_client").val(data[2]);
+        $("#up_numtel_client").val(data[3]);
+        $("#up_addresse_client").val(data[4]);
+        $("#up_commentaire_client").val(data[5]);
+        $("#update_client_modal").modal("show");
+      },
+    });
+  });
+}
+
+
+function update_client() {
+  $(document).on("click", "#btn_update_client", function () {
+    var msgErrorLabel = $("#update-client_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    $("#update_client_modal").scrollTop(0);
+    var idclient = $("#idclient").val();
+    var nom_entreprise_client = $("#up_nom_entreprise_client").val();
+    var email_client = $("#up_email_client").val();
+    var addresse_client = $("#up_addresse_client").val();
+    var numtel_client = $("#up_numtel_client").val();
+    var commentaire_client = $("#up_commentaire_client").val();
+
+
+    if (nom_entreprise_client == "") {
+      $("#up_nom_error").html("Saisir votre nom de votre entreprise s'il vous plait.");
+      $("#up_nom_entreprise_client").focus();
+    } else if (email_client == "") {
+      $("#up_email_error").html("Saisir votre email s'il vous plait.");
+      $("#up_email_client").focus();
+    }
+    else if (!IsValidEmail(email_client)) {
+      $("#up_email_error").html("Adresse email invalide");
+      $("#up_email_client").focus();
+    }
+    else if (numtel_client == "") {
+      $("#up_numtel_error").html("Saisir votre Téléphone s'il vous plait.");
+      $("#up_numtel_client").focus();
+    } else if (!validatePhoneNumber(numtel_client)) {
+      $("#up_numtel_error").html("Numéro téléphone invalide");
+      $("#up_numtel_client").focus();
+    } else if (addresse_client == "") {
+      $("#up_addresse_client_error").html("Saisir votre adresse s'il vous plait.");
+      $("#up_addresse_client").focus();
+    }
+    else {
+      var form_data = new FormData();
+      form_data.append("idclient", idclient);
+      form_data.append("nom_entreprise_client", nom_entreprise_client);
+      form_data.append("email_client", email_client);
+      form_data.append("addresse_client", addresse_client);
+      form_data.append("numtel_client", numtel_client);
+      form_data.append("commentaire_client", commentaire_client);
+    
+    $.ajax({
+      url: "update_client.php",
+      method: "post",
+      processData: false,
+      contentType: false,
+      data: form_data,
+      success: function (data) {
+        if (data.includes("text-echec")) {
+          $("#update_client_modal").modal("hide");
+          $("#Updateclient_echec")
+            .removeClass("text-checked")
+            .addClass("text-echec")
+            .html(data);
+          $("#EchecUpdateclient").modal("show");
+          setTimeout(function () {
+            if ($("#EchecUpdateclient").length > 0) {
+              $("#EchecUpdateclient").modal("hide");
+            }
+          }, 2000);
+        } else {
+          $("#update_client_modal").modal("hide");
+          $("#Updateclient_success").addClass("text-checked").html(data);
+          $("#SuccessUpdateclient").modal("show");
+          $("#Updateclient_success")
+            .removeClass("text-echec")
+            .addClass("text-checked");
+          setTimeout(function () {
+            if ($("#SuccessUpdateclient").length > 0) {
+              $("#SuccessUpdateclient").modal("hide");
+              view_client();
+            }
+          }, 2000);
+        }
+      }
+    })
+  }
+  });
+} 
+
+
+function view_agence() {
+  $.ajax({
+    url: "view_agence.php",
+    method: "post",
+    success: function (data) {
+      try {
+        data = $.parseJSON(data);
+        if (data.status == "success") {
+          $("#liste_agence").html(data.html);
+        }
+      } catch (e) {
+        console.error("Invalid Response!");
+      }
+    },
+  });
+}
+
+
+function add_agence() {
+  $(document).on("click", "#btn_openModelAddagence", function () {
+    $("#insert-agence_form").trigger("reset");
+    $("#modal_addAgence").modal("show");
+    var msgErrorLabel = $("#insert-agence_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    $(document).on("click", "#btn_ajout_agence", function () {
+      msgErrorLabel.each(function () {
+        $(this).html('');
+      });
+      var nom_agence = $("#nom_agence").val();
+      var email_agence = $("#email_agence").val();
+      var numtel_agence = $("#numtel_agence").val();
+      if (nom_agence == "") {
+        $("#nom_error").html("Saisir votre nom de l'agence s'il vous plait.");
+        $("#nom_agence").focus();
+      } else if (email_agence == "") {
+        $("#email_error").html("Saisir votre email s'il vous plait.");
+        $("#email_agence").focus();
+      } else if (!IsValidEmail(email_agence)) {
+        $("#email_error").html("Adresse email invalide");
+        $("#email_agence").focus();
+      }  else if (numtel_agence == "") {
+        $("#numtel_error").html("Saisir votre Téléphone s'il vous plait.");
+        $("#numtel_agence").focus();
+        
+      } else if (!validatePhoneNumber(numtel_agence)) {
+        $("#numtel_error").html("Numéro téléphone invalide");
+        $("#numtel_agence").focus();
+      } else {
+        var form_data = new FormData();
+        form_data.append("nom_agence", nom_agence);
+        form_data.append("email_agence", email_agence);
+        form_data.append("numtel_agence", numtel_agence);
+      
+        $.ajax({
+          url: "add_agence.php",
+          method: "post",
+          processData: false,
+          contentType: false,
+          data: form_data,
+          success: function (data) {
+            if (data.includes('text-echec')) {
+              $("#modal_addAgence").modal("hide");
+              $("#addAgence_echec").removeClass("text-checked").addClass("text-echec").html(data);
+              $("#EchecAddAgence").modal("show");
+              setTimeout(function () {
+                if ($("#EchecAddAgence").length > 0) {
+                  $("#EchecAddAgence").modal("hide");
+                }
+              }, 2000);
+            } else {
+              $("#modal_addAgence").modal("hide");
+              $("#addAgence_success").addClass("text-checked").html(data);
+              $("#SuccessAddAgence").modal("show");
+              $("#addAgence_success")
+                .removeClass("text-echec")
+                .addClass("text-checked");
+              setTimeout(function () {
+                if ($("#SuccessAddAgence").length > 0) {
+                  $("#SuccessAddAgence").modal("hide");
+                  view_agence();
+                  
+                }
+              }, 2000);
+              view_agence();
+            }
+          },
+          
+        })
+  
+      }
+     
+    });
+  });
+}
+
+function get_data_agence() {
+  $(document).on("click","#btn_modifier_agence", function () {
+    $("#update-agence_form").trigger("reset");
+    var msgErrorLabel = $("#update-agence_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    var updateID = $(this).attr("data-id");
+    $.ajax({
+      url: "get_data_agence.php",
+      method: "post",
+      data: {
+        update_ID: updateID,
+      },
+      dataType: "JSON",
+      success: function (data) {
+        $("#idAgence").val(data[0]);
+        $("#up_nom_agence").val(data[1]);
+        $("#up_email_agence").val(data[2]);
+        $("#up_numtel_agence").val(data[3]);
+        $("#update_agence_modal").modal("show");
+      },
+    });
+  });
+}
+
+function update_agence() {
+  $(document).on("click", "#btn_modifierAgence", function () {
+    var msgErrorLabel = $("#update-agence_form").find("p");
+    msgErrorLabel.each(function () {
+      $(this).html('');
+    });
+    $("#update_agence_modal").scrollTop(0);
+    var idagence = $("#idAgence").val();
+    var nom_agence = $("#up_nom_agence").val();
+    var email_agence = $("#up_email_agence").val();
+    var numtel_agence = $("#up_numtel_agence").val();
+
+
+    if (nom_agence == "") {
+      $("#up_nom_error").html("Saisir votre nom de votre entreprise s'il vous plait.");
+      $("#up_nom_agence").focus();
+    } else if (email_agence == "") {
+      $("#up_email_error").html("Saisir votre email s'il vous plait.");
+      $("#up_email_agence").focus();
+    }
+    else if (!IsValidEmail(email_agence)) {
+      $("#up_email_error").html("Adresse email invalide");
+      $("#up_email_agence").focus();
+    }
+    else if (numtel_agence == "") {
+      $("#up_numtel_error").html("Saisir votre Téléphone s'il vous plait.");
+      $("#up_numtel_agence").focus();
+    } else if (!validatePhoneNumber(numtel_agence)) {
+      $("#up_numtel_error").html("Numéro téléphone invalide");
+      $("#up_numtel_agence").focus();
+    }else {
+      var form_data = new FormData();
+      form_data.append("idagence", idagence);
+      form_data.append("nom_agence", nom_agence);
+      form_data.append("email_agence", email_agence);
+      form_data.append("numtel_agence", numtel_agence);
+    
+    $.ajax({
+      url: "update_agence.php",
+      method: "post",
+      processData: false,
+      contentType: false,
+      data: form_data,
+      success: function (data) {
+        if (data.includes("text-echec")) {
+          $("#update_agence_modal").modal("hide");
+          $("#UpdateAgence_echec")
+            .removeClass("text-checked")
+            .addClass("text-echec")
+            .html(data);
+          $("#EchecUpdateAgence").modal("show");
+          setTimeout(function () {
+            if ($("#EchecUpdateAgence").length > 0) {
+              $("#EchecUpdateAgence").modal("hide");
+            }
+          }, 2000);
+        } else{
+          $("#update_agence_modal").modal("hide");
+          $("#UpdateAgence_success").addClass("text-checked").html(data);
+          $("#SuccessUpdateAgence").modal("show");
+          $("#UpdateAgence_success")
+            .removeClass("text-echec")
+            .addClass("text-checked");
+          setTimeout(function () {
+            if ($("#SuccessUpdateAgence").length > 0) {
+              $("#SuccessUpdateAgence").modal("hide");
+              
+            }
+          }, 2000);
+          view_agence();
+        }
+      }
+    })
+  }
+  });
+} 
+
+function delete_agence() {
+  $(document).on("click", "#btn_supprimer_agence", function () {
+    var Delete_ID = $(this).attr("data-id1");
+    $("#delete_agence").modal("show");
+    $(document).on("click", "#supprimer_agence", function () {
+      $.ajax({
+        url: "delete_agence.php",
+        method: "post",
+        data: {
+          DeleteID: Delete_ID,
+        },
+        success: function (data) {
+          if (data.includes("text-echec")) {
+            $("#delete_agence").modal("hide");
+            $("#deleteAgence_echec")
+              .removeClass("text-checked")
+              .addClass("text-echec")
+              .html(data);
+            $("#EchecDeleteAgence").modal("show");
+            setTimeout(function () {
+              if ($("#EchecDeleteAgence").length > 0) {
+                $("#EchecDeleteAgence").modal("hide");
+              }
+            }, 2000);
+          } else {
+            $("#delete_agence").modal("hide");
+            $("#deleteAgence_success").addClass("text-checked").html(data);
+            $("#SuccessDeleteAgence").modal("show");
+            $("#deleteAgence_success")
+              .removeClass("text-echec")
+              .addClass("text-checked");
+            setTimeout(function () {
+              if ($("#SuccessDeleteAgence").length > 0) {
+                $("#SuccessDeleteAgence").modal("hide");
+                view_agence();
+              }
+            }, 2000);
+          }
+        },
+      });
+    });
+  });
+  $(document).on("hide.bs.modal", "#delete_agence", function () {
+    Delete_ID = "";
+  });
+}
+
+
+
+
