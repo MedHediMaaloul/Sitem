@@ -25,6 +25,7 @@ session_start();
         		$_SESSION['Role']=$row['id_role'];
     			$_SESSION['Specialite']=$row['id_specialite'];
         		$_SESSION['email_user']=$row['email_user'];
+                $_SESSION['agence']=$row['id_agence'];
     			echo "<label class=\"myclass\">success</label>";
         	}else{
         		if ($status=='1') {
@@ -54,20 +55,24 @@ session_start();
                     <th style="text-align: center;" class="border-top-0"><i class="fas fa-calendar-alt"></i> Date de Naissance </th>
                     <th style="text-align: center;" class="border-top-0"><i class=" fa fas fa-map-marker-alt"></i> Adresse</th>';
                     if($_SESSION['Role'] != '2'){
-                    $value .= ' <th style="text-align: center;" class="border-top-0"><i class="fas fa-graduation-cap"></i> Specialité</th>';
-                    }
-                    $value .=' <th style="text-align: center;" class="border-top-0"><i class="fa fa-image"></i> Photo</th>
-                    <th style="text-align: center;" class="border-top-0">Actions</th>
-                </tr>            
-            </thead>';
-
-            if($_SESSION['Role']=="2"){
-                $query = "SELECT * FROM user WHERE etat_user != '0' AND id_role='0' ORDER BY etat_user ASC";
-            }
-            else{
-                $query = "SELECT * FROM user WHERE etat_user != '0' AND id_role='1' ORDER BY etat_user ASC";
-            }
-            $result = mysqli_query($conn, $query);
+                        $value .= '<th style="text-align: center;" class="border-top-0"><i class="fas fa-graduation-cap"></i> Specialité</th>';
+                        }
+                        if($_SESSION['agence']=='0'){
+                        $value .='<th style="text-align: center;" class="border-top-0"><i class="fa fa-university" aria-hidden="true"></i> Agence</th>';
+                        }
+                        $value .='<th style="text-align: center;" class="border-top-0"><i class="fa fa-image"></i> Photo</th>
+                        <th style="text-align: center;" class="border-top-0">Actions</th>
+                    </tr>            
+                </thead>';
+    
+                if($_SESSION['Role']=="2"){
+                    $query = "SELECT * FROM user AS U LEFT JOIN agence AS A ON U.id_agence = A.id_agence WHERE etat_user != '0' AND id_role='0' ORDER BY etat_user ASC";
+                }
+                else{
+                    $agence=$_SESSION['agence'];
+                    $query = "SELECT * FROM user WHERE etat_user != '0' AND id_role='1' AND id_agence='$agence' ORDER BY etat_user ASC";
+                }
+                $result = mysqli_query($conn, $query);
             while ($row = mysqli_fetch_assoc($result)) {
             $query_sepcialite = "SELECT * FROM specialite";
             $result_sepcialite = mysqli_query($conn, $query_sepcialite);
@@ -94,6 +99,9 @@ session_start();
                     if($_SESSION['Role'] != '2'){
                     $value .= ' <td style="text-align: center;">' . $user_data. '</td>';
                     }
+                    else {                  
+                        $value .= ' <td style="text-align: center;">' . $row['lieu_agence']. '</td>';
+                        }
                     $value .= ' <td style="text-align: center;"><a '.(($row["photo_user"]!="")?"href='uploads/user/{$row["photo_user"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
                     <td style="text-align: center;">
                         <div class="btn-group">';
@@ -116,7 +124,8 @@ session_start();
     	
     function addUser(){
     	global $conn ;
-    	$role= $_POST['role'];
+        $role_login= $_SESSION['Role'];
+        $agence_session= $_SESSION['agence'];
     	$specialite=isset($_POST['specialite']) ? $_POST['specialite'] : null ;
     	$nom = $_POST['nom'];
     	$prenom = $_POST['prenom'];
@@ -126,6 +135,7 @@ session_start();
     	$numTel = $_POST['numTel'];
     	$dateNaissance = $_POST['dateNaissance'];
     	$password = $_POST['password'];
+        $agence = $_POST['agence'];
     	$doc_photoProfile=isset($_FILES["doc_photoProfile"]) ? $_FILES['doc_photoProfile'] : "" ;
     	$photoProfile_filname = "";
     
@@ -149,8 +159,20 @@ session_start();
     	}else if(mysqli_num_rows($selectCIN)) {
     		echo "<div class='text-echec'>Ce numéro de CIN est déjà utilisé</div> ";
     	}else {
-    		$query= "INSERT into user(nom_user,prenom_user,cin_user,numTel_user,email_user,password_user,date_naissance_user,id_role,id_specialite,adresse_user,photo_user)
-    		values('$nom','$prenom','$numCIN','$numTel','$email','$password','$dateNaissance','$role','$specialite','$address','$photoProfile_filname')";
+            if($role_login=='0'){
+                $role="1" ;
+            }
+            else{
+                $role="0" ;  
+            }
+            if($role_login=="2"){
+                $agence_user=$agence;
+            }
+            else {
+                $agence_user=$agence_session;
+            }
+    		$query= "INSERT into user(nom_user,prenom_user,cin_user,numTel_user,email_user,password_user,date_naissance_user,id_role,id_agence,id_specialite,adresse_user,photo_user)
+    		values('$nom','$prenom','$numCIN','$numTel','$email','$password','$dateNaissance','$role','$agence_user','$specialite','$address','$photoProfile_filname')";
     		$result=mysqli_query($conn,$query);
     		if ($result) {
     			echo "<div class='text-success'>L'utilisateur est ajouté avec succès</div>";
@@ -225,18 +247,18 @@ function get_dataUser()
         $update_user[7] = $row['numTel_user'];
         $update_user[8] = $row['adresse_user'];
         $update_user[9] = $row['date_naissance_user'];
-
-		
-			
+        $update_user[10] = $row['id_agence'];	
+	
     }
     echo json_encode($update_user);
 }
 
 	function updateUser(){
 		global $conn ;
-    $date = date('Y-m-d H:i:s');
+        $role_login= $_SESSION['Role'];
+        $agence_session= $_SESSION['agence'];
+        $date = date('Y-m-d H:i:s');
 		$idUser= $_POST['idUser'];
-		$role=$_POST['role'];
 		$specialite=$_POST['specialite'];
 		$nom=$_POST['nom'];
 		$prenom=$_POST['prenom'];
@@ -244,21 +266,18 @@ function get_dataUser()
 		$numCIN=$_POST['numCIN'];
 		$email=$_POST['email'];
 		$numTel=$_POST['numTel'];
+        $agence=$_POST['agence'];
 		$dateNaissance=$_POST['dateNaissance'];
 		$password=$_POST['password'];
 		$newPassword=$_POST['newPassword'];
-
 	    $doc_photoProfile=isset($_FILES["doc_photoProfile"]) ? $_FILES['doc_photoProfile'] : "" ;
     $photoProfile_filname = "";
-
 		if ($doc_photoProfile != ""){
 			$photoProfile_filname = $numCIN . "." . strtolower(pathinfo($doc_photoProfile["name"], PATHINFO_EXTENSION));
 			move_uploaded_file($doc_photoProfile["tmp_name"], "uploads/user/".$photoProfile_filname);
 		}
-
     $selectEmail = mysqli_query($conn, "SELECT * FROM user WHERE email_user='$email' and  id_user!='$idUser'");
     while ($row = mysqli_fetch_assoc($selectEmail)) {
-
 		$status= $row['etat_user'];
     }
     $selectCIN = mysqli_query($conn, "SELECT * FROM user WHERE cin_user='$numCIN' and  id_user!='$idUser'");
@@ -287,8 +306,13 @@ function get_dataUser()
 		}else if(mysqli_num_rows($selectCIN)) {
         echo "<div class='text-echec'>Ce numéro de CIN est déjà utilisé</div> ";
 		}else {
-
-        $query = "UPDATE user SET nom_user='$nom',prenom_user='$prenom',cin_user='$numCIN',numTel_user='$numTel',email_user='$email',password_user='$password',date_naissance_user='$dateNaissance',id_role='$role',id_specialite='$specialite',adresse_user='$address',photo_user='$photoProfile_filname', date_updated_user='$date' WHERE id_user='$idUser'";
+            if($role_login=="2"){
+                $agence_user=$agence;
+            }
+            else {
+                $agence_user=$agence_session;
+            }
+        $query = "UPDATE user SET nom_user='$nom',prenom_user='$prenom',cin_user='$numCIN',numTel_user='$numTel',email_user='$email',password_user='$password',date_naissance_user='$dateNaissance',id_agence='$agence_user',id_specialite='$specialite',adresse_user='$address',photo_user='$photoProfile_filname', date_updated_user='$date' WHERE id_user='$idUser'";
 
 			$result=mysqli_query($conn,$query);
 
@@ -409,13 +433,14 @@ function updateProfil()
 function addMateriel()
 {
     global $conn;
+    $agence= $_SESSION['agence'];
     $facture = isset($_FILES['facture']) ? $_FILES['facture'] : "";
     $nom = $_POST['nom'];
     $prix = $_POST['prix'];
     $EmplyeeID = $_POST['EmplyeeID'];
     $dateAchat = $_POST['dateAchat'];
-    $querymateriel = "INSERT into materiel(nom_materiel,prix_materiel,date_achat_materiel,id_user_materiel)
-		values('$nom','$prix','$dateAchat','$EmplyeeID')";
+    $querymateriel = "INSERT into materiel(nom_materiel,prix_materiel,date_achat_materiel,id_user_materiel,id_agence)
+		values('$nom','$prix','$dateAchat','$EmplyeeID',$agence)";
     $result = mysqli_query($conn, $querymateriel);
     $lastId = mysqli_insert_id($conn);
     if ($facture != "") {
@@ -442,6 +467,7 @@ function viewMateriel()
     global $conn;
     $IdRole = $_SESSION['Role'];
     $IdUser=$_SESSION['id_user'] ;
+    $agence=$_SESSION['agence'] ;
     $value = '
     <table class="table table-striped align-middle">
         <thead>
@@ -449,15 +475,32 @@ function viewMateriel()
                 <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Nom du matériel</th>
                 <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Prix de matériel </th>
                 <th style="text-align: center;" class="border-top-0"><i class="fa fa-pen"></i> Date d\'achat </th>
-                <th style="text-align: center;" class="border-top-0"><i class="fa fa-phone"></i> Nom d\'utilisateur </th>
-                <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Facture </th>
-                <th style="text-align: center;" class="border-top-0">Actions</th>
+                <th style="text-align: center;" class="border-top-0"><i class="fa fa-phone"></i> Nom d\'utilisateur </th>';
+                if($IdRole=='2'){
+                    $value .= '
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-university" aria-hidden="true"></i> Agence </th>';    
+                }
+                $value .= '
+                <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Facture </th>';
+                if($IdRole!='2'){
+                    $value .= '
+                    <th style="text-align: center;" class="border-top-0">Actions</th>';
+                }
+                $value .= '
             </tr>
         </thead>';
-    
-        $query = "SELECT * FROM materiel AS M
+        if($IdRole=='2'){
+            $query = "SELECT * FROM materiel AS M
              LEFT JOIN user AS U ON U.id_user = M.id_user_materiel
+             LEFT JOIN agence AS A ON A.id_agence = M.id_agence
               WHERE M.etat_materiel = '1'
+              ORDER BY U.id_user ASC";
+        }
+        else 
+            $query = "SELECT * FROM materiel AS M
+             LEFT JOIN user AS U ON U.id_user = M.id_user_materiel
+             LEFT JOIN agence AS A ON A.id_agence = M.id_agence
+              WHERE M.etat_materiel = '1' AND M.id_agence='$agence'
               ORDER BY U.id_user ASC";
     $result = mysqli_query($conn, $query);
     while ($row = mysqli_fetch_assoc($result)) {
@@ -466,14 +509,22 @@ function viewMateriel()
                 <td style="text-align: center;">' . $row['nom_materiel'] . '</td>
                 <td style="text-align: center;">' . $row['prix_materiel'] . '</td>
                 <td style="text-align: center;">' . $row['date_achat_materiel'] . '</td>
-                <td style="text-align: center;">' . $row['prenom_user'] . " " . $row['nom_user'] . '</td>
-                <td style="text-align: center;"><a ' . (($row["piece_joint_materiel"] != "") ? "href='uploads/materiel/{$row["piece_joint_materiel"]}'" : "") . '" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
-                <td style="text-align: center;">
+                <td style="text-align: center;">' . $row['prenom_user'] . " " . $row['nom_user'] . '</td>';
+                if($IdRole=='2'){
+                    $value .= '
+                    <td style="text-align: center;">' . $row['lieu_agence'] . '</td>';
+                }
+                $value .= '
+                <td style="text-align: center;"><a ' . (($row["piece_joint_materiel"] != "") ? "href='uploads/materiel/{$row["piece_joint_materiel"]}'" : "") . '" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>';
+                if($IdRole!='2'){
+                    $value .= ' <td style="text-align: center;">
                     <div class="btn-group">
                 <button type="button" title="Modifier Materiel" style="margin-right: 3px;" class="btn btn-primary" id="btn_modifier_materiel" data-id=' . $row['id_materiel'] . '><i class="fa fa-pen fa-1x"></i></button>
                         <button type="button" title="Supprimer Materiel"  class="btn btn-danger" id="btn_supprimer_materiel" data-id1=' . $row['id_materiel'] . '><i class="fa fa-trash fa-1x"></i></button>
                     </div>
-                </td>
+                </td>';
+                }
+                $value .= '
             </tr>';
     }
     $value .= '</tbody></table>';
@@ -551,6 +602,7 @@ function deleteMateriel()
     function viewProject(){
         global $conn;
         $id_user = $_SESSION['id_user'];
+        $agence = $_SESSION['agence'];
         $value = '
             <table class="table table-striped align-middle">
             <thead>
@@ -564,19 +616,32 @@ function deleteMateriel()
             <th style="text-align: center;" class="border-top-0"><i class="fas fa-check"></i> Confirmation</th>
             <th style="text-align: center;" class="border-top-0"><i class="fa fa-history"></i> Etat</th>
             <th style="text-align: center;" class="border-top-0"><i class="fa fa-tasks"></i> Tâche</th>
-            <th style="text-align: center;" class="border-top-0"><i class="fa fa-tasks"></i> Employés affectés</th>
-            <th style="text-align: center;" class="border-top-0"><i class="fa fa-upload"></i> Pièce jointe</th>
+            <th style="text-align: center;" class="border-top-0"><i class="fa fa-tasks"></i> Employés affectés</th>';
+            if($_SESSION['Role']=='2'){
+            $value .='<th style="text-align: center;" class="border-top-0"><i class="fa fa-university" aria-hidden="true"></i> Agence</th>';
+            }
+            $value .=' <th style="text-align: center;" class="border-top-0"><i class="fa fa-upload"></i> Pièce jointe</th>
             <th style="text-align: center;" class="border-top-0">Actions</th>
             </tr>            
             </thead>';
-        
-            $query = "SELECT *
-            FROM projet as P
-            LEFT JOIN user as U ON U.id_user =P.chef_projet
-            LEFT JOIN client AS C ON C.id_client = P.nom_client_projet
-            where P.etat_projet !='0' 
-            ORDER BY P.date_created_projet ASC";
-
+            if($_SESSION['Role']=='2'){
+                $query = "SELECT *
+                FROM projet as P
+                LEFT JOIN user as U ON U.id_user =P.chef_projet
+                LEFT JOIN agence as A ON A.id_agence =P.id_agence
+                LEFT JOIN client AS C ON C.id_client = P.nom_client_projet
+                where P.etat_projet !='0'
+                ORDER BY P.date_created_projet ASC";    
+            }
+            else{
+                $query = "SELECT *
+                FROM projet as P
+                LEFT JOIN user as U ON U.id_user =P.chef_projet
+                LEFT JOIN agence as A ON A.id_agence =P.id_agence
+                LEFT JOIN client AS C ON C.id_client = P.nom_client_projet
+                where P.etat_projet !='0' AND P.id_agence='$agence'
+                ORDER BY P.date_created_projet ASC";   
+            }
             $result = mysqli_query($conn, $query);
             while ($row = mysqli_fetch_assoc($result)) {
                 $id_project=$row['id_projet'];
@@ -629,8 +694,11 @@ function deleteMateriel()
                     }
                     $value .= '
                     <td style="text-align: center;"><a href="tache.php?id_project=' . $row['id_projet'] . '" >Consulter les tâches </a></td>
-                    <td style="text-align: center;">' . $userData. ' </td>
-                    <td style="text-align: center;"><a '.(($row["piece_joint_projet"]!="")?"href='uploads/projet/{$row["piece_joint_projet"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
+                    <td style="text-align: center;">' . $userData. ' </td>';
+                    if($_SESSION['Role']=='2'){
+                        $value .= '<td style="text-align: center;">' . $row['lieu_agence']. ' </td>';
+                    }
+                    $value .= '<td style="text-align: center;"><a '.(($row["piece_joint_projet"]!="")?"href='uploads/projet/{$row["piece_joint_projet"]}'":"").'" target="_blank"><i class="fa fa-image fa-2x"></i></a></td>
                     ';
                 
                     if (($_SESSION['Role']) != "1") {
@@ -655,7 +723,6 @@ function deleteMateriel()
         echo json_encode(['status' => 'success', 'html' => $value]);
     }
 
-
     function deleteProject(){
   
 		global $conn;
@@ -672,7 +739,7 @@ function deleteMateriel()
 
     function addProject(){
     	global $conn ;
-
+       $agence= $_SESSION['agence'];
     	$nom_projet= isset($_POST['nom_projet']) ? $_POST['nom_projet'] : null ;
     	$client = isset($_POST['client']) ? $_POST['client'] : null ;
     	$chef_projet = isset($_POST['chef_projet']) ? $_POST['chef_projet'] : null ;
@@ -681,15 +748,14 @@ function deleteMateriel()
     	$dateFinprojet = isset($_POST['dateFinprojet']) ? $_POST['dateFinprojet'] : null ;
         $confirmationProjet=$_POST['confirmationProjet'];
     	$doc_projet=isset($_FILES["doc_projet"]) ? $_FILES['doc_projet'] : "" ;
-
     	$doc_projet_filname = "";
     
     	if ($doc_projet != ""){
     		$doc_projet_filname = $nom_projet . "." . strtolower(pathinfo($doc_projet["name"], PATHINFO_EXTENSION));
     		move_uploaded_file($doc_projet["tmp_name"], "uploads/projet/".$doc_projet_filname);
     	}
-        $query= "INSERT into projet(nom_projet,date_debut_projet,date_fin_projet,description_projet,chef_projet,nom_client_projet,piece_joint_projet, confirmation_projet)
-        values('$nom_projet','$dateDebutprojet','$dateFinprojet','$description','$chef_projet','$client','$doc_projet_filname','$confirmationProjet')";
+        $query= "INSERT into projet(nom_projet,date_debut_projet,date_fin_projet,description_projet,chef_projet,nom_client_projet,id_agence,piece_joint_projet, confirmation_projet)
+        values('$nom_projet','$dateDebutprojet','$dateFinprojet','$description','$chef_projet','$client','$agence','$doc_projet_filname','$confirmationProjet')";
     
     	$result=mysqli_query($conn,$query);
     	if ($result) {
@@ -699,7 +765,6 @@ function deleteMateriel()
     	}
     	
     }
-
     function get_dataEtat()
 	{
 		global $conn;
@@ -814,7 +879,7 @@ function deleteMateriel()
                     <th style="text-align: center;" class="border-top-0"><i class="fa fa-upload"></i> Pièce jointe</th>';
                     if(($chef_projet==$id)||($_SESSION['Role']!='1')){
                         $value .= ' 
-                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Employées </th>';
+                    <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Employé </th>';
                     }
                     $value .= ' <th style="text-align: center;" class="border-top-0">Actions</th>
                 </tr>            
@@ -1007,7 +1072,7 @@ function deleteMateriel()
     	}
 	}
     
-function add_client(){
+function addClient(){
     global $conn ;
     	$nom_entreprise_client= $_POST['nom_entreprise_client'];
     	$email_client = $_POST['email_client'];
@@ -1131,7 +1196,8 @@ $selectEmail = mysqli_query($conn, "SELECT * FROM client WHERE email_client='$em
 
         function addAgence(){
             global $conn ;
-                $nom_agence= $_POST['nom_agence'];
+                $lieu_agence= $_POST['lieu_agence'];
+                $adresse_agence= $_POST['adresse_agence'];
                 $email_agence = $_POST['email_agence'];
                 $numtel_agence = $_POST['numtel_agence'];
         
@@ -1140,8 +1206,8 @@ $selectEmail = mysqli_query($conn, "SELECT * FROM client WHERE email_client='$em
                 if(mysqli_num_rows($selectEmail)) {
                     echo "<div class='text-echec'>L'email est déjà utilisée</div>";
                 }else{    
-                $query= "INSERT into agence (nom_agence,email_agence,tel_agence) 
-                VALUES('$nom_agence','$email_agence','$numtel_agence')";
+                $query= "INSERT into agence (lieu_agence,adresse_agence,email_agence,tel_agence) 
+                VALUES('$lieu_agence','$adresse_agence','$email_agence','$numtel_agence')";
                 $result=mysqli_query($conn,$query);
                 
                 if ($result) {
@@ -1155,21 +1221,26 @@ $selectEmail = mysqli_query($conn, "SELECT * FROM client WHERE email_client='$em
 
         function viewAgence (){
             global $conn;
+
+
+
             $value ='<table class="table table-striped align-middle">
                 <thead>
                     <tr>
-                        <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Nom agence </th>
+                        <th style="text-align: center;" class="border-top-0"><i class="fa fa-user"></i> Lieu agence </th>
+                        <th style="text-align: center;" class="border-top-0"><i class=" fa fas fa-map-marker-alt"></i> Adresse agence </th>
                         <th style="text-align: center;" class="border-top-0" class="hidden-phone"><i class="fa fa-envelope"></i> Email</th>
                         <th style="text-align: center;" class="border-top-0"><i class="fa fa-phone"></i> Téléphone</th>
                         <th style="text-align: center;" class="border-top-0">Actions</th>
                     </tr>            
                 </thead>';
-                $query = "SELECT * FROM agence WHERE action_agence= '1' ORDER BY nom_agence ASC";
+                $query = "SELECT * FROM agence WHERE action_agence= '1' ORDER BY lieu_agence ASC";
                 $result = mysqli_query($conn, $query);
                 while ($row = mysqli_fetch_assoc($result)) {
                 $value .= '<tbody>
                         <tr>
-                            <td style="text-align: center;">' . $row['nom_agence'] . '</td>
+                            <td style="text-align: center;">' . $row['lieu_agence'] . '</td>
+                            <td style="text-align: center;">' . $row['adresse_agence'] . '</td>
                             <td style="text-align: center;">' . $row['email_agence'] . '</td>
                             <td style="text-align: center;">' . $row['tel_agence'] . '</td>
                             <td style="text-align: center;">
@@ -1200,9 +1271,10 @@ $selectEmail = mysqli_query($conn, "SELECT * FROM client WHERE email_client='$em
             while ($row = mysqli_fetch_assoc($result)) {
                 $update_agence= [];
                 $update_agence[0] = $idAgence;
-                $update_agence[1] = $row['nom_agence'];
+                $update_agence[1] = $row['lieu_agence'];
                 $update_agence[2] = $row['email_agence'];
                 $update_agence[3] = $row['tel_agence'];
+                $update_agence[4] = $row['adresse_agence'];
             }
             echo json_encode($update_agence);
         } 
@@ -1211,7 +1283,8 @@ $selectEmail = mysqli_query($conn, "SELECT * FROM client WHERE email_client='$em
         function updateAgence(){
              global $conn ;
              $idagence= $_POST['idagence'];
-                 $nom_agence= $_POST['nom_agence'];
+                 $lieu_agence= $_POST['lieu_agence'];
+                 $adresse_agence= $_POST['adresse_agence'];
                  $email_agence = $_POST['email_agence'];
                  $numtel_agence = $_POST['numtel_agence'];
                  $selectEmail = mysqli_query($conn, "SELECT * FROM agence WHERE email_agence='$email_agence' and  id_agence!='$idagence'");
@@ -1219,7 +1292,7 @@ $selectEmail = mysqli_query($conn, "SELECT * FROM client WHERE email_client='$em
           if(mysqli_num_rows($selectEmail)) {
               echo "<div class='text-echec'>L'email est déjà utilisée</div> ";
             }else{
-             $query = "UPDATE agence SET nom_agence='$nom_agence',email_agence='$email_agence',tel_agence='$numtel_agence' WHERE id_agence='$idagence'";
+             $query = "UPDATE agence SET lieu_agence='$lieu_agence',adresse_agence='$adresse_agence',email_agence='$email_agence',tel_agence='$numtel_agence' WHERE id_agence='$idagence'";
                $result=mysqli_query($conn,$query);
     
          if ($result) {

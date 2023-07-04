@@ -249,7 +249,7 @@ WHERE id_user= '$iduser'";
                         </svg>
                     </a>
                 </div>
-                <div class="hexagon-item">
+                <div class="hexagon-item" <?php ($idRole == "1" || $idRole == "0") ? print "hidden" :""  ?>>
                     <div class="hex-item">
                         <div></div>
                         <div></div>

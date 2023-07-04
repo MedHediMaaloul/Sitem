@@ -14,7 +14,10 @@ include 'Gestion/header.php'
       <div class="row mt">
         <div class="col-md-12">
           <div class="content-panel">
-            <button type="button" class="btn btn-success btn-xs" title="Insert Materiel" id="btn_InsertMateriel" ><i class="fa fa-plus-circle"></i></button>
+          <?php if($idRole!='2'){
+           echo'    <button type="button" class="btn btn-success btn-xs" title="Insert Materiel" id="btn_InsertMateriel" ><i class="fa fa-plus-circle"></i></button>';
+          }
+          ?>
             <!-- Add materiel Modal -->
               <div class="modal fade bd-example-modal-lg" id="modal_addMateriel"  tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -62,7 +65,7 @@ include 'Gestion/header.php'
                                         <label class="col-md-12 p-0">Employée<span
                                                 class="text-danger">*</span></label>
                                 <?php
-                                 $query = "SELECT * FROM user";
+                                 $query = "SELECT * FROM user WHERE id_role!=0 AND id_role!=2 AND id_user!='$iduser'";
                                  $result = mysqli_query($conn, $query);
                                 ?>
                              <div style="width: 310px;" class="col-md-12 p-0">
@@ -76,8 +79,9 @@ include 'Gestion/header.php'
                                     }
                                 ?>
                               </select>
+                              <p style=" color: #D8000C;" class="error msgError mt-2" for="liste_materiel_employee" id="liste_materiel_employee_error"> </p>
+
                              </div>
-                                        <p style=" color: #D8000C;" class="error msgError mt-2" for="liste_materiel_employee" id="liste_materiel_employee_error"> </p>
                                     </div>
                       </form>
                     </div>

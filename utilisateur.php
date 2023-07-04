@@ -24,38 +24,15 @@ include 'Gestion/header.php'
                     </div>
                     <div class="modal-body">
                       <form id="insert-user_form" autocomplete="off" class="form-horizontal form-material">
-                      <input type="text" class="form-control" style="margin-bottom:8px" id="id_role_user" IdRoleusUr="<?php echo $idRole ?>" placeholder="Nom" hidden/>
-                      <?php if ($idRole=="0"){?>
                         <div id="fiche_1row">
+                         <?php if($idRole=="0"){?>
                           <div class="form-group">
-                            <label class="col-md-12 p-0">Role<span
-                            class="text-danger">*</span></label>
-                            <div class="col-md-12 p-0">
-                              <select id="role" name="role" class="form-control" required style="margin-bottom:8px">
-                                <option value="Choisissez" selected disabled>Choisissez Role</option>
-                                <?php
-                                global $conn;
-                                $resultat = mysqli_query($conn,"SELECT * FROM role");  
-                                if ($resultat->num_rows > 0) {
-                                  while ($row = $resultat->fetch_assoc()) {
-                                    echo '<option value="' . $row['id_role'] . '">' . $row['label_role_user'] . '</option>';
-                                  }
-                                }
-                                ?>
-                              </select>
-                              <p style=" color: #D8000C;" class="error" for="role" id="role_error"> </p>
-                            </div>
-                          </div>
-                        </div>
-                      <?php  } ?>
-                        <div id="fiche_1row">
-                          <div class="form-group" id="sh1" style="display:none;">
                             <label class="col-md-12 p-0">Spécialité<span
                             class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
-                              <select class="selectpicker form-control" id="specialite" name="specialite" style="margin-bottom:8px" multiple aria-label="select">
-                                <option value="" disabled>Selectionner votre spécialité</option>
-                                <?php
+                              <select  class="selectpicker form-control" id="specialite" name="specialite" style="margin-bottom:8px" multiple aria-label="select">
+                                <option selected value="" disabled>Selectionner une spécialité</option>
+                                <?php 
                                   global $conn;
                                   $resultat = mysqli_query($conn,"SELECT * FROM specialite");  
                                   if ($resultat->num_rows > 0) {
@@ -68,13 +45,12 @@ include 'Gestion/header.php'
                               <p style=" color: #D8000C;" class="error" for="specialite" id="specialite_error"> </p>
                             </div>
                           </div>
-                                 
+                          <?php }?>
                           <div class="form-group">
                             <label class="col-md-12 p-0">Nom<span class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
                               <input type="text" class="form-control" style="margin-bottom:8px" name="nom" id="nom" placeholder="Nom"/>
                               <p style=" color: #D8000C;" class="error" for="nom" id="nom_error"> </p>
-
                             </div>
                           </div>
                           <div class="form-group">
@@ -154,6 +130,27 @@ include 'Gestion/header.php'
                           </div>
                           
                         </div>
+                        <?php if($idRole=="2"){?>
+                          <div class="form-group">
+                            <label class="col-md-12 p-0">Agence<span
+                            class="text-danger">*</span></label>
+                            <div class="col-md-12 p-0">
+                              <select class="selectpicker form-control" id="agence_user" name="agence_user" style="margin-bottom:8px" >
+                                <option selected value="" disabled>Selectionner une agence</option>
+                                <?php
+                                  global $conn;
+                                  $resultat = mysqli_query($conn,"SELECT * FROM agence");  
+                                  if ($resultat->num_rows > 0) {
+                                    while ($row = $resultat->fetch_assoc()) {
+                                      echo '<option value="' . $row['id_agence'] . '">' . $row['lieu_agence'] . '</option>';
+                                    }
+                                  }
+                                ?>
+                              </select>
+                              <p style=" color: #D8000C;" class="error mt-2" for="agence_user" id="agence_error" > </p>
+                            </div>
+                          </div>
+                          <?php }?>
                       </form>
                     </div>
                     <div class="modal-body">
@@ -437,35 +434,16 @@ include 'Gestion/header.php'
                     </div>
                     <div class="modal-body">
                       <form id="update-user_form" autocomplete="off" class="form-horizontal form-material">
-                        <div class="form-group">
-                          <input type="hidden" id="idUser" UpIdRoleusUr="<?php echo $idRole ?>">
-                        </div>
-                        <div id="fiche_1row" >
-                          <div class="form-group" <?php  ($idRole=="2")? print 'hidden':print ''?>>
-                            <label class="col-md-12 p-0">Role<span class="text-danger">*</span></label>
-                            <div class="col-md-12 p-0">
-                              <select id="up_role" name="up_role" class="form-control" required style="margin-bottom:8px">
-                                <option value="Choisissez" selected disabled>Choisissez Role</option>
-                                <?php
-                                global $conn;
-                                $resultat = mysqli_query($conn,"SELECT * FROM role");  
-                                if ($resultat->num_rows > 0) {
-                                  while ($row = $resultat->fetch_assoc()) {
-                                    echo '<option value="' . $row['id_role'] . '">' . $row['label_role_user'] . '</option>';
-                                  }
-                                }
-                                ?>
-                              </select>
-                              <p style=" color: #D8000C;" class="error" for="up_role" id="up_role_error"> </p>
-                            </div>
-                          </div>
+                      <div class="form-group">
+                          <input type="hidden" id="idUser">
                         </div>
                         <div id="fiche_1row">
-                          <div class="form-group" id="sh2" style="display:none;">
+                        <?php if($idRole=="0"){?>
+                          <div class="form-group" >
                             <label class="col-md-12 p-0">Spécialité<span class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
-                            <select class="selectpicker form-control" id="up_specialite" name="up_specialite" style="margin-bottom:8px" multiple aria-label="select">
-                                <option value="" disabled selected>Selectionner votre spécialité</option>
+                            <select data-none-selected-text="Selectionner votre spécialité" class="selectpicker form-control" id="up_specialite" name="up_specialite" style="margin-bottom:8px" multiple aria-label="select">
+                                <option value="" disabled selected>Selectionner une spécialité</option>
                                 <?php
                                   global $conn;
                                   $resultat = mysqli_query($conn,"SELECT * FROM specialite");  
@@ -479,7 +457,7 @@ include 'Gestion/header.php'
                               <p style=" color: #D8000C;" class="error" for="up_specialite" id="up_specialite_error"> </p>                              
                             </div>
                           </div>
-                              
+                          <?php }?> 
                           <div class="form-group">
                             <label class="col-md-12 p-0">Nom<span class="text-danger">*</span></label>
                             <div class="col-md-12 p-0">
@@ -570,6 +548,27 @@ include 'Gestion/header.php'
                             </div>
                           </div>
                         </div>  
+                        <?php if($idRole=="2"){?>
+                          <div class="form-group">
+                            <label class="col-md-12 p-0">Agence<span
+                            class="text-danger">*</span></label>
+                            <div class="col-md-12 p-0">
+                              <select class="selectpicker form-control" id="up_agence_user" name="up_agence_user" style="margin-bottom:8px" >
+                                <option value="" disabled>Selectionner une agence</option>
+                                <?php
+                                  global $conn;
+                                  $resultat = mysqli_query($conn,"SELECT * FROM agence");  
+                                  if ($resultat->num_rows > 0) {
+                                    while ($row = $resultat->fetch_assoc()) {
+                                      echo '<option value="' . $row['id_agence'] . '">' . $row['lieu_agence'] . '</option>';
+                                    }
+                                  }
+                                ?>
+                              </select>
+                              <p style=" color: #D8000C;" class="error" for="up_agence_user" id="up_agence_error"> </p>
+                            </div>
+                          </div>
+                          <?php }?>
                       </form>                    
                     </div>
                       <div class="modal-body">
@@ -582,7 +581,6 @@ include 'Gestion/header.php'
                   </div>
               </div>
               <!-- end update user Model -->
-
               <!-- Model alert update user succès -->
               <div class="modal fade" id="SuccessUpdateUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -642,22 +640,6 @@ include 'Gestion/header.php'
   ?>
 
 <script>
-  var idRole=<?php echo $idRole ?>;
-  if (idRole=="0"){
-  //specialite display where role= employee
-  const Select_role = document.getElementById("role");
-  Select_role.addEventListener("change", handleSelectChange);
-  
-  function handleSelectChange(event) {
-    const id_role = event.target.value;
-    document.getElementById('sh1').style.display = 'none';
-    
-    if (id_role=="1")
-    {
-      document.getElementById('sh1').style.display = 'block';
-    }
-  }
-  }
   //date
   var today = new Date();
   var dd = today.getDate();

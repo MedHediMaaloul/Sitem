@@ -23,15 +23,22 @@ include 'Gestion/header.php'
                   </div>
                   <div class="modal-body">
                     <form id="insert-agence_form" autocomplete="off" class="form-horizontal form-material">
-                    
+                    <div id="fiche_2row"> 
                       <div class="form-group">
-                        <label class="col-md-12 p-0">Nom de l'agence<span class="text-danger">*</span></label>
+                        <label class="col-md-12 p-0">Lieu agence<span class="text-danger">*</span></label>
                         <div class="col-md-12 p-0">
-                          <input type="text" class="form-control" style="margin-bottom:8px" name="nom_agence" id="nom_agence" placeholder="nom"/>
-                          <p style=" color: #D8000C;" class="error" for="nom_agence" id="nom_error"> </p>
+                          <input type="text" class="form-control" style="margin-bottom:8px" name="lieu_agence" id="lieu_agence" placeholder="nom"/>
+                          <p style=" color: #D8000C;" class="error" for="lieu_agence" id="nom_error"> </p>
                         </div>
                       </div>
-
+                      <div class="form-group">
+                        <label class="col-md-12 p-0">Adresse agence<span class="text-danger">*</span></label>
+                        <div class="col-md-12 p-0">
+                          <input type="text" class="form-control" style="margin-bottom:8px" name="adresse_agence" id="adresse_agence" placeholder="nom"/>
+                          <p style=" color: #D8000C;" class="error" for="adresse_agence" id="adresse_error"> </p>
+                        </div>
+                      </div>
+                      </div>
                       <div id="fiche_1row"> 
                         <div class="form-group">
                           <label class="col-md-12 p-0">Email<span class="text-danger">*</span></label>
@@ -120,13 +127,22 @@ include 'Gestion/header.php'
                     <form id="update-agence_form" autocomplete="off" class="form-horizontal form-material">
                       <div class="form-group">
                         <input type="hidden" id="idAgence">
-                      </div>                                
+                      </div>  
+                    <div id="fiche_2row">                               
                       <div class="form-group">
-                        <label class="col-md-12 p-0">Non agence<span class="text-danger">*</span></label>
+                        <label class="col-md-12 p-0">Lieu agence<span class="text-danger">*</span></label>
                         <div class="col-md-12 p-0">
-                          <input type="text" class="form-control" style="margin-bottom:8px" name="up_nom_agence" id="up_nom_agence" placeholder="nom"/>
-                          <p style=" color: #D8000C;" class="error" for="up_nom_agence" id="up_nom_error"> </p>
+                          <input type="text" class="form-control" style="margin-bottom:8px" name="up_lieu_agence" id="up_lieu_agence" placeholder="nom"/>
+                          <p style=" color: #D8000C;" class="error" for="up_lieu_agence" id="up_nom_error"> </p>
                         </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-12 p-0">Adresse agence<span class="text-danger">*</span></label>
+                        <div class="col-md-12 p-0">
+                          <input type="text" class="form-control" style="margin-bottom:8px" name="up_adresse_agence" id="up_adresse_agence" placeholder="nom"/>
+                          <p style=" color: #D8000C;" class="error" for="up_adresse_agence" id="up_adresse_error"> </p>
+                        </div>
+                      </div>
                       </div>
                       <div id="fiche_1row">
                         <div class="form-group">

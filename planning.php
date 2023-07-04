@@ -147,7 +147,7 @@ $(document).ready(function() {
         header:{
             left:'prev,next today',
             center:'title',
-            right: 'year,month,agendaDay,listWeek'
+            right: 'year,month,listWeek'
         },
         height: "auto",
         defaultView: 'year',

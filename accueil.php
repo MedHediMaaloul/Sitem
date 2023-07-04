@@ -54,8 +54,8 @@ $idRole=$_SESSION['Role'];
                                         </svg>
                                     </a>
                                 </div>
-                                <div class="hexagon-item" id="utilisateur">
-                                    <div class="hex-item" >
+                                <div class="hexagon-item" <?php ($idRole == "1") ? print "hidden" :""  ?>>
+                                    <div class="hex-item">
                                         <div></div>
                                         <div></div>
                                         <div></div>
@@ -70,7 +70,7 @@ $idRole=$_SESSION['Role'];
                                             <span class="icon">
                                                 <i class="fa fa-users" aria-hidden="true"></i>
                                             </span>
-                                           <span class="title">Utilisateurs</span>
+                                            <span class="title">Utilisateurs</span>
                                         </span>
                                         <svg viewBox="0 0 173.20508075688772 200" height="200" width="174" version="1.1"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -80,8 +80,8 @@ $idRole=$_SESSION['Role'];
                                         </svg>
                                     </a>
                                 </div>
-                                <div class="hexagon-item" id="client">
-                                    <div class="hex-item" >
+                                <div class="hexagon-item" <?php ($idRole == "1") ? print "hidden" :""  ?>>
+                                    <div class="hex-item">
                                         <div></div>
                                         <div></div>
                                         <div></div>
@@ -94,7 +94,7 @@ $idRole=$_SESSION['Role'];
                                     <a class="hex-content" id="clientlink" href="client.php">
                                         <span class="hex-content-inner">
                                             <span class="icon">
-                                            <i class="fa fa-university" aria-hidden="true"></i>
+                                                <i class="fa fa-university" aria-hidden="true"></i>
                                             </span>
                                             <span class="title">Client</span>
                                         </span>
@@ -158,7 +158,7 @@ $idRole=$_SESSION['Role'];
                                         </svg>
                                     </a>
                                 </div>
-                                <div class="hexagon-item" id="materiel">
+                                <div class="hexagon-item" <?php ($idRole == "1") ? print "hidden" :""  ?>>
                                     <div class="hex-item">
                                         <div></div>
                                         <div></div>
@@ -195,7 +195,7 @@ $idRole=$_SESSION['Role'];
                                         <div></div>
                                         <div></div>
                                     </div>
-                                    <a class="hex-content">
+                                    <a class="hex-content" href="stock.php">
                                         <span class="hex-content-inner">
                                             <span class="icon">
                                                 <i class="fa fa-database" aria-hidden="true"></i>
@@ -221,7 +221,7 @@ $idRole=$_SESSION['Role'];
                                         <div></div>
                                         <div></div>
                                     </div>
-                                    <a class="hex-content">
+                                    <a class="hex-content" href="contact.php">
                                         <span class="hex-content-inner">
                                             <span class="icon">
                                                 <i class="fa fa-envelope-open" aria-hidden="true"></i>
@@ -236,7 +236,8 @@ $idRole=$_SESSION['Role'];
                                         </svg>
                                     </a>
                                 </div>
-                                <div class="hexagon-item">
+                                <div class="hexagon-item" style="margin-top: -173px; margin-left: 655px;"
+                                    <?php ($idRole == "1" || $idRole == "0") ? print "hidden" :""  ?>>
                                     <div class="hex-item">
                                         <div></div>
                                         <div></div>
@@ -247,10 +248,10 @@ $idRole=$_SESSION['Role'];
                                         <div></div>
                                         <div></div>
                                     </div>
-                                    <a class="hex-content">
+                                    <a class="hex-content" id="agencelink" href="agence.php">
                                         <span class="hex-content-inner">
                                             <span class="icon">
-                                            <i class="fas fa-building"></i>
+                                                <i class="fas fa-building"></i>
                                             </span>
                                             <span class="title">Agence</span>
                                         </span>
@@ -271,19 +272,9 @@ $idRole=$_SESSION['Role'];
     </main>
     <!-- partial -->
     </script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'></script>
-    <script>
-            var IdRole='<?php echo $idRole;?>';
-            document.addEventListener("DOMContentLoaded", function() {
-            if(IdRole=='1'){
-                $('#utilisateur').css('pointer-events','none');
-                $('#materiel').css('pointer-events','none');
-                $('#utilisateurlink').addClass('btn disabled');
-                $('#materiellink').addClass('btn disabled');
-            }
-});
-</script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </body>
 
 </html>

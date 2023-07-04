@@ -197,10 +197,8 @@ function view_user() {
     },
   });
 }
-
 function add_user() {
   $(document).on("click", "#btn_openModelAddUser", function () {
-    document.getElementById('sh1').style.display = 'none';
     $("#insert-user_form").trigger("reset");
     var msgErrorLabel = $("#insert-user_form").find("p");
     msgErrorLabel.each(function () {
@@ -211,41 +209,34 @@ function add_user() {
       msgErrorLabel.each(function () {
         $(this).html('');
       });
-      var id_role_user = $("#id_role_user").attr("IdRoleusUr");
-      if (id_role_user == "2") {
-        var role = "0";
-      }
-      else {
-        var role = $("#role").val();
-      }
       var nom = $("#nom").val();
       var prenom = $("#prenom").val();
       var address = $("#address").val();
       var numCIN = $("#numCIN").val();
       var email = $("#email").val();
       var numTel = $("#numTel").val();
-      var doc_photoProfile = $("#doc_photoProfile").prop("files")[0];
+      if ($("#agence_user").length) {
+        var agence = $("#agence_user").val();
+      }
+      else{
+        var agence = "";
+      }
+        var doc_photoProfile = $("#doc_photoProfile").prop("files")[0];
       var dateNaissance = $("#dateNaissance").val();
       var password = $("#password").val();
       var confirmPassword = $("#confirmPassword").val();
-
       var specialite = $("#specialite option:selected")
         .map(function () {
           return $(this).val();
         })
         .get();
-
       if (doc_photoProfile == undefined) {
         doc_photoProfile = "";
       }
-
       if (specialite == null && role != "1") {
         specialite == "";
       }
-      if (role == null) {
-        $("#role_error").html("Choisir le role.");
-        $("#role").focus();
-      } else if (specialite == null && role == "1") {
+      if (specialite == null && role == "1") {
         $("#specialite_error").html("Choisir la specialité.");
         $("#specialite").focus();
       } else if (nom == "") {
@@ -288,9 +279,14 @@ function add_user() {
           "Confirmer votre  Mot de Passe s'il vous plait."
         );
         $("#confirmPassword").focus();
+      }
+        else if (agence == null) {
+          $("#agence_error").html(
+            "Choisir une agence s'il vous plait."
+          );
+          $("#agence_user").focus();  
       } else {
         var form_data = new FormData();
-        form_data.append("role", role);
         form_data.append("specialite", specialite);
         form_data.append("nom", nom);
         form_data.append("prenom", prenom);
@@ -301,6 +297,8 @@ function add_user() {
         form_data.append("doc_photoProfile", doc_photoProfile);
         form_data.append("dateNaissance", dateNaissance);
         form_data.append("password", password);
+        form_data.append("agence", agence);
+
         $.ajax({
           url: "add_user.php",
           method: "post",
@@ -475,7 +473,6 @@ function delete_user() {
 
 function get_data_user() {
   $(document).on("click", "#btn_modifier_user", function () {
-    document.getElementById("sh2").style.display = "none";
     $("#passwordupdate").prop("checked", false);
     $("#passwordchange_form ").css("display", "none");
     $("#update-user_form").trigger("reset");
@@ -497,7 +494,6 @@ function get_data_user() {
         var specialite = data[2].split(",");
         $("select[name=up_specialite]").val(specialite);
         $("#up_specialite").selectpicker("refresh");
-        $("#up_specialite").val(specialite);
         $("#up_nom").val(data[3]);
         $("#up_prenom").val(data[4]);
         $("#up_email").val(data[5]);
@@ -505,22 +501,9 @@ function get_data_user() {
         $("#up_numTel").val(data[7]);
         $("#up_address").val(data[8]);
         $("#up_dateNaissance").val(data[9]);
-
+        $("#up_agence_user").val(data[10]);
+        $("#up_agence_user").selectpicker("refresh");
         $("#update_user_modal").modal("show");
-        if ($("#up_role").val() == "1") {
-          document.getElementById("sh2").style.display = "block";
-        }
-        const id_up_role = document.getElementById("up_role");
-        id_up_role.addEventListener("change", handleSelectChange);
-        function handleSelectChange(event) {
-          const id_role = event.target.value;
-          document.getElementById("sh2").style.display = "none";
-          if (id_role == "1") {
-            document.getElementById('sh2').style.display = 'block';
-          } else {
-            $("#up_specialite").val("");
-          }
-        }
       },
     });
   });
@@ -532,21 +515,20 @@ function update_user() {
     msgErrorLabel.each(function () {
       $(this).html('');
     });
-    var up_id_role_user = $("#idUser").attr("UpIdRoleusUr");
     $("#update_user_modal").scrollTop(0);
     var idUser = $("#idUser").val();
-    if (id_role_user == "2") {
-      var role = "0";
-    }
-    else {
-      var role = $("#up_role").val();
-    }
     var nom = $("#up_nom").val();
     var prenom = $("#up_prenom").val();
     var address = $("#up_address").val();
     var numCIN = $("#up_numCIN").val();
     var email = $("#up_email").val();
     var numTel = $("#up_numTel").val();
+    if ($("#up_agence_user").length) {
+      var agence = $("#up_agence_user").val();
+    }
+    else{
+      var agence = "";
+    }
     var doc_photoProfile = $("#up_doc_photoProfile").prop("files")[0];
     var dateNaissance = $("#up_dateNaissance").val();
     var password = $("#up_password").val();
@@ -560,14 +542,10 @@ function update_user() {
       doc_photoProfile = "";
     }
 
-    if (specialite == null && role != "1") {
+    if (specialite == null ) {
       specialite == "";
     }
-
-    if (role == null) {
-      $("#up_role_error").html("Choisir le role.");
-      $("#up_role").focus();
-    } else if (specialite == null && role == "1") {
+      if (specialite == null ) {
       $("#up_specialite_error").html("Choisir la specialité.");
       $("#up_specialite").focus();
     } else if (nom == "") {
@@ -618,10 +596,14 @@ function update_user() {
         "Saisir le nouveau mot de passe s'il vous plait."
       );
       $("#newPassword").focus();
+      } else if (agence == null) {
+          $("#up_agence_error").html(
+            "Choisir une agence s'il vous plait."
+          );
+          $("#up_agence_user").focus();  
     } else {
       var form_data = new FormData();
       form_data.append("idUser", idUser);
-      form_data.append("role", role);
       form_data.append("specialite", specialite);
       form_data.append("nom", nom);
       form_data.append("prenom", prenom);
@@ -633,7 +615,7 @@ function update_user() {
       form_data.append("dateNaissance", dateNaissance);
       form_data.append("password", password);
       form_data.append("newPassword", newPassword);
-
+      form_data.append("agence", agence);
       $.ajax({
         url: "update_user.php",
         method: "post",
@@ -892,7 +874,7 @@ function add_materiel() {
           );
           $(" #date_acha_materiel").focus();
           break;
-        case EmplyeeID == "":
+        case EmplyeeID == null:
           $(" #liste_materiel_employee_error").html(
             "Choisir un employée s'il vous plaît"
           );
@@ -1500,7 +1482,7 @@ function add_tache() {
         doc_tache = "";
       }
       if (employee == "") {
-        $("#employee_affect_error").html("Choisir les employées affectées.");
+        $("#employee_affect_error").html("Affecter un employé.");
         $("#employee_affect").focus();
       } else if (description == "") {
         $("#description_error").html("Saisir la description du projet s'il vous plait.");
@@ -1710,7 +1692,7 @@ function update_tache() {
       doc_tache = "";
     }
     if (employee == "") {
-      $("#up_employee_affect_error").html("Choisir les employées affectées.");
+      $("#up_employee_affect_error").html("Affecter un employé.");
       $("#employee_affect").focus();
     } else if (description == "") {
       $("#up_description_error").html("Saisir la description du projet s'il vous plait.");
@@ -2064,31 +2046,34 @@ function add_agence() {
       msgErrorLabel.each(function () {
         $(this).html('');
       });
-      var nom_agence = $("#nom_agence").val();
+      var lieu_agence = $("#lieu_agence").val();
+      var adresse_agence = $("#adresse_agence").val();
       var email_agence = $("#email_agence").val();
       var numtel_agence = $("#numtel_agence").val();
-      if (nom_agence == "") {
-        $("#nom_error").html("Saisir votre nom de l'agence s'il vous plait.");
-        $("#nom_agence").focus();
+      if (lieu_agence == "") {
+        $("#nom_error").html("Saisir le lieu de l'agence s'il vous plait.");
+        $("#lieu_agence").focus();
+      } else if (adresse_agence == "") {
+        $("#adresse_error").html("Saisir l'adresse s'il vous plait.");
+        $("#adresse_agence").focus();
       } else if (email_agence == "") {
-        $("#email_error").html("Saisir votre email s'il vous plait.");
+        $("#email_error").html("Saisir l'email s'il vous plait.");
         $("#email_agence").focus();
       } else if (!IsValidEmail(email_agence)) {
         $("#email_error").html("Adresse email invalide");
         $("#email_agence").focus();
       }  else if (numtel_agence == "") {
-        $("#numtel_error").html("Saisir votre Téléphone s'il vous plait.");
+        $("#numtel_error").html("Saisir le numéro Téléphone s'il vous plait.");
         $("#numtel_agence").focus();
-        
       } else if (!validatePhoneNumber(numtel_agence)) {
         $("#numtel_error").html("Numéro téléphone invalide");
         $("#numtel_agence").focus();
       } else {
         var form_data = new FormData();
-        form_data.append("nom_agence", nom_agence);
+        form_data.append("lieu_agence", lieu_agence);
+        form_data.append("adresse_agence", adresse_agence);
         form_data.append("email_agence", email_agence);
         form_data.append("numtel_agence", numtel_agence);
-      
         $.ajax({
           url: "add_agence.php",
           method: "post",
@@ -2116,10 +2101,8 @@ function add_agence() {
                 if ($("#SuccessAddAgence").length > 0) {
                   $("#SuccessAddAgence").modal("hide");
                   view_agence();
-                  
                 }
               }, 2000);
-              view_agence();
             }
           },
           
@@ -2148,9 +2131,10 @@ function get_data_agence() {
       dataType: "JSON",
       success: function (data) {
         $("#idAgence").val(data[0]);
-        $("#up_nom_agence").val(data[1]);
+        $("#up_lieu_agence").val(data[1]);
         $("#up_email_agence").val(data[2]);
         $("#up_numtel_agence").val(data[3]);
+        $("#up_adresse_agence").val(data[4]);
         $("#update_agence_modal").modal("show");
       },
     });
@@ -2165,16 +2149,20 @@ function update_agence() {
     });
     $("#update_agence_modal").scrollTop(0);
     var idagence = $("#idAgence").val();
-    var nom_agence = $("#up_nom_agence").val();
+    var adresse_agence = $("#up_adresse_agence").val();
+    var lieu_agence = $("#up_lieu_agence").val();
     var email_agence = $("#up_email_agence").val();
     var numtel_agence = $("#up_numtel_agence").val();
 
 
-    if (nom_agence == "") {
-      $("#up_nom_error").html("Saisir votre nom de votre entreprise s'il vous plait.");
-      $("#up_nom_agence").focus();
+    if (lieu_agence == "") {
+      $("#up_nom_error").html("Saisir le lieu de l'agence s'il vous plait.");
+      $("#up_lieu_agence").focus();
+    } else if (adresse_agence == "") {
+      $("#up_email_error").html("Saisir l'adresse s'il vous plait.");
+      $("#up_adresse_agence").focus();
     } else if (email_agence == "") {
-      $("#up_email_error").html("Saisir votre email s'il vous plait.");
+      $("#up_email_error").html("Saisir l'email s'il vous plait.");
       $("#up_email_agence").focus();
     }
     else if (!IsValidEmail(email_agence)) {
@@ -2182,7 +2170,7 @@ function update_agence() {
       $("#up_email_agence").focus();
     }
     else if (numtel_agence == "") {
-      $("#up_numtel_error").html("Saisir votre Téléphone s'il vous plait.");
+      $("#up_numtel_error").html("Saisir le numéro de téléphone s'il vous plait.");
       $("#up_numtel_agence").focus();
     } else if (!validatePhoneNumber(numtel_agence)) {
       $("#up_numtel_error").html("Numéro téléphone invalide");
@@ -2190,10 +2178,10 @@ function update_agence() {
     }else {
       var form_data = new FormData();
       form_data.append("idagence", idagence);
-      form_data.append("nom_agence", nom_agence);
+      form_data.append("lieu_agence", lieu_agence);
+      form_data.append("adresse_agence",adresse_agence);
       form_data.append("email_agence", email_agence);
       form_data.append("numtel_agence", numtel_agence);
-    
     $.ajax({
       url: "update_agence.php",
       method: "post",
@@ -2223,10 +2211,9 @@ function update_agence() {
           setTimeout(function () {
             if ($("#SuccessUpdateAgence").length > 0) {
               $("#SuccessUpdateAgence").modal("hide");
-              
+              view_agence();
             }
           }, 2000);
-          view_agence();
         }
       }
     })
