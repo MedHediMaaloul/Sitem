@@ -45,6 +45,8 @@ $(document).ready(function () {
   get_data_agence();
   update_agence();
   delete_agence();
+  //contact
+  Envoi_Email();
 
 });
 
@@ -2279,6 +2281,84 @@ function delete_agence() {
   $(document).on("hide.bs.modal", "#delete_agence", function () {
     Delete_ID = "";
   });
+}
+
+function Envoi_Email() {
+
+    $(document).on("click", "#btn_envoyer_contact", function () {
+      var msgErrorLabel = $("#form_contact").find("p");
+      msgErrorLabel.each(function () {
+        $(this).html('');
+      });
+      var sujet_contact = $("#sujet_contact").val();
+      var details_contact = $("#details_contact").val();
+
+      var doc_contact = $("#doc_contact").prop("files")[0];
+      if (doc_contact == undefined) {
+        doc_contact = "";
+      } else {
+        // Vérifier la taille de la pièce jointe
+        var maxFileSize = 25 * 1024 * 1024; // 25 Mo
+        if (doc_contact.size > maxFileSize) {
+          $("#doc_contact_error").html("La taille de la pièce jointe dépasse la limite autorisée (25 Mo).");
+          return; // Arrêter l'exécution du code si la taille dépasse la limite
+        }
+        var allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
+        var fileExtension = doc_contact.name.split('.').pop().toLowerCase();
+        if (allowedExtensions.indexOf(fileExtension) === -1) {
+        $("#doc_contact_error").html("Le type de pièce jointe n'est pas autorisé. Veuillez sélectionner une image (jpg, jpeg, png) ou un fichier PDF.");
+        return; // Arrêter l'exécution du code si le type de fichier n'est pas autorisé
+       }
+      }
+      if (sujet_contact == "") {
+        $("#sujet_contact_error").html("Saisir le sujet de contact s'il vous plait.");
+        $("#sujet_contact").focus();
+      } else if (details_contact == "") {
+        $("#details_contact_error").html("Saisir les détails de contact s'il vous plait.");
+        $("#details_contact").focus();
+      } else {
+        var form_data = new FormData();
+        form_data.append("sujet_contact", sujet_contact);
+        form_data.append("details_contact", details_contact);
+        form_data.append("doc_contact", doc_contact)
+        $.ajax({
+          url: "Envoi_Email.php",
+          method: "post",
+          processData: false,
+          contentType: false,
+          data: form_data,
+          success: function (data) {
+            if (data.includes("text-echec")) {
+              $("#Envoi_Email_echec")
+                .removeClass("text-checked")
+                .addClass("text-echec")
+                .html(data);
+              $("#EchecEnvoiEmail").modal("show");
+              setTimeout(function () {
+                if ($("#EchecEnvoiEmail").length > 0) {
+                  $("#EchecEnvoiEmail").modal("hide");
+                }
+              }, 200000);
+            
+             } else {
+              $("#Envoi_Email_success").addClass("text-checked").html(data);
+              $("#SuccessEnvoiEmail").modal("show");
+              $("#Envoi_Email_success")
+                .removeClass("text-echec")
+                .addClass("text-checked");
+              setTimeout(function () {
+                if ($("#SuccessEnvoiEmail").length > 0) {
+                  $("#SuccessEnvoiEmail").modal("hide");
+                }
+              }, 200000);
+            }
+        }
+        })
+  
+      }
+     
+    });
+  
 }
 
 

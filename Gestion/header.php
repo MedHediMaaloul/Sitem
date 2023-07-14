@@ -234,7 +234,7 @@ WHERE id_user= '$iduser'";
                         <div></div>
                         <div></div>
                     </div>
-                    <a class="hex-content" href="../profil.php">
+                    <a class="hex-content" href="contact.php">
                         <span class="hex-content-inner">
                             <span class="icon">
                                 <i class="fa fa-envelope-open" aria-hidden="true"></i>

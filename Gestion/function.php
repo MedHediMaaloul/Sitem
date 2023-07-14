@@ -1,5 +1,7 @@
 <?php
 include('connect_db.php');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 session_start();
 
     function Login(){
@@ -1244,3 +1246,80 @@ $selectEmail = mysqli_query($conn, "SELECT * FROM client WHERE email_client='$em
                 echo "<div class='text-echec'>Veuillez vérifier votre requête</div> ";
             }
         }
+
+        function Envoi_Email() {
+            global $conn;
+        
+                require_once 'phpmailer/vendor/autoload.php';
+                $mail = new PHPMailer();
+                $mail->isSMTP();
+                $mail->SMTPAuth = true;
+                // $mail->SMTPDebug = 2;
+                $mail->Host = "smtp.gmail.com";
+                $mail->Username =('sahlihadil76@gmail.com');
+                $mail->Password = "qsbmnilbfkkamufq";
+                $mail->SMTPSecure = "tls"; // or we can use ssl
+                $mail->Port = 587; // 465
+                $mail->From = "sahlihadil76@gmail.com";
+                $mail->addReplyTo("sahlihadil76@gmail.com",'Hadil Sahli');
+        
+
+        
+                    $mail->addAddress("atiateallhmariem@gmail.com");
+        
+                    $sujet_contact = $_POST['sujet_contact'];
+                    $details_contact = $_POST['details_contact'];
+                    $doc_contact = ""; // Initialisation de la variable
+        
+                    if (isset($_FILES['doc_contact']) && $_FILES['doc_contact']['error'] === UPLOAD_ERR_OK) {
+                        $doc_contact = $_FILES['doc_contact']['name'];
+                        $tmp_file = $_FILES['doc_contact']['tmp_name'];
+                        $upload_dir = "C:/xampp/htdocs/Sitem/uploads/piece_jointe_mail/";
+                        move_uploaded_file($tmp_file, $upload_dir . $doc_contact);
+                    }
+        
+                    $mail->Subject = $sujet_contact;
+                    $mail->isHTML(false);
+                    $mail->Body = $details_contact;
+        
+                    if (!empty($doc_contact)) {
+                        $fileExtension = strtolower(pathinfo($doc_contact, PATHINFO_EXTENSION)); // Récupérer l'extension du fichier
+        
+                        if ($fileExtension === 'pdf') {
+                            // Chemin de la pièce jointe PDF
+                            $cheminPieceJointe = $upload_dir . $doc_contact;
+        
+                            // Ajout de la pièce jointe PDF à l'e-mail en tant que pièce jointe normale
+                            $mail->addAttachment($cheminPieceJointe, $doc_contact);
+                        } elseif (in_array($fileExtension, ['jpg', 'jpeg', 'png'])) {
+                            // Chemin de la pièce jointe image
+                            $cheminPieceJointe = $upload_dir . $doc_contact;
+        
+                            // Ajout de la pièce jointe image à l'e-mail en tant qu'image intégrée
+                            $mail->AddEmbeddedImage($cheminPieceJointe, $doc_contact, $doc_contact);
+                        }
+                    }
+        
+                    $mail->SMTPOptions = array(
+                        'ssl' => array(
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => false,
+                        )
+                    );
+        
+                    if ($mail->send()) {
+                        $query = "INSERT INTO contact (sujet_contact,detail_contact,doc_contact) 
+                                VALUES ('$sujet_contact', '$details_contact', '$doc_contact')";
+                        $result = mysqli_query($conn, $query);
+                        if ($result) {
+                            echo "<div class='text-success'>Le contact a été ajouté avec succès</div>";
+                        } else {
+                            echo "<div class='text-echec'>Veuillez vérifier votre requête</div>";
+                        }
+                    } else {
+                        echo "<div class='text-echec'>Echec de l'envoi du contact</div>";
+                    }
+        }
+    
+        
